@@ -1,6 +1,6 @@
 #!/bin/bash
 
-log=/usr/local/nginx/logs/citysdk.daily.log
+log=/usr/local/nginx/logs/daily.citysdk.log
 touch "$log"
 date >> "$log"
 
