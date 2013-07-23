@@ -178,7 +178,9 @@ module Sequel
             #   dataset = dataset.union(self.where(:node_data__layer_id => layer_id))
             # }        
             # return dataset
-            database << "SET enable_mergejoin TO false;"
+
+            Sequel::Model.db << "SET enable_mergejoin TO false;"
+            # database << "SET enable_mergejoin TO false;"
             where = Sequel.expr(:node_data__layer_id => layer_ids)          
           end
         else
@@ -410,7 +412,8 @@ module Sequel
           #   http://sequel.rubyforge.org/rdoc-plugins/classes/Sequel.html
           if values
             values.split(values_separator).each { |value| 
-              data_conditions << Sequel.expr(:data).qualify(layer).hstore.contains({key => value}.hstore)  
+              data_conditions << Sequel.expr(:data).qualify(layer).hstore.contains(Sequel.hstore({key => value}))  
+              # data_conditions << Sequel.expr(:data).qualify(layer).hstore.contains({key => value}.hstore)  
             }
           else              
              data_conditions << Sequel.expr(:data).qualify(layer).hstore.has_key?(key)

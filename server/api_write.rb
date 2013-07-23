@@ -53,7 +53,7 @@ class CitySDK_API < Sinatra::Base
       
       all_known_cdk_ids = Sequel.function(:unnest, known.values.pg_array).as(:cdk_id)
       existing_known_cdk_ids = Node.dataset.select(:cdk_id).where(:cdk_id => known.values)      
-      not_known_cdk_ids = database[all_known_cdk_ids].where(Sequel.negate(:cdk_id => existing_known_cdk_ids)).all
+      not_known_cdk_ids = Sequel::Model.db[all_known_cdk_ids].where(Sequel.negate(:cdk_id => existing_known_cdk_ids)).all
       
       if not_known_cdk_ids.length > 0        
         CitySDK_API.do_abort(422, "'known' object specifies cdk_ids that do not exist in CitySDK: #{not_known_cdk_ids.map{|row| row[:cdk_id]}.join(", ")}")        
@@ -478,8 +478,8 @@ class CitySDK_API < Sinatra::Base
       
       results[:create][:results][:totals][:updated] -= results[:create][:results][:totals][:created]
 
-      database.transaction do 
-        database[:nodes].multi_insert(new_nodes)
+      Sequel::Model.db.transaction do 
+        Sequel::Model.db[:nodes].multi_insert(new_nodes)
 
         if updated_nodes.length > 0
           Node.where(:cdk_id => updated_nodes).update(:node_type => 2)
@@ -489,7 +489,7 @@ class CitySDK_API < Sinatra::Base
           NodeDatum.where(:node_id => Sequel.function(:any, Sequel.function(:cdk_ids_to_internal, node_data_cdk_ids.pg_array))).where(:layer_id => layer_id).delete      
         end
       
-        database[:node_data].multi_insert(node_data)
+        Sequel::Model.db[:node_data].multi_insert(node_data)
       end
     
     rescue Exception => e

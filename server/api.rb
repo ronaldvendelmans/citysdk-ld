@@ -12,7 +12,7 @@ configure do | sinatraApp |
       if forked
         # We're in smart spawning mode.
         CitySDK_API.memcache_new
-        database.disconnect
+        Sequel::Model.db.disconnect
       end
       # Else we're in direct spawning mode. We don't need to do anything.
     end
@@ -20,6 +20,7 @@ configure do | sinatraApp |
     
   dbconf = JSON.parse(File.read('./database.json')) 
   sinatraApp.database = "postgres://#{dbconf['user']}:#{dbconf['password']}@#{dbconf['host']}/#{dbconf['database']}"
+  
 
   # sinatraApp.database.logger = Logger.new(STDOUT)
   
@@ -39,10 +40,12 @@ configure do | sinatraApp |
 end
 
 class CitySDK_API < Sinatra::Base
-  Sequel::Model.plugin :json_serializer  
-  Sequel.extension :pagination
   Sequel.extension :pg_hstore_ops
   Sequel.extension :pg_array_ops
+
+  Sequel::Model.plugin :json_serializer 
+  Sequel::Model.db.extension(:pagination) 
+  
   
   before do 
     content_type 'application/json'
