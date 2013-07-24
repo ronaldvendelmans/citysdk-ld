@@ -34,7 +34,7 @@ $(document).ready( function() {
   }
   
   function makeID(s) {
-    return s.replace(/\./g,'').replace(/\-/g,'')
+    return s.replace(/\./g,'').replace(/\-/g,'').toLowerCase();
   }
   
   
@@ -46,9 +46,9 @@ $(document).ready( function() {
     }
   }
   
-  
+  // api.citysdk.waag.org/ptstops?geom&per_page=4&lat=38.9027&lon=22.4361
   function newLocationFound() {
-    loadCitySDKData('ptstops?geom&per_page=17&lat='+$.currentPosition.latitude+'&lon='+$.currentPosition.longitude, function(data) {
+    loadCitySDKData('ptstops?geom&per_page=4&lat='+$.currentPosition.latitude+'&lon='+$.currentPosition.longitude, function(data) {
       $.newStops = []
       for (var i = 0; i < data.results.length; i++) {
         $.newStops.push(data.results[i])
@@ -81,7 +81,6 @@ $(document).ready( function() {
   
   function updatePosition(pos) {
     loadingMessage(false)
-    console.info("geo location update.")
     if( distance($.currentPosition, pos.coords) > 50 ) {
       $.currentPosition = pos.coords;
       newLocationFound();
@@ -90,6 +89,7 @@ $(document).ready( function() {
   
 
   function getTimingForLine(l) {
+    
     
     loadCitySDKData(l.stop.cdk_id + '/select/now?tz=' + $.tzoffset, function(data) {
       $.each(data.results, function(i) {
@@ -127,7 +127,6 @@ $(document).ready( function() {
     }
     dest = line.layers.gtfs.data.route_to
     var m_id ='times_' + makeID(line.cdk_id)
-    
 
     a += "<div data-role='collapsible' data-expanded-icon='arrow-u'>" 
     a += "<h3>" + name + "<span class='dir'>dir. " + line.layers.gtfs.data.route_to + "</span></h3>"
@@ -150,10 +149,12 @@ $(document).ready( function() {
 
   function addLineToList(l) {
     if( $.currentLines.indexOf(l.line.cdk_id) == -1 ) {
-      $.currentLines.push(l.line.cdk_id)
-      if(l.line.layers.gtfs.data.route_to != l.stop.name) {
-        createSummary(l);
-        getTimingForLine(l) 
+      if( l.line.layers && l.line.layers.gtfs && l.line.layers.gtfs.data ) {
+        $.currentLines.push(l.line.cdk_id)
+        if(l.line.layers.gtfs.data.route_to != l.stop.name) {
+          createSummary(l);
+          getTimingForLine(l) 
+        }
       }
     }
   }
