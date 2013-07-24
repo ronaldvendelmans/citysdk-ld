@@ -102,7 +102,7 @@ class CitySDK_API < Sinatra::Base
       dsts = {}
       debug_data = debug ? {:nodes => [], :graph => {}} : nil
       
-      database.fetch(sql_osm_nodes).all do |row|        
+      Sequel::Model.db.fetch(sql_osm_nodes).all do |row|        
         
         cdk_id = row[:cdk_id]
         length = row[:length]

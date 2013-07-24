@@ -545,7 +545,8 @@ class CitySDK_API < Sinatra::Base
 
 
   put '/layer/:layer/status' do |layer|
-  
+    Layer.getLayerHashes
+    
     layer_id = Layer.idFromText(layer)
     CitySDK_API.do_abort(422,"Invalid layer spec: #{layer}") if layer_id.nil? or layer_id.is_a? Array
     Owner.validateSessionForLayer(request.env['HTTP_X_AUTH'],layer_id)   
@@ -562,9 +563,30 @@ class CitySDK_API < Sinatra::Base
   end
 
 
+  put '/layer/:layer/config' do |layer|
+    Layer.getLayerHashes
+    layer_id = Layer.idFromText(layer)
+    CitySDK_API.do_abort(422,"Invalid layer spec: #{layer}") if layer_id.nil? or layer_id.is_a? Array
+    Owner.validateSessionForLayer(request.env['HTTP_X_AUTH'],layer_id)   
+    json = CitySDK_API.parse_request_json(request)
+    if json['data']
+      l = Layer[layer_id]
+      l.import_config = json['data']
+      l.save
+      return 200, { 
+        :status => 'success' 
+      }.to_json
+    end
+    CitySDK_API.do_abort(422,"Data missing..")
+  end
+
+
 
   put '/layers' do
+    Layer.getLayerHashes
+    
     json = CitySDK_API.parse_request_json(request)
+    
     if json['data']
       if Owner.domains(request.env['HTTP_X_AUTH']).include?(json['data']['name'].split('.')[0])
         l = Layer.new(json['data'])

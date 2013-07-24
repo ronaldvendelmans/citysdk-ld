@@ -5,7 +5,7 @@ class CitySDK_API < Sinatra::Base
     @@agency_names = {}
     def self.get_agency_name(id)
       return @@agency_names[id] if(@@agency_names[id])
-      res = database.fetch("select agency_name from gtfs.agency where agency_id = '#{id}'")
+      res = Sequel::Model.db.fetch("select agency_name from gtfs.agency where agency_id = '#{id}'")
       res.to_a.each do |t|
         @@agency_names[id] = t[:agency_name]
         return @@agency_names[id]
@@ -25,7 +25,7 @@ class CitySDK_API < Sinatra::Base
       g = stop.getLayer('gtfs')
       if(g)
         h = {}
-        a = database.fetch("select * from stop_now('#{g[:data]['stop_id']}','#{tz}')").all
+        a = Sequel::Model.db.fetch("select * from stop_now('#{g[:data]['stop_id']}','#{tz}')").all
         a.to_a.each do |t|
           
           aname = t[:agency_id]
@@ -89,7 +89,7 @@ class CitySDK_API < Sinatra::Base
         t = Time.now
         (0..6).each do |day|
           d = ( t+86400 * day ).strftime("%a %-d %b")
-          a = database.fetch("select * from departs_from_stop('#{g[:data]['stop_id']}', #{day})").all
+          a = Sequel::Model.db.fetch("select * from departs_from_stop('#{g[:data]['stop_id']}', #{day})").all
           a.to_a.each do |t|
             
             aname = self.get_agency_name(t[:agency_id])
@@ -131,7 +131,7 @@ class CitySDK_API < Sinatra::Base
 
         d = ( Time.now+86400 * day.to_i ).strftime("%a %-d %b")
 
-        a = database.fetch("select * from line_schedule('#{g[:data]['route_id']}', #{line.cdk_id[-1]}, #{day})").all
+        a = Sequel::Model.db.fetch("select * from line_schedule('#{g[:data]['route_id']}', #{line.cdk_id[-1]}, #{day})").all
         mckey = "gtfs.line.#{g[:data]['route_id']}-#{line.cdk_id[-1]}"
 
         a.to_a.each do |t|

@@ -9,7 +9,42 @@ class NodeDatum < Sequel::Model
   many_to_one :layer
 
 	plugin :validation_helpers
+  
+  # hash = {
+  #   :name => :plop,
+  #   :id => 123,
+  #   'addr1:str'=>'kj',
+  #   'addr1:num'=>1
+  # }
+  # 
 
+  KEY_SEPARATOR = ':'
+  
+  def self.atonestedh(a,v,h)
+    g = h
+    while(a.length > 1 )
+      aa = a.shift.to_sym
+      g[aa] = {} if g[aa].nil?
+      g = g[aa]
+    end
+    g[a[0].to_sym] = v
+    h
+  end
+
+  def self.nest(h)
+    xtra = {}
+    h.each_key do |k|
+      i = k.to_s.index(KEY_SEPARATOR)
+      if i
+        a = k.to_s.split(KEY_SEPARATOR)
+        atonestedh(a,h[k],xtra)
+        h.delete(k)
+      end
+    end
+    h.merge(xtra)
+  end
+
+ 
   def self.serialize(cdk_id, h, params)    
     newh = {}
     h.each do |nd|
@@ -53,6 +88,7 @@ class NodeDatum < Sequel::Model
         nd[:data] = nd[:data]
       end
 
+      # nd[:data] = NodeDatum.nest(nd[:data])
       newh[name] = nd
     end
     newh

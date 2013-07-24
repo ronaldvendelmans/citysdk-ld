@@ -1,6 +1,9 @@
 class CitySDK_API < Sinatra::Base
   
   delete '/layer/:layer' do |layer|
+    
+    Layer.getLayerHashes
+    
     layer_id = Layer.idFromText(layer)
     CitySDK_API.do_abort(422,"Invalid layer spec: #{layer}") if layer_id.nil? or layer_id.is_a? Array
     Owner.validateSessionForLayer(request.env['HTTP_X_AUTH'],layer_id)   
