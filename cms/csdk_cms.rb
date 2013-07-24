@@ -27,7 +27,7 @@ configure do | app |
   app.database.extension :pg_range
 
 
-  #app.database.logger = Logger.new(STDOUT)
+  # app.database.logger = Logger.new(STDOUT)
 
   Dir[File.dirname(__FILE__) + '/utils/*.rb'].each {|file| require file }
   Dir[File.dirname(__FILE__) + '/models/*.rb'].each {|file| require file }
@@ -227,13 +227,7 @@ class CSDK_CMS < Sinatra::Base
     if Owner.validSession(session[:auth_key])
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
-
-        @period  = "<select name='period'> "
-        @period += "<option selected='selected'>never</option>"
-        @period += "<option>montly</option>"
-        @period += "<option>weekly</option>"
-        @period += "<option>daily</option>"
-        @period += "</select>"
+        @period = @layer.period_select()
         if params[:nolayout]
           erb :layer_data, :layout => false
         else
@@ -265,7 +259,7 @@ class CSDK_CMS < Sinatra::Base
   
   
   delete '/layer/:layer_id' do |l|
-    sess = request.cookies['auth_key']
+
     if Owner.validSession(session[:auth_key])
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
@@ -289,8 +283,9 @@ class CSDK_CMS < Sinatra::Base
       end
     end
     getLayers
-    params[:nolayout] = true
-    redirect "/layer/#{@layer.id}/data?nolayout"
+    redirect "/"
+    # params[:nolayout] = true
+    # redirect "/layer/#{@layer.id}/data?nolayout"
   end
 
   get '/layer/new' do
@@ -319,103 +314,107 @@ class CSDK_CMS < Sinatra::Base
       CSDK_CMS.do_abort(401,"not authorized")
     end
   end
-  # 
+  
+  post '/layer/create' do
+    if Owner.validSession(session[:auth_key])
+      
+      puts JSON.pretty_generate(params)
+      
+      @layer = Layer.new
+      @layer.owner_id = @oid
+  
+      if( params['prefix'] && params['prefix'] != '' )
+        @layer.name = params['prefix'] + '.' + params['name']
+      elsif (params['prefixc']  && params['prefixc'] != '' )
+        @layer.name = params['prefixc'] + '.' + params['name']
+      else
+        @layer.name = params['name']
+      end
+  
+      params['validity_from'] = Time.now.strftime('%Y-%m-%d') if params['validity_from'].nil?
+      params['validity_to'] = Time.now.strftime('%Y-%m-%d') if params['validity_to'].nil?
+  
+      @layer.description = params['description']
+      @layer.update_rate = params['update_rate'].to_i
+      @layer.validity = "[#{params['validity_from']}, #{params['validity_to']}]"
+      @layer.realtime = params['realtime'] ? true : false;
+      @layer.data_sources = []
+      @layer.data_sources << params["data_sources_x"] if params["data_sources_x"] && params["data_sources_x"] != ''
+      @layer.organization = params['organization']
+      @layer.category = params['catprefix'] + '.' + params['category']
+      @layer.webservice = params['wsurl']
+      @layer.update_rate = params['update_rate']
+  
+      if !@layer.valid? 
+        @prefix = params['prefixc']
+        @layer.name = params['name']
+        @categories = @layer.cat_select
+        erb :new_layer
+      else
+        # api = CitySDK::API.new(@apiServer)
+        # api.authenticate(session[:e],session[:p]) do
+        #   begin
+        #     d = { :data => @layer.to_hash.to_json }
+        #     puts JSON.pretty_generate(d)
+        #     api.put('/layers',d)
+        #   rescue => e
+        #     puts e.message
+        #   end
+        # end
+        @layer.save
+        getLayers
+        erb :layers
+      end
+    end
+  end
+  
+  
   # post '/layer/create' do
   #   if Owner.validSession(session[:auth_key])
-  #     @layer = Layer.new
-  #     @layer.owner_id = @oid
+  #     @layer = {}
+  #     @layer[:owner_id] = @oid
   # 
   #     if( params['prefix'] && params['prefix'] != '' )
-  #       @layer.name = params['prefix'] + '.' + params['name']
+  #       @layer[:name] = params['prefix'] + '.' + params['name']
   #     elsif (params['prefixc']  && params['prefixc'] != '' )
-  #       @layer.name = params['prefixc'] + '.' + params['name']
+  #       @layer[:name] = params['prefixc'] + '.' + params['name']
   #     else
-  #       @layer.name = params['name']
+  #       @layer[:name] = params['name']
   #     end
   # 
   #     params['validity_from'] = Time.now.strftime('%Y-%m-%d') if params['validity_from'].nil?
   #     params['validity_to'] = Time.now.strftime('%Y-%m-%d') if params['validity_to'].nil?
   # 
-  #     @layer.description = params['description']
-  #     @layer.update_rate = params['update_rate'].to_i
-  #     @layer.validity = "[#{params['validity_from']}, #{params['validity_to']}]"
-  #     @layer.realtime = params['realtime'] ? true : false;
-  #     @layer.data_sources = []
-  #     @layer.data_sources << params["data_sources_x"] if params["data_sources_x"] && params["data_sources_x"] != ''
-  #     @layer.organization = params['organization']
-  #     @layer.category = params['catprefix'] + '.' + params['category']
-  #     @layer.webservice = params['wsurl']
-  #     @layer.update_rate = params['update_rate']
+  #     @layer[:description] = params['description']
+  #     @layer[:update_rate] = params['update_rate'].to_i
+  #     @layer[:validity] = "[#{params['validity_from']}, #{params['validity_to']}]"
+  #     @layer[:realtime] = params['realtime'] ? true : false;
+  #     @layer[:data_sources] = []
+  #     @layer[:data_sources] << params["data_sources_x"] if params["data_sources_x"] && params["data_sources_x"] != ''
+  #     @layer[:organization] = params['organization']
+  #     @layer[:category] = params['catprefix'] + '.' + params['category']
+  #     @layer[:webservice] = params['wsurl']
+  #     @layer[:update_rate] = params['update_rate']
   # 
-  #     if !@layer.valid? 
-  #       @prefix = params['prefixc']
-  #       @layer.name = params['name']
-  #       @categories = @layer.cat_select
-  #       erb :new_layer
-  #     else
-  #       api = CitySDK::API.new(@apiServer)
-  #       api.authenticate(session[:e],session[:p]) do
-  #         begin
-  #           d = { :data => @layer.to_hash.to_json }
-  #           puts JSON.pretty_generate(d)
-  #           api.put('/layers',d)
-  #         rescue => e
-  #           puts e.message
-  #         end
+  #     api = CitySDK::API.new(@apiServer)
+  #     api.authenticate(session[:e],session[:p]) do
+  #       begin
+  #         d = { :data => @layer }
+  #         puts JSON.pretty_generate(d)
+  #         api.put('/layers',d)
+  #       rescue CitySDK::HostException => e
+  #         @prefix = params['prefixc']
+  #         @layer.name = params['name']
+  #         @categories = @layer.cat_select
+  #         erb :new_layer
+  #         return
   #       end
-  #       getLayers
-  #       erb :layers
   #     end
+  #     getLayers
+  #     erb :layers
   #   end
+  # 
   # end
-  
-  
-  post '/layer/create' do
-    if Owner.validSession(session[:auth_key])
-      @layer = {}
-      @layer[:owner_id] = @oid
-
-      if( params['prefix'] && params['prefix'] != '' )
-        @layer[:name] = params['prefix'] + '.' + params['name']
-      elsif (params['prefixc']  && params['prefixc'] != '' )
-        @layer[:name] = params['prefixc'] + '.' + params['name']
-      else
-        @layer[:name] = params['name']
-      end
-
-      params['validity_from'] = Time.now.strftime('%Y-%m-%d') if params['validity_from'].nil?
-      params['validity_to'] = Time.now.strftime('%Y-%m-%d') if params['validity_to'].nil?
-
-      @layer[:description] = params['description']
-      @layer[:update_rate] = params['update_rate'].to_i
-      @layer[:validity] = "[#{params['validity_from']}, #{params['validity_to']}]"
-      @layer[:realtime] = params['realtime'] ? true : false;
-      @layer[:data_sources] = []
-      @layer[:data_sources] << params["data_sources_x"] if params["data_sources_x"] && params["data_sources_x"] != ''
-      @layer[:organization] = params['organization']
-      @layer[:category] = params['catprefix'] + '.' + params['category']
-      @layer[:webservice] = params['wsurl']
-      @layer[:update_rate] = params['update_rate']
-
-      api = CitySDK::API.new(@apiServer)
-      api.authenticate(session[:e],session[:p]) do
-        begin
-          d = { :data => @layer }
-          puts JSON.pretty_generate(d)
-          api.put('/layers',d)
-        rescue => e
-          @prefix = params['prefixc']
-          @layer.name = params['name']
-          @categories = @layer.cat_select
-          erb :new_layer
-          return
-        end
-      end
-      getLayers
-      erb :layers
-    end
-
-  end
   
   post '/layer/edit/:layer_id' do |l|
     if Owner.validSession(session[:auth_key])
@@ -483,6 +482,23 @@ class CSDK_CMS < Sinatra::Base
     end
   end
   
+  post '/layer/:layer_id/periodic' do |l|
+    if Owner.validSession(session[:auth_key])
+      @layer = Layer[l]
+      if(@layer && (@oid == @layer.owner_id) or @oid==0)
+        @layer.import_url = params['update_url']
+        @layer.import_period = params['period']
+        if !@layer.valid? or @layer.import_config.nil?
+          @categories = @layer.cat_select
+          redirect "/layer/#{l}/data"
+        else
+          @layer.save
+          redirect "/layer/#{l}/data"
+        end
+      end
+    end
+  end
+  
   post '/layer/:layer_id/loadcsv' do |l|
     
     if Owner.validSession(session[:auth_key])
@@ -514,11 +530,8 @@ class CSDK_CMS < Sinatra::Base
   post '/csvheader' do
     
     if params['add']
-      params['email'] = session[:e]
-      params['passw'] = session[:p]
-      
-      
-      parameters = JSON.parse(Base64.decode64(params['parameters']))
+
+      parameters = JSON.parse(Base64.decode64(params['parameters']),{:symbolize_names => true})
 
       # puts "csvheader parameters: #{parameters}"
       #     
@@ -540,9 +553,29 @@ class CSDK_CMS < Sinatra::Base
       end
       
       parameters[:host] = @apiServer
+      parameters[:email] = session[:e]
+      parameters[:passw] = session[:p]
 
       system "ruby utils/import_file.rb '#{parameters.to_json}' >> log/import.log &"
-      redirect "/get_layer_stats/#{parameters['layername']}"
+      
+      
+      parameters.delete(:email)
+      parameters.delete(:passw)
+      parameters.delete(:file_path)
+      parameters.delete(:originalfile)
+      
+      api = CitySDK::API.new(@apiServer)
+      puts JSON.pretty_generate(parameters)
+      api.authenticate(session[:e],session[:p]) do
+        begin
+          d = { :data => Base64.encode64(parameters.to_json) }
+          api.put("/layer/#{parameters[:layername]}/config",d)
+        rescue => e
+          puts e.message
+        end
+      end
+      
+      redirect "/get_layer_stats/#{parameters[:layername]}"
 
     else
       puts JSON.pretty_generate(params)

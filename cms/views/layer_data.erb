@@ -1,5 +1,4 @@
 <div class="info">
-  <%= erb :layer_errors %> 
   
 
   <div class = "pageheader">
@@ -23,15 +22,17 @@
   
 
   <div class="code">
+    <%= erb :layer_errors %> 
     <h4>Periodic update<span class="codecomment">Download data periodically. Configuration above. </span></h4>
+     <form id="pu" action="/layer/<%= @layer.id %>/periodic" method="post">
       <div id='csvupl2'>
         <span class='flex'><%= @period %> update url:&nbsp;&nbsp;</span>
         <span class='flexinput'>
-            <input class='layer' type="text" id="update_url" name="update_url" value=""/>
+            <input class='layer' type="text" id="update_url" name="update_url" value="<%= @layer.import_url %>" placeholder="enter url to data file"/>
         </span>
-        <input class='uurlb nostretch' type='button' value="configure.."  disabled onclick="alert('to implement')"/>
-        <input class='uurlb submitb' type="submit" value="save changes" disabled/>
+        <input class='uurlb submitb' type="submit" value="save changes" />
 	    </div>
+    </form>
   </div>
 
 
@@ -64,17 +65,6 @@ $(function() {
 
     $('#stats').load("/get_layer_stats/<%= @layer.name %>")
   
-  
-    $("#update_url").keyup(function() {
-      var s = $("#update_url").val();
-	    if( /(http|https):\/\/.+\..+/.test(s) ) {
-	      $(".uurlb").enable(true);
-	    } else {
-	      $(".uurlb").enable(false);
-	    }
-    })
-    
-    
     $('#ws').submit(function() { 
         $(this).ajaxSubmit(); 
         return false; 

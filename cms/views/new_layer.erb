@@ -7,7 +7,7 @@
   </div>
   
   <form id='cl' name="input" action="/layer/create" method="post">
-
+    <input type="hidden" name="category" value="<%= @category %>" />
     <div class="code">
       <h4>Name</h4>
       <% if @prefix %>

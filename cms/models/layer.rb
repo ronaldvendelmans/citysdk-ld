@@ -10,6 +10,9 @@ class Layer < Sequel::Model
     validates_unique :name
     validates_format /^\w+(\.\w+)*$/, :name
     validates_format /^\w+\.\w+$/, :category
+    if (import_config.nil? or import_config=='') and import_url != nil
+      errors.add(:import_url,"Cannot be set without config. Upload file once, first.")
+    end
   end
   
   def self.category_select(sel=false, all=false)
@@ -25,6 +28,20 @@ class Layer < Sequel::Model
     end
     s += "</select>"
     s
+  end
+  
+  
+  def period_select()
+    period  = "<select name='period'> "
+    ['never','monthly','weekly','daily','hourly'].each do |p|
+      if import_period == p 
+        period += "<option selected='selected'>#{p}</option>"
+      else
+        period += "<option>#{p}</option>"
+      end
+    end
+    period += "</select>"
+    period
   end
   
   
