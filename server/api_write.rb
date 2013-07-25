@@ -51,7 +51,7 @@ class CitySDK_API < Sinatra::Base
       #      SELECT cdk_id FROM nodes WHERE cdk_id IN known.values
       #    )
       
-      all_known_cdk_ids = Sequel.function(:unnest, known.values.pg_array).as(:cdk_id)
+      all_known_cdk_ids = Sequel.function(:unnest, Sequel.pg_array(known.values)).as(:cdk_id)
       existing_known_cdk_ids = Node.dataset.select(:cdk_id).where(:cdk_id => known.values)      
       not_known_cdk_ids = Sequel::Model.db[all_known_cdk_ids].where(Sequel.negate(:cdk_id => existing_known_cdk_ids)).all
       
@@ -305,7 +305,8 @@ class CitySDK_API < Sinatra::Base
               # Node to be added is a route
               members = cdk_ids.map { |cdk_id|
                 Sequel.function(:cdk_id_to_internal, cdk_id)
-              }.pg_array 
+              }
+              members = Sequel.pg_array(members)
             end
           else
             CitySDK_API.do_abort(422,"Invalid cdk_ids field encountered. Must be array.")
@@ -345,7 +346,7 @@ class CitySDK_API < Sinatra::Base
         # TODO: check if data is one-dimensional and unnested 
         data = nil
         if node["data"]
-          data = node["data"].hstore
+          data = Sequel.hstore(node["data"])
         else
           CitySDK_API.do_abort(422,"Node without data encountered.")
         end
@@ -438,7 +439,7 @@ class CitySDK_API < Sinatra::Base
             :members => members,
             :layer_id => layer_id,
             :node_type => node_type_id,
-            :modalities => node_modalities ? node_modalities.pg_array : nil,
+            :modalities => node_modalities ? Sequel.pg_array(node_modalities) : nil,
             :geom => geom
           }
           
@@ -467,7 +468,7 @@ class CitySDK_API < Sinatra::Base
             :node_id => Sequel.function(:cdk_id_to_internal, cdk_id), 
             :layer_id => layer_id,
             :data => data,
-            :modalities => modalities ? modalities.pg_array : nil,
+            :modalities => modalities ? Sequel.pg_array(modalities) : nil,
             :validity => validity
           }                  
           node_data_cdk_ids << cdk_id
@@ -486,7 +487,7 @@ class CitySDK_API < Sinatra::Base
         end
       
         if node_data_cdk_ids.length > 0
-          NodeDatum.where(:node_id => Sequel.function(:any, Sequel.function(:cdk_ids_to_internal, node_data_cdk_ids.pg_array))).where(:layer_id => layer_id).delete      
+          NodeDatum.where(:node_id => Sequel.function(:any, Sequel.function(:cdk_ids_to_internal, Sequel.pg_array(node_data_cdk_ids)))).where(:layer_id => layer_id).delete      
         end
       
         Sequel::Model.db[:node_data].multi_insert(node_data)
