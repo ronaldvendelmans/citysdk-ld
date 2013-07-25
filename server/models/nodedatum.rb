@@ -39,9 +39,11 @@ class NodeDatum < Sequel::Model
         a = k.to_s.split(KEY_SEPARATOR)
         atonestedh(a,h[k],xtra)
         h.delete(k)
+        h.delete(a) if h[a]
+        h = h.merge(xtra)
       end
     end
-    h.merge(xtra)
+    h
   end
 
  
@@ -84,11 +86,9 @@ class NodeDatum < Sequel::Model
 
       if Layer.isWebservice?(layer_id) and !params.has_key?('skip_webservice')
         nd[:data] = WebService.load(layer_id, cdk_id, nd[:data])
-      else
-        nd[:data] = nd[:data]
       end
-
-      # nd[:data] = NodeDatum.nest(nd[:data])
+      
+      nd[:data] = nest(nd[:data].to_hash)
       newh[name] = nd
     end
     newh
