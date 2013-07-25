@@ -6,7 +6,7 @@ require 'csv'
 
 configure do | sinatraApp |
   set :environment, :production
-
+  
   if defined?(PhusionPassenger)
     PhusionPassenger.on_event(:starting_worker_process) do |forked|
       if forked
@@ -40,6 +40,8 @@ configure do | sinatraApp |
 end
 
 class CitySDK_API < Sinatra::Base
+  set :protection, :except => [:json_csrf]
+
   Sequel.extension :pg_hstore_ops
   Sequel.extension :pg_array_ops
 
