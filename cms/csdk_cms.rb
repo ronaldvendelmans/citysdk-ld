@@ -57,10 +57,13 @@ class CSDK_CMS < Sinatra::Base
     case request.url
     when /cms\-test/
       @apiServer = 'test-api.citysdk.waag.org'
+      @sampleUrl = "http://dev.citysdk.waag.org/map#http://test-api.citysdk.waag.org/"
     when /cms\.citysdk/
       @apiServer = 'api.citysdk.waag.org'
+      @sampleUrl = "http://dev.citysdk.waag.org/map#"
     else
       @apiServer = 'api.dev'
+      @sampleUrl = "http://dev.dev/map#http://api.dev/"
     end
 
     @oid = session? ? session[:oid] : nil
@@ -556,6 +559,7 @@ class CSDK_CMS < Sinatra::Base
       parameters[:email] = session[:e]
       parameters[:passw] = session[:p]
 
+      puts "ruby utils/import_file.rb '#{parameters.to_json}' >> log/import.log &"
       system "ruby utils/import_file.rb '#{parameters.to_json}' >> log/import.log &"
       
       
@@ -566,6 +570,7 @@ class CSDK_CMS < Sinatra::Base
       
       api = CitySDK::API.new(@apiServer)
       puts JSON.pretty_generate(parameters)
+      
       api.authenticate(session[:e],session[:p]) do
         begin
           d = { :data => Base64.encode64(parameters.to_json) }
