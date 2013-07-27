@@ -31,6 +31,14 @@ Sequel.migration do
     $stderr.puts("\t\tNode index members[-1]...")
       run "CREATE INDEX ON nodes USING btree ((members[array_upper(members, 1)]));"
 
+    run <<-SQL
+    ALTER TABLE nodes ADD CONSTRAINT constraint_cdk_id_unique UNIQUE (cdk_id);
+    ALTER TABLE nodes ADD CONSTRAINT constraint_geom_4326 CHECK (ST_SRID(geom) = 4326);
+    create trigger node_lb_update
+        after insert on nodes
+        for each row execute procedure node_ulb();    
+    SQL
+
     # Loading pages with high page number is VERY slow:
     # http://localhost:3000/nodes?page=9000&per_page=100
     # 
@@ -52,6 +60,12 @@ Sequel.migration do
       run "CREATE INDEX ON node_data USING gist (validity);"
     $stderr.puts("\t\tNode data index layer_id...")
       run "CREATE INDEX ON node_data USING btree (layer_id);"
+
+      run <<-SQL
+      create trigger nodedata_lb_update
+          after insert on node_data
+          for each row execute procedure nodedata_ulb();    
+      SQL
  
 	end
 

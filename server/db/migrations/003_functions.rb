@@ -424,13 +424,6 @@ Sequel.migration do
         end;
     $$ language plpgsql;
 
-    create trigger node_lb_update
-        after insert on nodes
-        for each row execute procedure node_ulb();    
-
-    create trigger nodedata_lb_update
-        after insert on node_data
-        for each row execute procedure nodedata_ulb();    
     SQL
 
 

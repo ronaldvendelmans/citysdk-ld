@@ -19,12 +19,6 @@ Sequel.migration do
 			column :geom, 'geometry'
 		end
 
-    nodes_cdk_id_unique = <<-SQL
-      ALTER TABLE nodes ADD CONSTRAINT constraint_cdk_id_unique UNIQUE (cdk_id);
-      ALTER TABLE nodes ADD CONSTRAINT constraint_geom_4326 CHECK (ST_SRID(geom) = 4326);
-    SQL
-		
-    run nodes_cdk_id_unique
 
 		create_table :node_types do
 			primary_key :id
