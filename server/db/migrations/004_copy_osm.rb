@@ -138,7 +138,7 @@ Sequel.migration do
       INSERT INTO nodes (id, cdk_id, name, layer_id, geom)
         SELECT
           nextval('nodes1_id_seq'), -- id
-          'r' || osm_id::text,      -- cdk_id
+          'r' || id::text,      -- cdk_id
           hstore(tags) -> 'name',   -- name
           0,                        -- layer_id
           NULL                      -- geom

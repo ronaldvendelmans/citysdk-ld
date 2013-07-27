@@ -50,6 +50,8 @@ Sequel.migration do
     self[:layers].insert(
       :id => 0, 
       :name => 'osm', 
+      :organization=> 'CitySDK',
+      :category => 'base.geography',
       :title => 'OpenStreetMap', 
       :description => 'Base geograpy layer.', 
       :data_sources => '{"Data from OpenstreetMap; openstreetmap.org © OpenStreetMap contributors"}'
@@ -60,6 +62,8 @@ Sequel.migration do
     self[:layers].insert(
       :id => 1, 
       :name => 'gtfs', 
+      :organization=> 'CitySDK',
+      :category => 'mobility.public_transport',
       :title => 'Public transport', 
       :description => 'Layer representing GTFS public transport information.', 
       :data_sources => '{"OpenOV/GOVI import through gtfs.ovapi.nl"}'
@@ -70,6 +74,8 @@ Sequel.migration do
     self[:layers].insert(
       :id => 2, 
       :name => 'admr', 
+      :organization=> 'CitySDK',
+      :category => 'administrative.regions',
       :title => 'Administrative borders', 
       :description => 'Administrative borders.', 
       :data_sources => '{"Bron: © 2012, Centraal Bureau voor de Statistiek / Kadaster, Zwolle, 2012"}'
@@ -78,7 +84,7 @@ Sequel.migration do
     )
         
     # Insert default owners   
-    self[:owners].insert(:id => 0, :name => 'CitySDK', :email => 'citysdk@waag.org')
+    self[:owners].insert(:id => 0, :name => 'CitySDK', :organization => 'Waag Society', :domains => 'test', :email => 'citysdk@waag.org')
     # self[:owners].insert([1,'tom','tom@waag.org'])
     # self[:owners].insert([2,'bert','bert@waag.org'])
   end

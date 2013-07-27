@@ -60,6 +60,10 @@ Sequel.migration do
       String :auth_key
       String :organization
       String :domains
+      String :salt
+      String :passwd
+      String :session
+      DateTime :timeout
       timestamptz :created_at, :null => false, :default => :now.sql_function
     end
 

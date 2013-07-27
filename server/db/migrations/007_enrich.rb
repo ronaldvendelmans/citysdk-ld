@@ -186,8 +186,8 @@ Sequel.migration do
         "data @> '\"route\"=>\"#{type}\"'::hstore"
       }.join(" OR ")
   
-      run << set_nodes_modalities % [array, hstores]
-      run << set_node_data_modalities % [array, hstores]
+      run sprintf(set_nodes_modalities % [array, hstores])
+      run sprintf(set_node_data_modalities % [array, hstores])
     }
     
     ################################################################################################
@@ -202,7 +202,7 @@ Sequel.migration do
       WHERE members IS NOT NULL AND members != '{}' AND node_type IN (1, 3) AND geom IS NULL;
     SQL
     
-    run << route_geometries
+    run route_geometries
 
     ########################################################################################
     ########################################################################################
