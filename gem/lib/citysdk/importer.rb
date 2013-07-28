@@ -25,6 +25,7 @@ module CitySDK
       # CREATE_TYPE_ROUTES = 'routes'
       # CREATE_TYPE_CREATE = 'create'
 
+
       @filereader = FileReader.new(@params)
     end
     
@@ -147,10 +148,6 @@ module CitySDK
         sign_in
         if @params[:unique_id] and @params[:match] and (@params[:hasgeometry] != 'unknown')
 
-          # puts ""
-          # puts "doImport... 1"
-          # puts ""
-
           match_tpl[:match][:params][:radius] = @params[:radius] || 200
           match_tpl[:match][:params][:geometry_type] = @params[:geometry_type] || :point
           @params[:match].each do |a|
@@ -164,9 +161,11 @@ module CitySDK
               :id   => rec[:id]
             }
             node[:name] = rec[:properties][@params[:name]] if @params[:name]
-            node[:data] = rec[:properties]
+            node[:data] = filterFields(rec[:properties])
 
             # puts JSON.pretty_generate(node)
+            
+            yield(node) if block_given?
             
             @api.match_create_node(node) if not dryrun
             count -= 1
@@ -187,10 +186,12 @@ module CitySDK
                 :id   => rec[:id]
               }
               node[:name] = rec[:properties][@params[:name]] if @params[:name]
-              node[:data] = rec[:properties]
+              node[:data] = filterFields(rec[:properties])
 
               # puts JSON.pretty_generate(node)
             
+              yield(node) if block_given?
+
               @api.create_node(node) if not dryrun
               count -= 1
             end

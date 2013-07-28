@@ -30,14 +30,17 @@ module CitySDK
             readZip(file_path)
           when /\.(geo)?json/i
             readJSON(file_path)
-          when /\.shape/i
+          when /\.(shape|shp)/i
             readShape(file_path)
           when /\.csv|tsv/i
             readCsv(file_path)
           when /\.csdk/i
             readCsdk(file_path)
+          else
+            raise "Unknown or unsupported file type: #{ext}."
         end
       end
+      
 
       @params[:rowcount] = @content.length
       getFields if not @params[:fields]
@@ -320,6 +323,7 @@ module CitySDK
       sridFromPrj(prj) if (prj and @params[:srid].nil?)
       
       @params[:hasgeometry] = 'certain'
+      
       
       GeoRuby::Shp4r::ShpFile.open(path) do |shp|
         shp.each do |shape|
