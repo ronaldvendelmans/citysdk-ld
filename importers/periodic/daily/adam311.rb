@@ -1,6 +1,6 @@
 require 'date'
 require 'active_support/core_ext'
-require '/var/www/csdk_cms/current/utils/citysdk_api.rb'
+require 'citysdk'
 require '/var/www/csdk_cms/current/utils/sysmail.rb'
 
 pw = JSON.parse(File.read('/var/www/citysdk/shared/config/cdkpw.json')) if File.exists?('/var/www/citysdk/shared/config/cdkpw.json')
@@ -14,13 +14,12 @@ $adamPath = "opentunnel/open311/v21/requests.xml?jurisdiction_id=0363&api_key=" 
 $layer='311.amsterdam'
 puts "Updating layer #{$layer}.."
 
-$api = CitySDK_API.new($email,$password)
+$api = CitySDK::API.new('api.dev')
 
 
 
 begin 
-  $api.set_host('api.citysdk.waag.org')
-  if $api.authenticate == false 
+  if $api.authenticate($email,$password) == false 
     puts "Auth failure"
     exit!
   end
@@ -52,7 +51,7 @@ begin
           rescue Exception => e
             puts "Exception updating node: #{e.message}" 
           end
-      rescue CitySDK_Exception => e # node not found..
+      rescue Exception => e # node not found..
           node = {
             "id" => n['service_request_id'],
             "name" => "",

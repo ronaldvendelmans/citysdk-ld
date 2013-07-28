@@ -1,4 +1,4 @@
-require '/var/www/csdk_cms/current/utils/citysdk_api.rb'
+require 'citysdk'
 
 # Rijkswaterstaat waterdata
 
@@ -6,9 +6,9 @@ pw = JSON.parse(File.read('/var/www/citysdk/shared/config/cdkpw.json')) if File.
 $email = ARGV[0] || 'citysdk@waag.org'
 $password = ARGV[1] || (pw ? pw[$email] : '')
 
-$api = CitySDK_API.new($email, $password)
+$api = CitySDK::API.new('api.dev')
 
-if $api.authenticate == false 
+if $api.authenticate($email,$password) == false 
   puts "Auth failure with citysdk."
   exit!
 end
