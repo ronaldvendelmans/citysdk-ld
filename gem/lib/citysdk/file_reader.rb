@@ -30,7 +30,7 @@ module CitySDK
             readZip(file_path)
           when /\.(geo)?json/i
             readJSON(file_path)
-          when /\.(shape|shp)/i
+          when /\.shp/i
             readShape(file_path)
           when /\.csv|tsv/i
             readCsv(file_path)

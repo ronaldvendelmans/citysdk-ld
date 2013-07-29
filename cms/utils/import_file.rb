@@ -9,6 +9,7 @@ if ARGV[0]
     puts "\nFile import at #{Time.now.strftime('%b %d %Y - %H:%M:%S')}"
 
     params = JSON.parse(ARGV[0], {:symbolize_names => true} )
+    params[:fields] = params[:fields].map { |f| f.to_sym }
 
     puts "\tlayer: #{params[:layername]}\n\tfile: #{params[:originalfile]}"  
 
@@ -19,10 +20,8 @@ if ARGV[0]
     
     csv.setLayerStatus("importing...")
     
-    ret = csv.doImport do |h|
-      puts JSON.pretty_generate(h)
-    end
-
+    ret = csv.doImport 
+    
     s = "updated: #{ret[:updated]}; added: #{ret[:created]}; not added: #{ret[:not_added]}"
     puts s
     
