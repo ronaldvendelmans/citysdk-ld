@@ -1,30 +1,41 @@
 require 'date'
-require '/var/www/csdk_cms/current/utils/citysdk_api.rb'
+require 'citysdk'
+require '/var/www/csdk_cms/current/utils/sysmail.rb'
 
-pw = JSON.parse(File.read('/var/www/citysdk/shared/config/cdkpw.json')) if File.exists?('/var/www/citysdk/shared/config/cdkpw.json')
-$email = ARGV[0] || 'citysdk@waag.org'
-$password = ARGV[1] || (pw ? pw[$email] : '')
+credentials = '/var/www/citysdk/shared/config/cdkpw.json'
+pw = File.exists?(credentials) ? JSON.parse(File.read(credentials)) : nil
+$email = ARGV[0] || (pw ? pw['email'] : nil) || 'citysdk@waag.org'
+$passw = ARGV[1] || (pw ? pw[$email]  : nil) || ''
+$host  = ARGV[2] || (pw ? pw['host']  : nil) || 'api.dev'
 
 
 $layer = 'test.*'
-$api = CitySDK_API.new($email,$password)
-if $api.authenticate == false 
-  puts "Auth failure.."
-  $stderr.puts "Auth failure.."
-  exit!
-end
+$api = CitySDK::API.new($host)
 
-count = 0
+begin 
+  if $api.authenticate($email,$passw) == false 
+    puts "Auth failure"
+    exit!
+  end
+  count = 0
 
-obj = $api.get('layers?name=test')
-if obj and obj['results']
-  obj['results'].each do |l|
-    if l['name'] =~ /^test\..+/
-      $api.delete("/layer/#{l['name']}?delete_layer=true")
-      puts "\tdeleted layer: #{l['name']}."
+  obj = $api.get('layers?name=test')
+  if obj and obj['results']
+    obj['results'].each do |l|
+      if l['name'] =~ /^test\..+/
+        $api.delete("/layer/#{l['name']}?delete_layer=true")
+        puts "\tdeleted layer: #{l['name']}."
+      end
     end
   end
+
+rescue Exception => e
+  puts "Error cleaning out test layers:\n\t#{e.message}"
+  CitySDK.sysmail('Error cleaning out test layers.',e.message)
+ensure
+  $api.release()
 end
 
 
-$api.release()
+
+

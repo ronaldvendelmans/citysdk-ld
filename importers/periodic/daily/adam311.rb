@@ -3,10 +3,11 @@ require 'active_support/core_ext'
 require 'citysdk'
 require '/var/www/csdk_cms/current/utils/sysmail.rb'
 
-pw = JSON.parse(File.read('/var/www/citysdk/shared/config/cdkpw.json')) if File.exists?('/var/www/citysdk/shared/config/cdkpw.json')
-$email = ARGV[0] || 'citysdk@waag.org'
-$password = ARGV[1] || (pw ? pw[$email] : '')
-
+credentials = '/var/www/citysdk/shared/config/cdkpw.json'
+pw = File.exists?(credentials) ? JSON.parse(File.read(credentials)) : nil
+$email = ARGV[0] || (pw ? pw['email'] : nil) || 'citysdk@waag.org'
+$passw = ARGV[1] || (pw ? pw[$email]  : nil) || ''
+$host  = ARGV[2] || (pw ? pw['host']  : nil) || 'api.dev'
 
 $adamSR = Faraday.new :url => "http://open311.dataplatform.nl"
 $adamPath = "opentunnel/open311/v21/requests.xml?jurisdiction_id=0363&api_key=" + JSON.parse(File.read('/var/www/citysdk/shared/config/adam311.json'))['key']
@@ -14,12 +15,11 @@ $adamPath = "opentunnel/open311/v21/requests.xml?jurisdiction_id=0363&api_key=" 
 $layer='311.amsterdam'
 puts "Updating layer #{$layer}.."
 
-$api = CitySDK::API.new('api.dev')
 
-
+$api = CitySDK::API.new($host)
 
 begin 
-  if $api.authenticate($email,$password) == false 
+  if $api.authenticate($email,$passw) == false 
     puts "Auth failure"
     exit!
   end

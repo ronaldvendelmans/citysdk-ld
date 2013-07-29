@@ -1,11 +1,13 @@
 require 'date'
+require 'citysdk'
 require 'active_support/core_ext'
-require '/var/www/csdk_cms/current/utils/citysdk_api.rb'
 require '/var/www/csdk_cms/current/utils/sysmail.rb'
 
-pw = JSON.parse(File.read('/var/www/citysdk/shared/config/cdkpw.json')) if File.exists?('/var/www/citysdk/shared/config/cdkpw.json')
-$email = ARGV[0] || 'citysdk@waag.org'
-$password = ARGV[1] || (pw ? pw[$email] : '')
+credentials = '/var/www/citysdk/shared/config/cdkpw.json'
+pw = File.exists?(credentials) ? JSON.parse(File.read(credentials)) : nil
+$email = ARGV[0] || (pw ? pw['email'] : nil) || 'citysdk@waag.org'
+$passw = ARGV[1] || (pw ? pw[$email]  : nil) || ''
+$host  = ARGV[2] || (pw ? pw['host']  : nil) || 'api.dev'
 
 $helsSR = Faraday.new :url => "https://asiointi.hel.fi", :ssl => {:verify => false, :version => 'SSLv3'}
 $helsPath = "/palautews/rest/v1/requests.json"
@@ -15,8 +17,8 @@ puts "Updating layer #{$layer}.."
 
 
 begin
-  $api = CitySDK_API.new($email,$password)
-  if $api.authenticate == false 
+  $api = CitySDK::API.new($host)
+  if $api.authenticate($email,$passw) == false 
     puts "Auth failure"
     exit!
   end
@@ -48,7 +50,7 @@ begin
           rescue Exception => e
             puts "Exception updating node: #{e.message}" 
           end
-      rescue CitySDK_Exception => e # node not found..
+      rescue Exception => e # node not found..
           node = {
             "id" => n['service_request_id'],
             "name" => "",
@@ -73,6 +75,9 @@ begin
           end
       end
     end
+
+    puts "\tupdated #{updated} nodes; added #{new_nodes} nodes.."
+
   else
     CitySDK.sysmail('error @ helsinki311',"Error accessing Helsinki 311 api.")
     puts "Error accessing Helsinki 311 api."
@@ -87,6 +92,4 @@ ensure
   $api.release()
 end
 
-
-puts "\tupdated #{updated} nodes; added #{new_nodes} nodes.."
 
