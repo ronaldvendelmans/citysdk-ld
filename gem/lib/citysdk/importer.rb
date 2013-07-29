@@ -89,10 +89,16 @@ module CitySDK
     end
   
     def filterFields(h)
+      
+      # puts "h: \n#{h}"
+      # puts "@params[:fields]: \n#{@params[:fields]}"
+      
       data = {}
       h.each_key do |k|
+        k = (k.to_sym rescue k) || k
         data[k] = h[k] if @params[:fields].include?(k)
       end
+      # puts "data: \n#{data}"
       data
     end
   
@@ -180,16 +186,14 @@ module CitySDK
 
           begin
             nodes.each do |rec|
-              
+
               node = {
                 :geom => rec[:geometry],
                 :id   => rec[:id]
               }
-              node[:name] = rec[:properties][@params[:name]] if @params[:name]
+              node[:name] = rec[:properties][@params[:name].to_sym] if @params[:name]
               node[:data] = filterFields(rec[:properties])
 
-              # puts JSON.pretty_generate(node)
-            
               yield(node) if block_given?
 
               @api.create_node(node) if not dryrun
@@ -202,6 +206,8 @@ module CitySDK
         else
           raise Exception.new("Cannot import. Geometry or uniuque id is not known for records.") if failed.nil?
         end
+      rescue => e
+        raise Exception.new(e.message)
       ensure
         a = sign_out
         result[:updated] += a[0]
@@ -225,6 +231,7 @@ module CitySDK
             if not (pc.empty? or hn.empty?)
               pc = pc.downcase.gsub(/[^a-z0-9]/,'')
               hn.scan(/\d+/).reverse.each { |n|
+                # puts "/nodes?#{@params[:addresslayer]}::#{@params[:addressfield]}=#{pc + n}"
                 qres = @api.get("/nodes?#{@params[:addresslayer]}::#{@params[:addressfield]}=#{pc + n}")
                 break if qres[:status]=='success' and qres[:record_count].to_i >= 1
               }

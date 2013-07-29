@@ -55,7 +55,7 @@ module CitySDK
       pd = pc = hn = ad = false
       @params[:fields].reverse.each do |f|
         pd = f if ( f.to_s =~ /postcode|post/i )
-        pc = f if ( f.to_s =~ /^postcode$/i )
+        pc = f if ( f.to_s =~ /^(post|zip)code$/i )
         hn = f if ( f.to_s =~ /huisnummer|housenumber|(house|huis)(nr|no)|number/i)
         ad = f if ( f.to_s =~ /address|street|straat|adres/i)
       end
@@ -71,6 +71,8 @@ module CitySDK
         @params[:housenumber] = hn ? hn : ad
       end
     end
+
+
 
     def findUniqueField
       fields = {}
@@ -115,7 +117,7 @@ module CitySDK
     def getFields
       @params[:fields] = []
       @content[0][:properties].each_key do |k|
-        @params[:fields] << k
+        @params[:fields] << (k.to_sym rescue k) || k
       end
     end
     
@@ -178,6 +180,7 @@ module CitySDK
       xfield = nil; xs = true
       yfield = nil; ys = true
       @content[0][:properties].each do |k,v|
+        next if k.nil?
         if k.to_s =~ RE_GEO
           srid,g_type = isWkbGeometry(v)
           if(srid)
@@ -347,8 +350,8 @@ module CitySDK
     
     def readZip(path)
       begin 
-        Dir.mktmpdir("cdkfi_#{File.basename(path)}") do |dir| 
-          raise "Error unzipping #{path}." if not system "unzip #{path} -d #{dir} > /dev/null 2>&1"
+        Dir.mktmpdir("cdkfi_#{File.basename(path).gsub(/\A/,'')}") do |dir| 
+          raise "Error unzipping #{path}." if not system "unzip '#{path}' -d '#{dir}' > /dev/null 2>&1"
           Dir.foreach(dir) do |f|
             next if f =~ /^\./
             case File.extname(f)

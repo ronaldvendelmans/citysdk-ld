@@ -17,11 +17,11 @@ if ARGV[0]
     
     csv = CitySDK::Importer.new(params)
     
-    
-    puts "setLayerStatus"
     csv.setLayerStatus("importing...")
     
-    ret = csv.doImport
+    ret = csv.doImport do |h|
+      puts JSON.pretty_generate(h)
+    end
 
     s = "updated: #{ret[:updated]}; added: #{ret[:created]}; not added: #{ret[:not_added]}"
     puts s
