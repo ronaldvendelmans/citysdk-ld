@@ -14,10 +14,7 @@ $layer = '311.*'
 $api = CitySDK::API.new($host)
 
 begin
-  if $api.authenticate($email,$passw) == false 
-    puts "Auth failure"
-    exit!
-  end
+  $api.authenticate($email,$passw)
 
   puts "Cleaning up layer #{$layer}.."
 

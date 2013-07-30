@@ -1,4 +1,6 @@
-require "../../rce/rijksmonumenten"
+exit
+
+
 require 'active_support/core_ext'
 require '/var/www/csdk_cms/current/utils/citysdk_api.rb'
 
@@ -10,6 +12,7 @@ $password = ARGV[1] || (pw ? pw[$email] : '')
 @ns = Faraday.new :url => "https://webservices.ns.nl", :ssl => {:verify => false}
 @ns.basic_auth(ns['usr'], ns['key'])
 xml = @ns.get "/ns-api-stations"
+
 
 # TODO: Use ns-api-stations-v2
 

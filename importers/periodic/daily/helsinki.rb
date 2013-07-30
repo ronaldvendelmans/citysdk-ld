@@ -16,16 +16,10 @@ $layer='311.helsinki'
 puts "Updating layer #{$layer}.."
 
 
+$api = CitySDK::API.new($host)
 begin
-  $api = CitySDK::API.new($host)
-  if $api.authenticate($email,$passw) == false 
-    puts "Auth failure"
-    exit!
-  end
-
+  $api.authenticate($email,$passw)
   $api.set_layer($layer)
-
-
   updated = 0
   new_nodes = 0
 

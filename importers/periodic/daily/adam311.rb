@@ -15,17 +15,11 @@ $adamPath = "opentunnel/open311/v21/requests.xml?jurisdiction_id=0363&api_key=" 
 $layer='311.amsterdam'
 puts "Updating layer #{$layer}.."
 
-
 $api = CitySDK::API.new($host)
 
 begin 
-  if $api.authenticate($email,$passw) == false 
-    puts "Auth failure"
-    exit!
-  end
-
+  $api.authenticate($email,$passw)
   $api.set_layer($layer)
-
   updated = 0
   new_nodes = 0
 

@@ -13,12 +13,8 @@ $layer = 'test.*'
 $api = CitySDK::API.new($host)
 
 begin 
-  if $api.authenticate($email,$passw) == false 
-    puts "Auth failure"
-    exit!
-  end
+  $api.authenticate($email,$passw)
   count = 0
-
   obj = $api.get('layers?name=test')
   if obj and obj['results']
     obj['results'].each do |l|
