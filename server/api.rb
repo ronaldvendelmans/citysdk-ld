@@ -50,7 +50,15 @@ class CitySDK_API < Sinatra::Base
   
   
   before do 
-    content_type 'application/json'
+    
+    
+    # puts "REQ = #{JSON.pretty_generate(request.env)}"
+    
+    
+    # text/turtle
+    # application/x-turtle
+    # 
+    # content_type 'application/json'
     # @do_cache = (request.env['REQUEST_METHOD'] == 'GET')
     # @cache_time = 300
   end
@@ -88,7 +96,7 @@ class CitySDK_API < Sinatra::Base
             .do_paginate(params)
         end      
       
-      CitySDK_API.json_nodes_results(pgn, params, request)
+      CitySDK_API.nodes_results(pgn, params, request)
     rescue Exception => e
       CitySDK_API.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
     end
@@ -104,7 +112,7 @@ class CitySDK_API < Sinatra::Base
         .node_layers(params)
         .do_paginate(params)
 
-      CitySDK_API.json_nodes_results(pgn, params, request)
+      CitySDK_API.nodes_results(pgn, params, request)
     rescue Exception => e
       CitySDK_API.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
     end

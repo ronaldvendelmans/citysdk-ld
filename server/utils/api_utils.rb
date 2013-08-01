@@ -135,6 +135,27 @@ class CitySDK_API < Sinatra::Base
     }).to_json
   end  
   
+  
+  def self.nodes_results(dataset, params, req)
+    case req.env['HTTP_ACCEPT']
+    when 'application/json'
+      return self.json_nodes_results(dataset, params, req)
+    when 'text/turtle', 'application/x-turtle'
+      return self.ttl_nodes_results(dataset, params, req)
+    else
+      case params[:format]
+      when 'turtle'
+        return self.ttl_nodes_results(dataset, params, req)
+      when 'json'
+        return self.json_nodes_results(dataset, params, req)
+      else
+        return self.json_nodes_results(dataset, params, req)
+      end
+    end
+  end
+  
+  
+  
   def self.json_nodes_results(dataset, params, req)
     begin
       res = dataset.nodes(params).map { |item| Node.serialize(item,params) }    
@@ -144,6 +165,11 @@ class CitySDK_API < Sinatra::Base
     end
   end  
     
+  def self.ttl_nodes_results(dataset, params, req)
+    "turtle!"
+  end  
+    
+
   def self.pagination_results(params, pagination_data, res_length)
     if pagination_data
       if res_length < pagination_data[:page_size]

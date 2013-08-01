@@ -19,6 +19,11 @@ Sequel.migration do
 			column :geom, 'geometry'
 		end
 
+		create_table :ldprefix do
+			String :name, :null => false
+			String :prefix, :null => false
+			String :url, :null => false
+    end
 
 		create_table :node_types do
 			primary_key :id

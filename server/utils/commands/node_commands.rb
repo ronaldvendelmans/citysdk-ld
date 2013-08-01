@@ -20,7 +20,7 @@ class CitySDK_API < Sinatra::Base
           .node_layers(params)
           .do_paginate(params)
           
-        CitySDK_API.json_nodes_results(pgn, params, req)      
+        CitySDK_API.nodes_results(pgn, params, req)      
             
       elsif params[:cmd] == 'routes_start' or params[:cmd] == 'routes_end'
         # Select all routes that start or end in cdk_id, 
@@ -43,7 +43,7 @@ class CitySDK_API < Sinatra::Base
           .node_layers(params)
           .do_paginate(params)
           
-        CitySDK_API.json_nodes_results(pgn, params, req) 
+        CitySDK_API.nodes_results(pgn, params, req) 
     
       elsif params[:cmd] == 'regions'
 

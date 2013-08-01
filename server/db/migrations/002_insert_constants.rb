@@ -43,6 +43,26 @@ Sequel.migration do
     # Insert node_data types
     self[:node_data_types].insert([0, 'layer_data'])
     self[:node_data_types].insert([1, 'comment'])
+    
+    
+    
+    # Insert ontology prefixes
+    self[:ldprefix].insert(:name => 'ArtsHolland', :prefix => 'ah:', :url => 'http://purl.org/artsholland/1.0#')
+    self[:ldprefix].insert(:name => 'DC-Elements', :prefix => 'dc:', :url => 'http://purl.org/dc/elements/1.1/')
+    self[:ldprefix].insert(:name => 'DC-Terms', :prefix => 'dct:', :url => 'http://purl.org/dc/terms/')
+    self[:ldprefix].insert(:name => 'FOAF', :prefix => 'foaf:', :url => 'http://xmlns.com/foaf/0.1/')
+    self[:ldprefix].insert(:name => 'GeoNames', :prefix => 'gn:', :url => 'http://www.geonames.org/ontology#')
+    self[:ldprefix].insert(:name => 'GeoSparql', :prefix => 'geo:', :url => 'http://www.opengis.net/ont/geosparql#')
+    self[:ldprefix].insert(:name => 'GoodRelations', :prefix => 'gr:', :url => 'http://purl.org/goodrelations/v1#')
+    self[:ldprefix].insert(:name => 'ICAL', :prefix => 'ical:', :url => 'http://www.w3.org/2002/12/cal/ical#')
+    self[:ldprefix].insert(:name => 'OWL', :prefix => 'owl:', :url => 'http://www.w3.org/2002/07/owl#')
+    self[:ldprefix].insert(:name => 'RDF', :prefix => 'rdf:', :url => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+    self[:ldprefix].insert(:name => 'RDF-Schema', :prefix => 'dfs:', :url => 'http://www.w3.org/2000/01/rdf-schema#')
+    self[:ldprefix].insert(:name => 'SKOS', :prefix => 'skos:', :url => 'http://www.w3.org/2004/02/skos/core#')
+    self[:ldprefix].insert(:name => 'Time', :prefix => 'time:', :url => 'http://www.w3.org/2006/time#')
+    self[:ldprefix].insert(:name => 'XML', :prefix => 'xml:', :url => 'http://www.w3.org/XML/1998/namespace')
+    self[:ldprefix].insert(:name => 'XSD', :prefix => 'xsd:', :url => 'http://www.w3.org/2001/XMLSchema#')
+    self[:ldprefix].insert(:name => 'LinkedGeoData', :prefix => 'lgdo:', :url => 'http://linkedgeodata.org/ontology/')    
         
     # Insert default layers 
     # TODO: categories for default layers!!
