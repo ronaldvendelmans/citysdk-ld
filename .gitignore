@@ -3,3 +3,6 @@ services/tmp/restart.txt
 cms/log/import.log
 cms/database.json
 cms/database.json
+.SyncArchive/server/models/node.rb
+.SyncID
+.SyncIgnore

@@ -1,0 +1,240 @@
+@prefix : <http://purl.org/citysdk/1.0/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://purl.org/citysdk/1.0/> .
+
+<http://purl.org/citysdk/1.0/> rdf:type owl:Ontology .
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+###  http://purl.org/citysdk/1.0/hasTransportModality
+
+:hasTransportModality rdf:type owl:ObjectProperty ;
+                      
+                      rdfs:domain :Ptstop ,
+                                  :Route ;
+                      
+                      rdfs:range :TransportModality .
+
+
+
+
+
+#################################################################
+#
+#    Data properties
+#
+#################################################################
+
+
+###  http://purl.org/citysdk/1.0/createdOnLayer
+
+:createdOnLayer rdf:type owl:DatatypeProperty ;
+                
+                rdfs:range xsd:anyURI .
+
+
+
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+###  http://purl.org/citysdk/1.0/CitySDK_Entity
+
+:CitySDK_Entity rdf:type owl:Class .
+
+
+
+###  http://purl.org/citysdk/1.0/Node
+
+:Node rdf:type owl:Class ;
+      
+      rdfs:subClassOf :CitySDK_Entity .
+
+
+
+###  http://purl.org/citysdk/1.0/Ptline
+
+:Ptline rdf:type owl:Class ;
+        
+        rdfs:subClassOf :Route .
+
+
+
+###  http://purl.org/citysdk/1.0/Ptstop
+
+:Ptstop rdf:type owl:Class ;
+        
+        rdfs:subClassOf :Node .
+
+
+
+###  http://purl.org/citysdk/1.0/Region
+
+:Region rdf:type owl:Class ;
+        
+        rdfs:subClassOf :CitySDK_Entity .
+
+
+
+###  http://purl.org/citysdk/1.0/Route
+
+:Route rdf:type owl:Class ;
+       
+       rdfs:subClassOf :CitySDK_Entity .
+
+
+
+###  http://purl.org/citysdk/1.0/TransportModality
+
+:TransportModality rdf:type owl:Class ;
+                   
+                   rdfs:subClassOf :CitySDK_Entity .
+
+
+
+
+
+#################################################################
+#
+#    Individuals
+#
+#################################################################
+
+
+###  http://purl.org/citysdk/1.0/transportModality_airplane
+
+:transportModality_airplane rdf:type :TransportModality ,
+                                     owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_any
+
+:transportModality_any rdf:type :TransportModality ,
+                                owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_bicycle
+
+:transportModality_bicycle rdf:type :TransportModality ,
+                                    owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_bus
+
+:transportModality_bus rdf:type :TransportModality ,
+                                owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_cable_car
+
+:transportModality_cable_car rdf:type :TransportModality ,
+                                      owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_car
+
+:transportModality_car rdf:type :TransportModality ,
+                                owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_ferry
+
+:transportModality_ferry rdf:type :TransportModality ,
+                                  owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_foot
+
+:transportModality_foot rdf:type :TransportModality ,
+                                 owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_funicular
+
+:transportModality_funicular rdf:type :TransportModality ,
+                                      owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_gondola
+
+:transportModality_gondola rdf:type :TransportModality ,
+                                    owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_horse
+
+:transportModality_horse rdf:type :TransportModality ,
+                                  owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_moped
+
+:transportModality_moped rdf:type :TransportModality ,
+                                  owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_motorbike
+
+:transportModality_motorbike rdf:type :TransportModality ,
+                                      owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_rail
+
+:transportModality_rail rdf:type :TransportModality ,
+                                 owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_subway
+
+:transportModality_subway rdf:type :TransportModality ,
+                                   owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_tram
+
+:transportModality_tram rdf:type :TransportModality ,
+                                 owl:NamedIndividual .
+
+
+
+###  http://purl.org/citysdk/1.0/transportModality_truck
+
+:transportModality_truck rdf:type :TransportModality ,
+                                  owl:NamedIndividual .
+
+
+
+
+###  Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net
+
