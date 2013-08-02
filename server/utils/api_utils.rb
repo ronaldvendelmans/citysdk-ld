@@ -187,7 +187,8 @@ class CitySDK_API < Sinatra::Base
     begin
       prefixes = Set.new
       prfs = []
-      res = dataset.nodes(params).map { |item| Node.turtelize(item,params,prefixes) }
+      layers = []
+      res = dataset.nodes(params).map { |item| Node.turtelize(item,params,prefixes,layers) }
       prefixes.each do |p|
         prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
       end

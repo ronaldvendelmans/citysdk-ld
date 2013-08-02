@@ -16,6 +16,18 @@
 #################################################################
 
 
+###  http://purl.org/citysdk/1.0/createdOnLayer
+
+:createdOnLayer rdf:type owl:ObjectProperty ;
+                
+                rdfs:range :Layer ;
+                
+                rdfs:domain :Node ,
+                            :Region ,
+                            :Route .
+
+
+
 ###  http://purl.org/citysdk/1.0/hasTransportModality
 
 :hasTransportModality rdf:type owl:ObjectProperty ;
@@ -31,23 +43,6 @@
 
 #################################################################
 #
-#    Data properties
-#
-#################################################################
-
-
-###  http://purl.org/citysdk/1.0/createdOnLayer
-
-:createdOnLayer rdf:type owl:DatatypeProperty ;
-                
-                rdfs:range xsd:anyURI .
-
-
-
-
-
-#################################################################
-#
 #    Classes
 #
 #################################################################
@@ -56,6 +51,14 @@
 ###  http://purl.org/citysdk/1.0/CitySDK_Entity
 
 :CitySDK_Entity rdf:type owl:Class .
+
+
+
+###  http://purl.org/citysdk/1.0/Layer
+
+:Layer rdf:type owl:Class ;
+       
+       rdfs:subClassOf :CitySDK_Entity .
 
 
 
