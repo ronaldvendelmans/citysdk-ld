@@ -1,5 +1,5 @@
 require 'set'
-ENDPOINTNAME = '001'
+ENDPOINTNAME = 'http://purl.org/citysdk/1.0/001'
 
 class Sequel::Model
   @@node_types = ['node','route','ptstop','ptline']  
@@ -65,33 +65,42 @@ class Node < Sequel::Model
   end
   
   
-  def self.turtelize(h,params,prefixes)    
+  def self.turtelize(h,params,prefixes,layers)    
     prefixes << 'csdk:'
+    prefixes << 'rdfs:'
+    prefixes << 'rdf:'
     prefixes << 'geo:'
     prefixes << 'dct:'
     triples = []
     
-    triples << "csdk:<#{ENDPOINTNAME}/#{h[:cdk_id]}>"
+    if not layers.include?(h[:layer_id])
+      layers << h[:layer_id]
+      triples << "<#{ENDPOINTNAME}/layer/#{Layer.textFromId(h[:layer_id])}> a csdk:Layer ."
+      triples << ""
+    end
+    
+    triples << "<#{ENDPOINTNAME}/#{h[:cdk_id]}>"
     triples << "\t a csdk:#{@@node_types[h[:node_type]].capitalize} ;"
     triples << "\t a geo:SpatialObject ;"
-    triples << "\t dct:title '#{h[:name]}' ;" if h[:name]
-    triples << "\t csdk:createdOnLayer 'csdk:#{ENDPOINTNAME}/#{Layer.textFromId(h[:layer_id])}' ;"
+    triples << "\t dct:title \"#{h[:name]}\" ;" if h[:name]
+    triples << "\t csdk:createdOnLayer <#{ENDPOINTNAME}/layer/#{Layer.textFromId(h[:layer_id])}> ;"
     
     if h[:modalities]
       h[:modalities].each { |m| 
-        triples << "\t csdk:hasTransportmodality 'csdk:transportModality_#{Modality.NameFromId(m)}' ;"
+        triples << "\t csdk:hasTransportmodality csdk:transportModality_#{Modality.NameFromId(m)} ;"
       }
     end
     
     if params.has_key? "geom"
       if h[:member_geometries] and h[:node_type] != 3
-        triples << "\t geo:hasGeometry '" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(h[:member_geometries]) )  + "' ;"
+        triples << "\t geo:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(h[:member_geometries]) )  + "\" ;"
       elsif h[:geom]
-        triples << "\t geo:hasGeometry '" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(h[:geom]) )  + "' ;"
+        triples << "\t geo:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(h[:geom]) )  + "\" ;"
       end
     end
 
     triples[-1][-1] = '.'
+    triples << ""
     triples
     
   end
