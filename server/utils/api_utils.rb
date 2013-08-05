@@ -186,13 +186,23 @@ class CitySDK_API < Sinatra::Base
   def self.turtle_nodes_results(dataset, params, req)
     begin
       prefixes = Set.new
-      prfs = []
+      prfs = ["@base <#{CitySDK_API::BASE_URI}> ."]
+      prfs << "@prefix : <#{CitySDK_API::BASE_URI}> ."
+      
       layers = []
       res = dataset.nodes(params).map { |item| Node.turtelize(item,params,prefixes,layers) }
       prefixes.each do |p|
         prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
       end
       prfs << ""
+      
+      if params[:layerdataproperties]
+        params[:layerdataproperties].each do |p|
+          prfs << p
+        end
+        prfs << ""
+      end
+      
       turtle_results([prfs.join("\n"),res.join("\n")].join("\n"), params, dataset.get_pagination_data(params), req)      
     rescue Exception => e
       self.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")

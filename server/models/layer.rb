@@ -49,6 +49,40 @@ class Layer < Sequel::Model
       return false, @@LayerValidity[id]
     end
   end
+  
+  def turtelize(params,prefixes)    
+    prefixes << 'rdfs:'
+    prefixes << 'foaf:'
+    prefixes << 'rdf:'
+    prefixes << 'geos:'
+    prefixes << 'dc:'
+    triples = []
+    
+    triples << "<#{::CitySDK_API::ENDPOINT}/layer/#{name}>"
+    triples << " a :Layer ;"
+
+    triples << " rdfs:descripttion \"#{description}\" ;"
+    
+    if data_sources 
+      data_sources.each { |s| 
+        a = s.index('=') ? s[s.index('=')+1..-1] : s 
+        triples << " rdfs:comment \"#{a}\" ;"
+      }
+    end
+    
+    if params.has_key? "geom" and !bbox.nil?
+      triples << "\t geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(bbox) )  + "\" ;"
+    end
+
+    triples[-1][-1] = '.'
+    
+    triples << "_:o a foaf:Organization ;"
+    triples << "  foaf:name \"#{organization}\" ;"
+    triples << "  foaf:mbox \"#{owner.email}\" ."
+    
+    triples << ""
+    triples
+  end
 
   def serialize(params)
     h = {

@@ -1,5 +1,6 @@
 require 'sequel/model'
 require 'sequel/plugins/serialization'
+require 'set'
 require 'json'
 
 require_relative 'node.rb'
@@ -44,6 +45,91 @@ class NodeDatum < Sequel::Model
       end
     end
     h
+  end
+  
+  # deal with osm rdf mapping separately...
+  def self.osmprops(h,datas,triples,params)
+    h.each do |k,v|
+
+      o = OSMProps.where({:key => k,:val => v}).first
+      if(o)
+        triples << "\t #{o[:type]} #{o[:uri]} ;"
+        next
+      end
+
+      o = OSMProps.where(:key => k).where(Sequel.~(:lang => nil)).first
+      if(o)
+        triples << "\t #{o[:uri]} \"#{v}\"@#{o[:lang]} ;"
+        next
+      end
+
+      o = OSMProps.where({:type => 'string', :key => k}).where(Sequel.~(:uri => nil)).first
+      if(o)
+        triples << "\t #{o[:uri]} \"#{v}\" ;"
+        next
+      end
+
+      o = OSMProps.where({:type => 'a', :key => k}).where(Sequel.~(:uri => nil)).first
+      if(o)
+        triples << "\t #{o[:type]} #{o[:uri]} ;"
+        next
+      end
+
+      o = OSMProps.where(:key => k).where(Sequel.~(:type => nil)).first
+      if(o)
+        triples << "\t #{o[:uri]} \"#{v}\"^^xsd:#{o[:type]} ;"
+        next
+      end
+      
+      prop = "<#{::CitySDK_API::ENDPOINT}.osm.#{k.to_s}>"
+      params[:layerdataproperties] << "#{prop} rdfs:subPropertyOf :ldProperty ."
+      datas << "\t #{prop} \"#{v}\" ;"
+
+    end # h.each
+  end
+  
+  def self.turtelize(cdk_id, h, params)    
+    triples = []
+    gdatas = []
+    
+    params[:layerdataproperties] = Set.new if params[:layerdataproperties].nil?
+    base_uri = "#{::CitySDK_API::ENDPOINT}/#{cdk_id}/"
+    
+    h.each do |nd|
+      datas = []
+      layer_id = nd[:layer_id]
+      name = Layer.textFromId(layer_id)
+      subj = base_uri + name
+
+      datas << "<#{subj}>"
+    
+      if layer_id == 0 
+
+        osmprops(nd[:data].to_hash,datas,triples,params)
+
+      else
+
+        if Layer.isWebservice?(layer_id) and !params.has_key?('skip_webservice')
+          nd[:data] = WebService.load(layer_id, cdk_id, nd[:data])
+        end
+
+        nd[:data].to_hash.each do |k,v|
+          prop = "<#{::CitySDK_API::ENDPOINT}.#{name}.#{k.to_s}>"
+          params[:layerdataproperties] << "#{prop} rdfs:subPropertyOf :ldProperty ."
+          datas << "\t #{prop} \"#{v}\" ;"
+        end
+
+      end
+      
+      if datas.length > 1
+        triples << "\t :layerData <#{subj}> ;"
+        datas[-1][-1] = '.'
+        datas << ""
+        gdatas += datas
+      end
+    
+    end
+    return triples, gdatas
   end
 
  

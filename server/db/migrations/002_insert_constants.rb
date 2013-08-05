@@ -52,7 +52,7 @@ Sequel.migration do
     self[:ldprefix].insert(:name => 'DC-Terms', :prefix => 'dct:', :url => 'http://purl.org/dc/terms/')
     self[:ldprefix].insert(:name => 'FOAF', :prefix => 'foaf:', :url => 'http://xmlns.com/foaf/0.1/')
     self[:ldprefix].insert(:name => 'GeoNames', :prefix => 'gn:', :url => 'http://www.geonames.org/ontology#')
-    self[:ldprefix].insert(:name => 'GeoSparql', :prefix => 'geo:', :url => 'http://www.opengis.net/ont/geosparql#')
+    self[:ldprefix].insert(:name => 'GeoSparql', :prefix => 'geos:', :url => 'http://www.opengis.net/ont/geosparql#')
     self[:ldprefix].insert(:name => 'GoodRelations', :prefix => 'gr:', :url => 'http://purl.org/goodrelations/v1#')
     self[:ldprefix].insert(:name => 'ICAL', :prefix => 'ical:', :url => 'http://www.w3.org/2002/12/cal/ical#')
     self[:ldprefix].insert(:name => 'OWL', :prefix => 'owl:', :url => 'http://www.w3.org/2002/07/owl#')

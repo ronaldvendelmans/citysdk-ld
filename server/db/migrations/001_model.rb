@@ -27,7 +27,13 @@ Sequel.migration do
     run = <<-SQL
       ALTER TABLE ldprefix ADD CONSTRAINT constraint_prefix_unique UNIQUE(prefix);
     SQL
-	
+
+		create_table :ldprops do
+      integer :layer_id, :null => false     
+			String :key, :null => false
+			String :type
+			String :uri
+    end
 
 		create_table :node_types do
 			primary_key :id

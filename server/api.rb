@@ -61,6 +61,7 @@ class CitySDK_API < Sinatra::Base
     #   @@memcache.set($1,response.body[0], @cache_time, :raw => true)
     # end
     response.headers['Content-type'] = params[:inferred_format]
+    response.headers['Content-encoding'] = 'utf-8'
     response.headers['Access-Control-Allow-Origin'] = '*'
   end
 

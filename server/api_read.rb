@@ -4,15 +4,34 @@ class CitySDK_API < Sinatra::Base
       kv8  = CitySDK_API::memcache_get('kv8daemon');
       divv = CitySDK_API::memcache_get('divvdaemon');
       @do_cache = false
-      { :status => 'success', 
-        :url => request.url, 
-        "name" => "CitySDK Version 1.0",
-        "description" => "live testing; preliminary documentation @ http://dev.citysdk.waag.org",
-        "health" => {
-          "kv8" => kv8 ? "alive, #{kv8}" : "dead",
-          "divv" => divv ? "alive, last timestamp: #{divv}" : "dead",
-        }
-      }.to_json 
+      
+      case params[:inferred_format]
+      when 'text/turtle'
+        a = ["@base <#{CitySDK_API::BASE_URI}> ."]
+        a << "@prefix : <#{CitySDK_API::BASE_URI}> ."
+        a << "@prefix foaf: <http://xmlns.com/foaf/0.1/> ."
+        a << ""
+        a << '_:ep'
+        a << ' a :CitysdkEndpoint ;'
+        a << ' rdfs:description "Amsterdam/NL CitySDK endpoint." ;'
+        a << ' :endpointCode "001" ;'
+        a << ' :apiUrl "http://api.citysdk.waag.org" ;'
+        a << ' :cmsUrl "http://cms.citysdk.waag.org" ;'
+        a << ' :infoUrl "http://dev.citysdk.waag.org" ;'
+        a << ' foaf:mbox "citysdk@waag.org" .'
+        return a.join("\n")
+      when 'application/json'
+        return { :status => 'success', 
+          :url => request.url, 
+          "name" => "CitySDK Version 1.0",
+          "description" => "live testing; preliminary documentation @ http://dev.citysdk.waag.org",
+          "health" => {
+            "kv8" => kv8 ? "alive, #{kv8}" : "dead",
+            "divv" => divv ? "alive, last timestamp: #{divv}" : "dead",
+          }
+        }.to_json 
+      end
+
   end
 
   get '/get_session' do
@@ -77,10 +96,23 @@ class CitySDK_API < Sinatra::Base
     layer_id = Layer.idFromText(name)
     CitySDK_API.do_abort(422,"Unknown layer or invalid layer spec: #{name}") if layer_id.nil? or layer_id.is_a? Array
     layer = Layer[layer_id]
-    { :status => 'success', 
-      :url => request.url,  
-      :results => [ layer.serialize(params) ]
-    }.to_json 
+
+    case params[:inferred_format]
+    when 'text/turtle'
+      prefixes = Set.new
+      prfs = ["@base <#{CitySDK_API::BASE_URI}> ."]
+      prfs << "@prefix : <#{CitySDK_API::BASE_URI}> ."
+      res = layer.turtelize(params,prefixes)
+      prefixes.each do |p|
+        prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
+      end
+      return [prfs.join("\n"),res.join("\n")].join("\n")
+    when 'application/json'
+      return { :status => 'success', 
+        :url => request.url,  
+        :results => [ layer.serialize(params) ]
+      }.to_json 
+    end
   end
 
   get '/:within/nodes/?' do
