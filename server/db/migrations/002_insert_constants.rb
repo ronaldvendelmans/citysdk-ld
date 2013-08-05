@@ -57,12 +57,13 @@ Sequel.migration do
     self[:ldprefix].insert(:name => 'ICAL', :prefix => 'ical:', :url => 'http://www.w3.org/2002/12/cal/ical#')
     self[:ldprefix].insert(:name => 'OWL', :prefix => 'owl:', :url => 'http://www.w3.org/2002/07/owl#')
     self[:ldprefix].insert(:name => 'RDF', :prefix => 'rdf:', :url => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#')
-    self[:ldprefix].insert(:name => 'RDF-Schema', :prefix => 'dfs:', :url => 'http://www.w3.org/2000/01/rdf-schema#')
+    self[:ldprefix].insert(:name => 'RDF-Schema', :prefix => 'rdfs:', :url => 'http://www.w3.org/2000/01/rdf-schema#')
     self[:ldprefix].insert(:name => 'SKOS', :prefix => 'skos:', :url => 'http://www.w3.org/2004/02/skos/core#')
     self[:ldprefix].insert(:name => 'Time', :prefix => 'time:', :url => 'http://www.w3.org/2006/time#')
     self[:ldprefix].insert(:name => 'XML', :prefix => 'xml:', :url => 'http://www.w3.org/XML/1998/namespace')
     self[:ldprefix].insert(:name => 'XSD', :prefix => 'xsd:', :url => 'http://www.w3.org/2001/XMLSchema#')
     self[:ldprefix].insert(:name => 'LinkedGeoData', :prefix => 'lgdo:', :url => 'http://linkedgeodata.org/ontology/')    
+    self[:ldprefix].insert(:name => 'CitySDK', :prefix => 'csdk:', :url => 'http://purl.org/citysdk/1.0/')    
         
     # Insert default layers 
     # TODO: categories for default layers!!

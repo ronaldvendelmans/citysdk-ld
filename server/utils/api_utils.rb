@@ -1,3 +1,5 @@
+require 'set'
+
 class CitySDK_API < Sinatra::Base
   
   ##########################################################################################
@@ -135,22 +137,38 @@ class CitySDK_API < Sinatra::Base
     }).to_json
   end  
   
+  def self.turtle_results(res, params, pagination_data, req)
+    res
+  end  
   
-  def self.nodes_results(dataset, params, req)
+  def self.format(params, req)
     case req.env['HTTP_ACCEPT']
+      # accept header takes precedence
     when 'application/json'
-      return self.json_nodes_results(dataset, params, req)
-    when 'text/turtle', 'application/x-turtle'
-      return self.ttl_nodes_results(dataset, params, req)
+      return 'application/json'
+    when 'text/turtle'
+      return 'text/turtle'
     else
       case params[:format]
       when 'turtle'
-        return self.ttl_nodes_results(dataset, params, req)
+        return 'text/turtle'
       when 'json'
-        return self.json_nodes_results(dataset, params, req)
+        return 'application/json'
       else
-        return self.json_nodes_results(dataset, params, req)
+        # json if nothing specified
+        return 'application/json'
       end
+    end
+  end
+  
+  def self.nodes_results(dataset, params, req)
+    case params[:inferred_format]
+    when 'application/json'
+      return self.json_nodes_results(dataset, params, req)
+    when 'text/turtle'
+      return self.turtle_nodes_results(dataset, params, req)
+    else
+      return self.json_nodes_results(dataset, params, req)
     end
   end
   
@@ -165,8 +183,20 @@ class CitySDK_API < Sinatra::Base
     end
   end  
     
-  def self.ttl_nodes_results(dataset, params, req)
-    "turtle!"
+  def self.turtle_nodes_results(dataset, params, req)
+    begin
+      prefixes = Set.new
+      prfs = []
+      layers = []
+      res = dataset.nodes(params).map { |item| Node.turtelize(item,params,prefixes,layers) }
+      prefixes.each do |p|
+        prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
+      end
+      prfs << ""
+      turtle_results([prfs.join("\n"),res.join("\n")].join("\n"), params, dataset.get_pagination_data(params), req)      
+    rescue Exception => e
+      self.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
+    end
   end  
     
 

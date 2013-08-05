@@ -21,6 +21,10 @@ class CSDK_Docs < Sinatra::Base
     redirect "/"
   end
 
+  get '/rdf/1.0/?' do
+    send_file './public/citysdk.ttl', :type => 'text/turtle', :disposition => :inline
+  end
+
   get '/map' do
     erb :dev, :locals => { :api => false, :map => erb(:map), :title => "Map Viewer" }
   end
