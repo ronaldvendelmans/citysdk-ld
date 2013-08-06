@@ -186,8 +186,8 @@ class CitySDK_API < Sinatra::Base
   def self.turtle_nodes_results(dataset, params, req)
     begin
       prefixes = Set.new
-      prfs = ["@base <#{CitySDK_API::BASE_URI}> ."]
-      prfs << "@prefix : <#{CitySDK_API::BASE_URI}> ."
+      prfs = ["@base <#{EP_BASE_URI}> ."]
+      prfs << "@prefix : <#{EP_BASE_URI}> ."
       
       layers = []
       res = dataset.nodes(params).map { |item| Node.turtelize(item,params,prefixes,layers) }

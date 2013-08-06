@@ -81,7 +81,7 @@ class NodeDatum < Sequel::Model
         next
       end
       
-      prop = "<#{::CitySDK_API::ENDPOINT}.osm.#{k.to_s}>"
+      prop = "<#{::CitySDK_API::EP_ENDPOINT}.osm.#{k.to_s}>"
       params[:layerdataproperties] << "#{prop} rdfs:subPropertyOf :ldProperty ."
       datas << "\t #{prop} \"#{v}\" ;"
 
@@ -93,7 +93,7 @@ class NodeDatum < Sequel::Model
     gdatas = []
     
     params[:layerdataproperties] = Set.new if params[:layerdataproperties].nil?
-    base_uri = "#{::CitySDK_API::ENDPOINT}/#{cdk_id}/"
+    base_uri = "#{::CitySDK_API::EP_ENDPOINT}/#{cdk_id}/"
     
     h.each do |nd|
       datas = []
@@ -114,7 +114,7 @@ class NodeDatum < Sequel::Model
         end
 
         nd[:data].to_hash.each do |k,v|
-          prop = "<#{::CitySDK_API::ENDPOINT}.#{name}.#{k.to_s}>"
+          prop = "<#{::CitySDK_API::EP_ENDPOINT}.#{name}.#{k.to_s}>"
           params[:layerdataproperties] << "#{prop} rdfs:subPropertyOf :ldProperty ."
           datas << "\t #{prop} \"#{v}\" ;"
         end

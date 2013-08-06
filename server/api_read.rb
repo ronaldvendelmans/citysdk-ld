@@ -7,14 +7,15 @@ class CitySDK_API < Sinatra::Base
       
       case params[:inferred_format]
       when 'text/turtle'
-        a = ["@base <#{CitySDK_API::BASE_URI}> ."]
-        a << "@prefix : <#{CitySDK_API::BASE_URI}> ."
+        a = ["@base <#{EP_BASE_URI}> ."]
+        a << "@prefix : <#{EP_BASE_URI}> ."
         a << "@prefix foaf: <http://xmlns.com/foaf/0.1/> ."
+        a << "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> ."
         a << ""
         a << '_:ep'
         a << ' a :CitysdkEndpoint ;'
-        a << ' rdfs:description "Amsterdam/NL CitySDK endpoint." ;'
-        a << ' :endpointCode "001" ;'
+        a << " rdfs:description \"#{EP_DESCRIPTION}\" ;"
+        a << " :endpointCode \"#{EP_ENDPOINT}\" ;"
         a << ' :apiUrl "http://api.citysdk.waag.org" ;'
         a << ' :cmsUrl "http://cms.citysdk.waag.org" ;'
         a << ' :infoUrl "http://dev.citysdk.waag.org" ;'
@@ -100,13 +101,14 @@ class CitySDK_API < Sinatra::Base
     case params[:inferred_format]
     when 'text/turtle'
       prefixes = Set.new
-      prfs = ["@base <#{CitySDK_API::BASE_URI}> ."]
-      prfs << "@prefix : <#{CitySDK_API::BASE_URI}> ."
+      prfs = ["@base <#{EP_BASE_URI}> ."]
+      prfs << "@prefix : <#{EP_BASE_URI}> ."
       res = layer.turtelize(params,prefixes)
       prefixes.each do |p|
+        puts p
         prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
       end
-      return [prfs.join("\n"),res.join("\n")].join("\n")
+      return [prfs.join("\n"),"",res.join("\n")].join("\n")
     when 'application/json'
       return { :status => 'success', 
         :url => request.url,  

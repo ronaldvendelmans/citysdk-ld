@@ -76,14 +76,14 @@ class Node < Sequel::Model
     
     if not layers.include?(h[:layer_id])
       layers << h[:layer_id]
-      triples << "<#{::CitySDK_API::ENDPOINT}/layer/#{Layer.textFromId(h[:layer_id])}> a :Layer ."
+      triples << "<#{::CitySDK_API::EP_ENDPOINT}/layer/#{Layer.textFromId(h[:layer_id])}> a :Layer ."
       triples << ""
     end
     
-    triples << "<#{::CitySDK_API::ENDPOINT}/#{h[:cdk_id]}>"
+    triples << "<#{::CitySDK_API::EP_ENDPOINT}/#{h[:cdk_id]}>"
     triples << "\t a :#{@@node_types[h[:node_type]].capitalize} ;"
     triples << "\t dc:title \"#{h[:name].gsub('"','\"')}\" ;" if h[:name] and h[:name] != ''
-    triples << "\t :createdOnLayer <#{::CitySDK_API::ENDPOINT}/layer/#{Layer.textFromId(h[:layer_id])}> ;"
+    triples << "\t :createdOnLayer <#{::CitySDK_API::EP_ENDPOINT}/layer/#{Layer.textFromId(h[:layer_id])}> ;"
     
     if h[:modalities]
       h[:modalities].each { |m| 

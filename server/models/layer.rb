@@ -55,10 +55,9 @@ class Layer < Sequel::Model
     prefixes << 'foaf:'
     prefixes << 'rdf:'
     prefixes << 'geos:'
-    prefixes << 'dc:'
     triples = []
     
-    triples << "<#{::CitySDK_API::ENDPOINT}/layer/#{name}>"
+    triples << "<#{::CitySDK_API::EP_ENDPOINT}/layer/#{name}>"
     triples << " a :Layer ;"
 
     triples << " rdfs:descripttion \"#{description}\" ;"
