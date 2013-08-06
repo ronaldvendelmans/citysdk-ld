@@ -91,7 +91,7 @@ class Layer < Sequel::Model
     end
     
     if params.has_key? "geom" and !bbox.nil?
-      triples << "\t geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(bbox) )  + "\" ;"
+      triples << "  geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(bbox) )  + "\" ;"
     end
 
     triples[-1][-1] = '.'
