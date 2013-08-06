@@ -4,6 +4,9 @@ require_relative('../utils/appConfig')
 
 class Sequel::Model
   @@node_types = ['node','route','ptstop','ptline']  
+  @@noderesults = []
+  @@prefixes = Set.new
+  @@layers = []
 end
 
 
@@ -23,8 +26,76 @@ class Node < Sequel::Model
     end
     nil
   end
+  
+  
+  def self.serializeStart(params,request)
+    case params[:request_format]
+    when 'application/json'
+      @@noderesults = []
+    when 'text/turtle'
+      @@noderesults = []
+      @@prefixes = Set.new
+      @@layers = []
+    end
+  end
+  
+  
+  def self.prefixes
+    prfs = ["@base <#{::CitySDK_API::EP_BASE_URI}> ."]
+    prfs << "@prefix : <#{::CitySDK_API::EP_BASE_URI}> ."
+    @@prefixes.each do |p|
+      
+      puts p
+      
+      prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
+    end
+    prfs << ""
+  end
+  
+  def self.layerProps(params)
+    pr = []
+    if params[:layerdataproperties]
+      params[:layerdataproperties].each do |p|
+        pr << p
+      end
+      pr << ""
+    end
+    pr
+  end
+  
+  def self.serializeEnd(params,request, pagination = {})
 
-  def self.serialize(h,params)    
+    case params[:request_format]
+    when 'application/json'
+      { :status => 'success',
+        :url => request.url
+      }.merge(pagination).merge({
+        :results => @@noderesults
+      }).to_json
+
+    when 'text/turtle'
+      begin
+        return [self.prefixes.join("\n"),self.layerProps(params),@@noderesults.join("\n")].join("\n")
+      rescue Exception => e
+        ::CitySDK_API::do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
+      end
+    end
+
+
+  end
+  
+
+  def self.serialize(h,params)
+    case params[:request_format]
+    when 'application/json'
+      Node.make_hash(h,params)    
+    when 'text/turtle'
+      Node.turtelize(h,params)    
+    end
+  end
+  
+
+  def self.make_hash(h,params)    
     h[:layers] = NodeDatum.serialize(h[:cdk_id], h[:node_data], params) if h[:node_data]
 
     # members not directly exposed, 
@@ -62,20 +133,21 @@ class Node < Sequel::Model
     if h.has_key? :collect_member_geometries
       h.delete(:collect_member_geometries)
     end
+    @@noderesults << h
     h
   end
   
   
-  def self.turtelize(h,params,prefixes,layers)    
-    prefixes << 'rdfs:'
-    prefixes << 'rdf:'
-    prefixes << 'geos:'
-    prefixes << 'dc:'
-    prefixes << 'lgd:' if h[:layer_id] == 0
+  def self.turtelize(h,params)    
+    @@prefixes << 'rdfs:'
+    @@prefixes << 'rdf:'
+    @@prefixes << 'geos:'
+    @@prefixes << 'dc:'
+    @@prefixes << 'lgd:' if h[:layer_id] == 0
     triples = []
     
-    if not layers.include?(h[:layer_id])
-      layers << h[:layer_id]
+    if not @@layers.include?(h[:layer_id])
+      @@layers << h[:layer_id]
       triples << "<#{::CitySDK_API::EP_ENDPOINT}/layer/#{Layer.textFromId(h[:layer_id])}> a :Layer ."
       triples << ""
     end
@@ -107,6 +179,7 @@ class Node < Sequel::Model
     
     triples += d if d
     
+    @@noderesults += triples
     triples
     
   end

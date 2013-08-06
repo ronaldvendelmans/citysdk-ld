@@ -1,14 +1,14 @@
-@prefix : <http://purl.org/citysdk/1.0/> .
+@prefix : <http://purl.org/citysdk/> .
 @prefix geo: <http://www.opengis.net/ont/geosparql#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@base <http://purl.org/citysdk/1.0/> .
+@base <http://purl.org/citysdk/> .
 
-<http://purl.org/citysdk/1.0> rdf:type owl:Ontology .
-
+<http://purl.org/citysdk/> rdf:type owl:Ontology ;
+                          owl:versionInfo "1.0"  .
 
 :createdOnLayer rdf:type owl:ObjectProperty ;
                rdfs:range   :Layer ;

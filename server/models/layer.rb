@@ -50,11 +50,32 @@ class Layer < Sequel::Model
     end
   end
   
-  def turtelize(params,prefixes)    
-    prefixes << 'rdfs:'
-    prefixes << 'foaf:'
-    prefixes << 'rdf:'
-    prefixes << 'geos:'
+  def serialize(params,request)
+    case params[:request_format]
+    when 'text/turtle'
+      prefixes = Set.new
+      prfs = ["@base <#{::CitySDK_API::EP_BASE_URI}> ."]
+      prfs << "@prefix : <#{::CitySDK_API::EP_BASE_URI}> ."
+      res = turtelize(params)
+      prefixes.each do |p|
+        puts p
+        prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
+      end
+      return [prfs.join("\n"),"",res.join("\n")].join("\n")
+    when 'application/json'
+      return { :status => 'success', 
+        :url => request.url,  
+        :results => [ make_hash(params) ]
+      }.to_json 
+    end
+  end
+  
+  
+  def turtelize(params)    
+    @@prefixes << 'rdf:'
+    @@prefixes << 'rdfs:'
+    @@prefixes << 'foaf:'
+    @@prefixes << 'geos:'
     triples = []
     
     triples << "<#{::CitySDK_API::EP_ENDPOINT}/layer/#{name}>"
@@ -80,10 +101,11 @@ class Layer < Sequel::Model
     triples << "  foaf:mbox \"#{owner.email}\" ."
     
     triples << ""
+    @@noderesults += triples
     triples
   end
 
-  def serialize(params)
+  def make_hash(params)
     h = {
       :name => name,
       :category => category,
@@ -102,6 +124,7 @@ class Layer < Sequel::Model
       if !bbox.nil? and params.has_key? 'geom'
          h[:bbox] = RGeo::GeoJSON.encode(CitySDK_API.rgeo_factory.parse_wkb(bbox))
       end
+      @@noderesults << h
       h
   end
 

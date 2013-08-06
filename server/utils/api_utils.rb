@@ -120,28 +120,8 @@ class CitySDK_API < Sinatra::Base
     @do_cache = false
     throw(:halt, [code, {'Content-Type' => 'application/json'}, {:status => 'fail', :message  => message}.to_json])
   end  
-  
-  def self.json_simple_results(res, req)
-    { :status => 'success',
-      :url => req.url,
-      :results => res
-    }.to_json 
-  end
-  
-  def self.json_results(res, params, pagination_data, req)
-    pagination_results = self.pagination_results(params, pagination_data, res.length)      
-    { :status => 'success',
-      :url => req.url
-    }.merge(pagination_results).merge({
-      :results => res
-    }).to_json
-  end  
-  
-  def self.turtle_results(res, params, pagination_data, req)
-    res
-  end  
-  
-  def self.format(params, req)
+
+  def self.geRequestFormat(params, req)
     case req.env['HTTP_ACCEPT']
       # accept header takes precedence
     when 'application/json'
@@ -160,66 +140,24 @@ class CitySDK_API < Sinatra::Base
       end
     end
   end
-  
+
   def self.nodes_results(dataset, params, req)
-    case params[:inferred_format]
-    when 'application/json'
-      return self.json_nodes_results(dataset, params, req)
-    when 'text/turtle'
-      return self.turtle_nodes_results(dataset, params, req)
-    else
-      return self.json_nodes_results(dataset, params, req)
-    end
+    res = 0
+    Node.serializeStart(params, req)
+    dataset.nodes(params).each { |h| Node.serialize(h,params); res += 1 }
+    Node.serializeEnd(params, req, pagination_results(params, dataset.get_pagination_data(params), res))
   end
-  
-  
-  
-  def self.json_nodes_results(dataset, params, req)
-    begin
-      res = dataset.nodes(params).map { |item| Node.serialize(item,params) }    
-      json_results(res, params, dataset.get_pagination_data(params), req)      
-    rescue Exception => e
-      self.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
-    end
-  end  
-    
-  def self.turtle_nodes_results(dataset, params, req)
-    begin
-      prefixes = Set.new
-      prfs = ["@base <#{EP_BASE_URI}> ."]
-      prfs << "@prefix : <#{EP_BASE_URI}> ."
-      
-      layers = []
-      res = dataset.nodes(params).map { |item| Node.turtelize(item,params,prefixes,layers) }
-      prefixes.each do |p|
-        prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
-      end
-      prfs << ""
-      
-      if params[:layerdataproperties]
-        params[:layerdataproperties].each do |p|
-          prfs << p
-        end
-        prfs << ""
-      end
-      
-      turtle_results([prfs.join("\n"),res.join("\n")].join("\n"), params, dataset.get_pagination_data(params), req)      
-    rescue Exception => e
-      self.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
-    end
-  end  
-    
 
   def self.pagination_results(params, pagination_data, res_length)
     if pagination_data
-      if res_length < pagination_data[:page_size]
+      if res_length < pagination_data[:page_size] 
         {
           :pages => pagination_data[:current_page],
           :per_page => pagination_data[:page_size],
           :record_count => pagination_data[:page_size] * (pagination_data[:current_page] - 1) + res_length,
           :next_page => -1, 
         } 
-      else        
+      else 
         {
           :pages => params.has_key?('count') ? pagination_data[:page_count] : 'not counted.',
           :per_page => pagination_data[:page_size],

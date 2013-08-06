@@ -88,47 +88,52 @@ class NodeDatum < Sequel::Model
     end # h.each
   end
   
+  
+  def self.turtelize_one(nd,triples,base_uri,params)
+    datas = []
+    layer_id = nd[:layer_id]
+    name = Layer.textFromId(layer_id)
+    subj = base_uri + name
+
+    datas << "<#{subj}>"
+    
+    if layer_id == 0 
+
+      osmprops(nd[:data].to_hash,datas,triples,params)
+
+    else
+
+      if Layer.isWebservice?(layer_id) and !params.has_key?('skip_webservice')
+        nd[:data] = WebService.load(layer_id, cdk_id, nd[:data])
+      end
+
+      nd[:data].to_hash.each do |k,v|
+        prop = "<#{::CitySDK_API::EP_ENDPOINT}.#{name}.#{k.to_s}>"
+        params[:layerdataproperties] << "#{prop} rdfs:subPropertyOf :ldProperty ."
+        datas << "\t #{prop} \"#{v}\" ;"
+      end
+
+    end
+    
+    if datas.length > 1
+      triples << "\t :layerData <#{subj}> ;"
+      datas[-1][-1] = '.'
+      datas << ""
+    else 
+      datas = []
+    end
+    return datas
+  end
+  
   def self.turtelize(cdk_id, h, params)    
     triples = []
     gdatas = []
-    
     params[:layerdataproperties] = Set.new if params[:layerdataproperties].nil?
     base_uri = "#{::CitySDK_API::EP_ENDPOINT}/#{cdk_id}/"
-    
     h.each do |nd|
-      datas = []
-      layer_id = nd[:layer_id]
-      name = Layer.textFromId(layer_id)
-      subj = base_uri + name
-
-      datas << "<#{subj}>"
-    
-      if layer_id == 0 
-
-        osmprops(nd[:data].to_hash,datas,triples,params)
-
-      else
-
-        if Layer.isWebservice?(layer_id) and !params.has_key?('skip_webservice')
-          nd[:data] = WebService.load(layer_id, cdk_id, nd[:data])
-        end
-
-        nd[:data].to_hash.each do |k,v|
-          prop = "<#{::CitySDK_API::EP_ENDPOINT}.#{name}.#{k.to_s}>"
-          params[:layerdataproperties] << "#{prop} rdfs:subPropertyOf :ldProperty ."
-          datas << "\t #{prop} \"#{v}\" ;"
-        end
-
-      end
-      
-      if datas.length > 1
-        triples << "\t :layerData <#{subj}> ;"
-        datas[-1][-1] = '.'
-        datas << ""
-        gdatas += datas
-      end
-    
+      gdatas += self.turtelize_one(nd,triples,base_uri,params)
     end
+    
     return triples, gdatas
   end
 

@@ -5,7 +5,7 @@ class CitySDK_API < Sinatra::Base
       divv = CitySDK_API::memcache_get('divvdaemon');
       @do_cache = false
       
-      case params[:inferred_format]
+      case params[:request_format]
       when 'text/turtle'
         a = ["@base <#{EP_BASE_URI}> ."]
         a << "@prefix : <#{EP_BASE_URI}> ."
@@ -73,8 +73,10 @@ class CitySDK_API < Sinatra::Base
         .layer_geosearch(params)
         .do_paginate(params)
         
-      res = pgn.all.map { |l| l.serialize(params) }
-      return CitySDK_API.json_results(res, params, pgn.get_pagination_data(params), request)
+      Node.serializeStart(params,request)
+      res = 0
+      pgn.each { |l| l.serialize(params,request); res += 1 }
+      Node.serializeEnd(params, request, CitySDK_API::pagination_results(params, pgn.get_pagination_data(params), res))
   end
 
   get '/nodes/?' do
@@ -96,25 +98,9 @@ class CitySDK_API < Sinatra::Base
   get '/layer/:name/?' do |name|
     layer_id = Layer.idFromText(name)
     CitySDK_API.do_abort(422,"Unknown layer or invalid layer spec: #{name}") if layer_id.nil? or layer_id.is_a? Array
-    layer = Layer[layer_id]
-
-    case params[:inferred_format]
-    when 'text/turtle'
-      prefixes = Set.new
-      prfs = ["@base <#{EP_BASE_URI}> ."]
-      prfs << "@prefix : <#{EP_BASE_URI}> ."
-      res = layer.turtelize(params,prefixes)
-      prefixes.each do |p|
-        puts p
-        prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
-      end
-      return [prfs.join("\n"),"",res.join("\n")].join("\n")
-    when 'application/json'
-      return { :status => 'success', 
-        :url => request.url,  
-        :results => [ layer.serialize(params) ]
-      }.to_json 
-    end
+    Node.serializeStart(params,request)
+    Layer[layer_id].serialize(params,request)
+    Node.serializeEnd(params, request)
   end
 
   get '/:within/nodes/?' do
@@ -167,25 +153,6 @@ class CitySDK_API < Sinatra::Base
     end
   end
 
-
-  get '/:node/:layer/:dpoint/?' do
-    if 0 == Node.where(:cdk_id=>params[:node]).count
-      CitySDK_API.do_abort(422,"Node not found: '#{params[:node]}'")
-    end
-    if 0 == Layer.where(:name=>params[:layer]).count
-      CitySDK_API.do_abort(422,"Layer not found: '#{params[:layer]}'")
-    end
-    n  = Node.where(:cdk_id=>params[:node]).first
-    nd = NodeDatum.where(:layer_id => Layer.idFromText(params[:layer])).where(:node_id => n.id)
-    if 0 == nd.count
-      CitySDK_API.do_abort(422,"No #{params[:layer]} layer data for node '#{params[:node]}'")
-    end
-    { :status => 'success', 
-      :url => request.url,
-      :results => {params[:dpoint] => nd.first.data[params[:dpoint]]}
-    }.to_json 
-  end
-
   get '/:node/:layer/?' do
     if 0 == Node.where(:cdk_id=>params[:node]).count
       CitySDK_API.do_abort(422,"Node not found: '#{params[:node]}'")
@@ -194,27 +161,34 @@ class CitySDK_API < Sinatra::Base
       CitySDK_API.do_abort(422,"Layer not found: '#{params[:layer]}'")
     end
     n  = Node.where(:cdk_id=>params[:node]).first
-    nd = NodeDatum.where(:layer_id => Layer.idFromText(params[:layer])).where(:node_id => n.id)
-    { :status => 'success', 
-      :url => request.url,
-      :results => nd.all.map { |item| NodeDatum.serialize(params[:node],[item.values],params)}
-    }.to_json 
+    nd = NodeDatum.where(:layer_id => Layer.idFromText(params[:layer])).where(:node_id => n.id).first
+    
+    case params[:request_format]
+    when 'application/json'
+      { :status => 'success', 
+        :url => request.url,
+        :results => [NodeDatum.serialize(params[:node],[nd.values],params)]
+      }.to_json 
+    when 'text/turtle'
+      Node.serializeStart(params,request)
+      t,d = NodeDatum.turtelize(params[:node],[nd.values],params)
+      [Node.prefixes.join("\n"),Node.layerProps(params).join("\n"),d.join("\n")].join("\n")
+    end
+    
   end
 
 
+# http://0.0.0.0:3000/admr.nl.zwolle?pred=cbs/aant_inw
   get '/:node/?' do
     results = Node.where(:cdk_id=>params[:node])
       .node_layers(params)
       .nodes(params)
-      .map { |item| Node.serialize(item,params) }
-
     if 0 == results.length
       CitySDK_API.do_abort(422,"Node not found: '#{params[:node]}'")
     end
-    { :status => 'success', 
-      :url => request.url,
-      :results => results
-    }.to_json 
+    Node.serializeStart(params, request)
+    results.map { |item| Node.serialize(item,params) }
+    Node.serializeEnd(params, request)
   end
 
 end
