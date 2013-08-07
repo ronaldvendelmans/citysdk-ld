@@ -143,7 +143,7 @@ class Node < Sequel::Model
     @@prefixes << 'rdf:'
     @@prefixes << 'geos:'
     @@prefixes << 'dc:'
-    @@prefixes << 'lgd:' if h[:layer_id] == 0
+    @@prefixes << 'lgdo:' if h[:layer_id] == 0
     triples = []
     
     if not @@layers.include?(h[:layer_id])

@@ -12,6 +12,7 @@ class OSMProps < Sequel::Model(:osmprops)
 end
 
 
-
+class LDProps < Sequel::Model(:ldprops)
+end
 
 

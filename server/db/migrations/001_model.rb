@@ -33,6 +33,7 @@ Sequel.migration do
 			String :key, :null => false
 			String :type
 			String :uri
+			String :lang
     end
 
 		create_table :node_types do

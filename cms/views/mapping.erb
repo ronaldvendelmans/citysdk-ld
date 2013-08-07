@@ -1,0 +1,11 @@
+<h4>Linked Data Mapping<span class="codecomment">Map the properties to meaningful linked data uri's. </span></h4>
+<div id='ldmap'>
+  <div id="fields"></div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() { 
+    tagsForLayer( "<%= @layer.id %>", 'fields', 0 )
+  })
+</script>
+
