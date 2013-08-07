@@ -89,7 +89,7 @@ class NodeDatum < Sequel::Model
   end
   
   
-  def self.turtelize_one(nd,triples,base_uri,params)
+  def self.turtelize_one(nd,triples,base_uri,params,cdk_id)
     datas = []
     layer_id = nd[:layer_id]
     name = Layer.textFromId(layer_id)
@@ -108,9 +108,21 @@ class NodeDatum < Sequel::Model
       end
 
       nd[:data].to_hash.each do |k,v|
-        prop = "<#{::CitySDK_API::EP_ENDPOINT}.#{name}.#{k.to_s}>"
-        params[:layerdataproperties] << "#{prop} rdfs:subPropertyOf :ldProperty ."
-        datas << "\t #{prop} \"#{v}\" ;"
+        res = LDProps.where({:layer_id => layer_id, :key => k.to_s }).first
+        if res
+          lng = res[:lang]
+          prp = res[:uri]
+          tpe = res[:type]
+        else
+          lng = nil
+          tpe = nil
+          prp = "<#{::CitySDK_API::EP_ENDPOINT}.#{name}.#{k.to_s}>"
+        end
+        params[:layerdataproperties] << "#{prp} rdfs:subPropertyOf :ldProperty ."
+        s = "\t #{prp} \"#{v}\""
+        s += "^^xsd:#{tpe}" if tpe
+        s += "@#{lng}" if lng
+        datas << s + " ;"
       end
 
     end
@@ -131,7 +143,7 @@ class NodeDatum < Sequel::Model
     params[:layerdataproperties] = Set.new if params[:layerdataproperties].nil?
     base_uri = "#{::CitySDK_API::EP_ENDPOINT}/#{cdk_id}/"
     h.each do |nd|
-      gdatas += self.turtelize_one(nd,triples,base_uri,params)
+      gdatas += self.turtelize_one(nd,triples,base_uri,params,cdk_id)
     end
     
     return triples, gdatas

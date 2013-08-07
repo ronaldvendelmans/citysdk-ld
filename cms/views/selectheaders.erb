@@ -1,15 +1,5 @@
 <div id='csvconf'>
   <form name="input" id="csvconf_f" action="/csvheader" method="post">
-    <!-- <input type="hidden" name="file_path" value="<%= @params[:file_path] %>" />
-    <input type="hidden" name="layer" value="<%= @layer.id %>" />
-    <input type="hidden" name="srid" value="<%= @params[:srid] %>" />
-    <input type="hidden" name="geometry" value="<%= @params[:geometry] %>" />
-    <input type="hidden" name="geometry_type" value="<%= @params[:geometry_type]  %>" />
-    <input type="hidden" name="layername" value="<%= @params[:layername] %>" />
-    <input type="hidden" name="colsep" value="<%= @params[:colsep] %>" />
-    <input type="hidden" name="originalfile" value="<%= @params[:originalfile] %>" />
-    <input type="hidden" name="housenumber" value="<%= @params[:housenumber] %>" />
-    <input type="hidden" name="postcode" value="<%= @params[:postcode] %>" /> -->
     <input type="hidden" name="parameters" value="<%= @parameters %>" />
 
     <div >file: <span style="font-size:120%"><em><%= @originalfile %></em></span></div>
