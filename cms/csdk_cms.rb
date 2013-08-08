@@ -111,7 +111,7 @@ class CSDK_CMS < Sinatra::Base
   get '/get_layer_keys/:layer' do |l|
     l = Layer.where(:name=>l).first
     if(l)
-      return database.fetch("select keys_for_layer(#{l.id})").all.to_json
+      return Sequel::Model.db.fetch("select keys_for_layer(#{l.id})").all.to_json
     else
       return '{}'
     end
@@ -231,6 +231,7 @@ class CSDK_CMS < Sinatra::Base
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
         @period = @layer.period_select()
+        @ptypeSelect = '<select style="border 0px;" id="ptype" onchange="selectFieldType(this.value)"> <option>select...</option> <option>Quantity</option> <option>Percentage</option> <option>Identifier</option> <option>Date</option> <option>Time</option>  <option>Timespan</option> <option>Descriptive</option> </select>'  
         if params[:nolayout]
           erb :layer_data, :layout => false
         else

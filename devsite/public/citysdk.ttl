@@ -1,117 +1,143 @@
-@prefix : <http://purl.org/citysdk/> .
-@prefix geo: <http://www.opengis.net/ont/geosparql#> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xml: <http://www.w3.org/XML/1998/namespace> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@base <http://purl.org/citysdk/> .
+# Saved by TopBraid on Thu Aug 08 15:53:06 CEST 2013
+# baseURI: http://rdf.citysdk.eu/
 
-<http://purl.org/citysdk/> rdf:type owl:Ontology ;
-                          owl:versionInfo "1.0"  .
+@prefix :        <http://rdf.citysdk.eu/> .
+@prefix geo:     <http://www.opengis.net/ont/geosparql#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml:     <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 
-:createdOnLayer rdf:type owl:ObjectProperty ;
-               rdfs:range   :Layer ;
-               rdfs:domain  :Node , :Region , :Route .
+:     rdf:type owl:Ontology ;
+      owl:versionInfo "Created with TopBraid Composer"^^xsd:string , "1.0" .
 
-:hasTransportModality rdf:type owl:ObjectProperty ;
-                     rdfs:domain  :Ptstop , :Route ;
-                     rdfs:range   :TransportModality .
-                     
-:ldProperty rdf:type owl:DataProperty ;
-           rdfs:domain  :NodeDatum  .
+:CitysdkEndpoint
+      rdf:type owl:Class .
 
-:layerData rdf:type owl:ObjectProperty ;
-            rdfs:range   :NodeDatum ;
-          rdfs:domain  :Node , :Route, :Region .
-          
-:endpointCode rdf:type owl:DataProperty ;
-           rdfs:domain  :CitysdkEndpoint  .
-
-:apiUrl rdf:type owl:DataProperty ;
-        rdfs:domain  :CitysdkEndpoint  .
-
-:cmsUrl rdf:type owl:DataProperty ;
-        rdfs:domain  :CitysdkEndpoint  .
-
-:infoUrl rdf:type owl:DataProperty ;
-        rdfs:domain  :CitysdkEndpoint  .
-           
-
-:CitysdkEndpoint   rdf:type owl:Class .
-:TransportModality rdf:type owl:Class .
-geo:SpatialObject  rdf:type owl:Class .
-
-:Layer rdf:type owl:Class ;
+:Layer
+      rdf:type owl:Class ;
       rdfs:subClassOf geo:SpatialObject .
 
-:Node rdf:type owl:Class ;
-     rdfs:subClassOf geo:SpatialObject .
-
-:Region rdf:type owl:Class ;
-        rdfs:subClassOf geo:SpatialObject .
-
-:Route rdf:type owl:Class ;
+:Node
+      rdf:type owl:Class ;
       rdfs:subClassOf geo:SpatialObject .
 
-:Ptline rdf:type owl:Class ;
-       rdfs:subClassOf :Route .
+:NodeDatum
+      rdf:type owl:Class .
 
-:Ptstop rdf:type owl:Class ;
-        rdfs:subClassOf :Node .
+:Ptline
+      rdf:type owl:Class ;
+      rdfs:subClassOf :Route .
 
-:NodeDatum rdf:type owl:Class .
+:Ptstop
+      rdf:type owl:Class ;
+      rdfs:subClassOf :Node .
+
+:Region
+      rdf:type owl:Class ;
+      rdfs:subClassOf geo:SpatialObject .
+
+:Route
+      rdf:type owl:Class ;
+      rdfs:subClassOf geo:SpatialObject .
+
+:TransportModality
+      rdf:type owl:Class .
+
+:apiUrl
+      rdf:type owl:AnnotationProperty ;
+      rdfs:domain :CitysdkEndpoint .
+
+:cmsUrl
+      rdf:type owl:AnnotationProperty ;
+      rdfs:domain :CitysdkEndpoint .
+
+:infoUrl
+      rdf:type owl:AnnotationProperty ;
+      rdfs:domain :CitysdkEndpoint .
+
+:createdOnLayer
+      rdf:type owl:ObjectProperty ;
+      rdfs:domain :Route , :Region , :Node ;
+      rdfs:range :Layer .
+
+:endpointCode
+      rdf:type owl:AnnotationProperty ;
+      rdfs:domain :CitysdkEndpoint .
+
+:hasTransportModality
+      rdf:type owl:ObjectProperty ;
+      rdfs:domain :Route , :Ptstop ;
+      rdfs:range :TransportModality .
 
 
 
-:transportModality_airplane rdf:type :TransportModality ,
-                                     owl:NamedIndividual .
+:layerProperty
+      rdf:type owl:AnnotationProperty ;
+      rdfs:domain :NodeDatum .
+            
+:identifierProperty
+      rdfs:subPropertyOf :layerProperty .
 
-:transportModality_any rdf:type :TransportModality ,
-                                owl:NamedIndividual .
+:layerData
+      rdf:type owl:ObjectProperty ;
+      rdfs:domain :Region , :Route , :Node ;
+      rdfs:range :NodeDatum .
 
-:transportModality_bicycle rdf:type :TransportModality ,
-                                    owl:NamedIndividual .
+:timespanProperty
+      rdfs:subPropertyOf :layerProperty .
 
-:transportModality_bus rdf:type :TransportModality ,
-                                owl:NamedIndividual .
+:transportModality_airplane
+      rdf:type owl:NamedIndividual , :TransportModality .
 
-:transportModality_cable_car rdf:type :TransportModality ,
-                                      owl:NamedIndividual .
+:transportModality_any
+      rdf:type owl:NamedIndividual , :TransportModality .
 
-:transportModality_car rdf:type :TransportModality ,
-                                owl:NamedIndividual .
+:transportModality_bicycle
+      rdf:type owl:NamedIndividual , :TransportModality .
 
-:transportModality_ferry rdf:type :TransportModality ,
-                                  owl:NamedIndividual .
+:transportModality_bus
+      rdf:type owl:NamedIndividual , :TransportModality .
 
-:transportModality_foot rdf:type :TransportModality ,
-                                 owl:NamedIndividual .
+:transportModality_cable_car
+      rdf:type owl:NamedIndividual , :TransportModality .
 
-:transportModality_funicular rdf:type :TransportModality ,
-                                      owl:NamedIndividual .
+:transportModality_car
+      rdf:type owl:NamedIndividual , :TransportModality .
 
-:transportModality_gondola rdf:type :TransportModality ,
-                                    owl:NamedIndividual .
+:transportModality_ferry
+      rdf:type owl:NamedIndividual , :TransportModality .
 
-:transportModality_horse rdf:type :TransportModality ,
-                                  owl:NamedIndividual .
+:transportModality_foot
+      rdf:type owl:NamedIndividual , :TransportModality .
 
-:transportModality_moped rdf:type :TransportModality ,
-                                  owl:NamedIndividual .
+:transportModality_funicular
+      rdf:type owl:NamedIndividual , :TransportModality .
 
-:transportModality_motorbike rdf:type :TransportModality ,
-                                      owl:NamedIndividual .
+:transportModality_gondola
+      rdf:type owl:NamedIndividual , :TransportModality .
 
-:transportModality_rail rdf:type :TransportModality ,
-                                 owl:NamedIndividual .
+:transportModality_horse
+      rdf:type owl:NamedIndividual , :TransportModality .
 
-:transportModality_subway rdf:type :TransportModality ,
-                                   owl:NamedIndividual .
+:transportModality_moped
+      rdf:type owl:NamedIndividual , :TransportModality .
 
-:transportModality_tram rdf:type :TransportModality ,
-                                 owl:NamedIndividual .
+:transportModality_motorbike
+      rdf:type owl:NamedIndividual , :TransportModality .
 
-:transportModality_truck rdf:type :TransportModality ,
-                                  owl:NamedIndividual .
+:transportModality_rail
+      rdf:type owl:NamedIndividual , :TransportModality .
 
+:transportModality_subway
+      rdf:type owl:NamedIndividual , :TransportModality .
+
+:transportModality_tram
+      rdf:type owl:NamedIndividual , :TransportModality .
+
+:transportModality_truck
+      rdf:type owl:NamedIndividual , :TransportModality .
+
+geo:SpatialObject
+      rdf:type owl:Class .
