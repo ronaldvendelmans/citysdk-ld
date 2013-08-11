@@ -54,7 +54,7 @@ class Layer < Sequel::Model
     case params[:request_format]
     when 'text/turtle'
       prefixes = Set.new
-      prfs = ["@base <#{::CitySDK_API::EP_BASE_URI}> ."]
+      prfs = ["@base <#{::CitySDK_API::EP_BASE_URI}/#{::CitySDK_API::EP_ENDPOINT}/> ."]
       prfs << "@prefix : <#{::CitySDK_API::EP_BASE_URI}> ."
       res = turtelize(params)
       prefixes.each do |p|
@@ -78,15 +78,21 @@ class Layer < Sequel::Model
     @@prefixes << 'geos:'
     triples = []
     
-    triples << "<#{::CitySDK_API::EP_ENDPOINT}/layer/#{name}>"
-    triples << " a :Layer ;"
+    triples << "<layer/#{name}>"
+    triples << "  a :Layer ;"
 
-    triples << " rdfs:descripttion \"#{description}\" ;"
+    triples << "  rdfs:descripttion \"#{description}\" ;"
+
+    triples << "  :createdBy ["
+    triples << "    foaf:name \"#{organization}\" ;"
+    triples << "    foaf:mbox \"#{owner.email}\""
+    triples << "  ] ;"
+
     
     if data_sources 
       data_sources.each { |s| 
         a = s.index('=') ? s[s.index('=')+1..-1] : s 
-        triples << " rdfs:comment \"#{a}\" ;"
+        triples << "  rdfs:comment \"#{a}\" ;"
       }
     end
     
@@ -95,11 +101,6 @@ class Layer < Sequel::Model
     end
 
     triples[-1][-1] = '.'
-    
-    triples << "_:o a foaf:Organization ;"
-    triples << "  foaf:name \"#{organization}\" ;"
-    triples << "  foaf:mbox \"#{owner.email}\" ."
-    
     triples << ""
     @@noderesults += triples
     triples

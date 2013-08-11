@@ -8,9 +8,10 @@
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xml:     <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/>.
 
-:     rdf:type owl:Ontology ;
-      owl:versionInfo "Created with TopBraid Composer"^^xsd:string , "1.0" .
+: rdf:type owl:Ontology ;
+  owl:versionInfo "Created with TopBraid Composer"^^xsd:string , "1.0" .
 
 :CitysdkEndpoint
       rdf:type owl:Class .
@@ -62,6 +63,11 @@
       rdfs:domain :Route , :Region , :Node ;
       rdfs:range :Layer .
 
+:createdBy
+      rdf:type owl:ObjectProperty ;
+      rdfs:range foaf:Organization ;
+      rdfs:domain :Layer .
+
 :endpointCode
       rdf:type owl:AnnotationProperty ;
       rdfs:domain :CitysdkEndpoint .
@@ -70,8 +76,6 @@
       rdf:type owl:ObjectProperty ;
       rdfs:domain :Route , :Ptstop ;
       rdfs:range :TransportModality .
-
-
 
 :layerProperty
       rdf:type owl:AnnotationProperty ;
@@ -138,6 +142,7 @@
 
 :transportModality_truck
       rdf:type owl:NamedIndividual , :TransportModality .
+
 
 geo:SpatialObject
       rdf:type owl:Class .

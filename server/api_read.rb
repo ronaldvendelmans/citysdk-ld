@@ -7,7 +7,7 @@ class CitySDK_API < Sinatra::Base
       
       case params[:request_format]
       when 'text/turtle'
-        a = ["@base <#{EP_BASE_URI}> ."]
+        a = ["@base <#{EP_BASE_URI}/#{EP_ENDPOINT}/> ."]
         a << "@prefix : <#{EP_BASE_URI}> ."
         a << "@prefix foaf: <http://xmlns.com/foaf/0.1/> ."
         a << "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> ."

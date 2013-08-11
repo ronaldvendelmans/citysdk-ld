@@ -81,8 +81,8 @@ class NodeDatum < Sequel::Model
         next
       end
       
-      prop = "<#{::CitySDK_API::EP_ENDPOINT}.osm.#{k.to_s}>"
-      params[:layerdataproperties] << "#{prop} rdfs:subPropertyOf :ldProperty ."
+      prop = "<osm.#{k.to_s}>"
+      params[:layerdataproperties] << "#{prop} rdfs:subPropertyOf :layerProperty ."
       datas << "\t #{prop} \"#{v}\" ;"
 
     end # h.each
@@ -116,9 +116,10 @@ class NodeDatum < Sequel::Model
         else
           lng = nil
           tpe = nil
-          prp = "<#{::CitySDK_API::EP_ENDPOINT}.#{name}.#{k.to_s}>"
+          prp = "#{name}.#{k.to_s}>"
+          # prp = "<#{::CitySDK_API::EP_ENDPOINT}.#{name}.#{k.to_s}>"
         end
-        params[:layerdataproperties] << "#{prp} rdfs:subPropertyOf :ldProperty ."
+        params[:layerdataproperties] << "#{prp} rdfs:subPropertyOf :layerProperty ."
         s = "\t #{prp} \"#{v}\""
         s += "^^xsd:#{tpe}" if tpe
         s += "@#{lng}" if lng
@@ -141,7 +142,7 @@ class NodeDatum < Sequel::Model
     triples = []
     gdatas = []
     params[:layerdataproperties] = Set.new if params[:layerdataproperties].nil?
-    base_uri = "#{::CitySDK_API::EP_ENDPOINT}/#{cdk_id}/"
+    base_uri = "#{cdk_id}/"
     h.each do |nd|
       gdatas += self.turtelize_one(nd,triples,base_uri,params,cdk_id)
     end
