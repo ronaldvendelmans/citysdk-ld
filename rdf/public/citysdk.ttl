@@ -1,5 +1,5 @@
 @prefix :        <http://rdf.citysdk.eu/> .
-@prefix geo:     <http://www.opengis.net/ont/geosparql#> .
+@prefix geos:    <http://www.opengis.net/ont/geosparql#> .
 @prefix owl:     <http://www.w3.org/2002/07/owl#> .
 @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
@@ -15,11 +15,11 @@
 
 :Layer
       rdf:type owl:Class ;
-      rdfs:subClassOf geo:SpatialObject .
+      rdfs:subClassOf geos:SpatialObject .
 
 :Node
       rdf:type owl:Class ;
-      rdfs:subClassOf geo:SpatialObject .
+      rdfs:subClassOf geos:SpatialObject .
 
 :NodeDatum
       rdf:type owl:Class .
@@ -34,11 +34,11 @@
 
 :Region
       rdf:type owl:Class ;
-      rdfs:subClassOf geo:SpatialObject .
+      rdfs:subClassOf geos:SpatialObject .
 
 :Route
       rdf:type owl:Class ;
-      rdfs:subClassOf geo:SpatialObject .
+      rdfs:subClassOf geos:SpatialObject .
 
 :TransportModality
       rdf:type owl:Class .
@@ -141,5 +141,5 @@
       rdf:type owl:NamedIndividual , :TransportModality .
 
 
-geo:SpatialObject
+geos:SpatialObject
       rdf:type owl:Class .
