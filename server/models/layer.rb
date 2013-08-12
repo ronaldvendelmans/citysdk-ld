@@ -81,7 +81,7 @@ class Layer < Sequel::Model
     triples << "<layer/#{name}>"
     triples << "  a :Layer ;"
 
-    triples << "  rdfs:descripttion \"#{description}\" ;"
+    triples << "  rdfs:description \"#{description}\" ;"
 
     triples << "  :createdBy ["
     triples << "    foaf:name \"#{organization}\" ;"
