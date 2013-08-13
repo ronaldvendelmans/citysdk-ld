@@ -54,7 +54,7 @@ class Layer < Sequel::Model
     case params[:request_format]
     when 'text/turtle'
       prefixes = Set.new
-      prfs = ["@base <#{::CitySDK_API::EP_BASE_URI}/#{::CitySDK_API::EP_ENDPOINT}/> ."]
+      prfs = ["@base <#{::CitySDK_API::EP_BASE_URI}#{::CitySDK_API::EP_ENDPOINT}/> ."]
       prfs << "@prefix : <#{::CitySDK_API::EP_BASE_URI}> ."
       res = turtelize(params)
       prefixes.each do |p|
