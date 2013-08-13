@@ -25,7 +25,7 @@ module CitySDK
       :nodes => []
     }
 
-    def initialize(host, port=80)
+    def initialize(host, port=nil)
       @error = '';
       @layer = '';
       @batch_size = 10;
