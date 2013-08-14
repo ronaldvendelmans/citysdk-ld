@@ -1,5 +1,5 @@
 # require "bundler/capistrano"
-puts "*** Deploying to \033[1;41mcms.citysdk.waag.org\033[0m"
+puts "*** Deploying to \033[1;41mservices.citysdk.waag.org\033[0m"
 
 
 set :application, "CsdkService"
@@ -39,7 +39,7 @@ namespace :deploy do
       mkdir -p #{latest_release}/tmp &&
       ln -s #{shared_path}/log #{latest_release}/log
     CMD
-    run "ln -s /var/www/citysdk/shared/config/nskey.json #{release_path}"
+    # run "ln -s /var/www/citysdk/shared/config/nskey.json #{release_path}"
   end
 end  
 
