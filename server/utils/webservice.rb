@@ -4,10 +4,7 @@ class NodeDatum < Sequel::Model
     require 'faraday'
     require 'net/http'
     require 'uri'    
-
-
-    #http://localhost:3000/admr.nl.stichtse_vecht_wijk_09_oudover_en_mijnden?layer=rain
-    
+  
     def self.memcache_key(layer_id, cdk_id)
       l = Layer.textFromId(layer_id)
       return "#{l}!!#{cdk_id}"
