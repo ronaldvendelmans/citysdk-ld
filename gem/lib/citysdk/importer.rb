@@ -121,7 +121,6 @@ module CitySDK
         result[:updated] += @filereader.content.length
         return result
       end
-
       if failed 
         result[:updated] += (@filereader.content.length - failed.length)
       end
@@ -179,14 +178,9 @@ module CitySDK
           @api.match_create_flush
       
         elsif @params[:unique_id] and (@params[:hasgeometry] != 'unknown')
-          
-          # puts ""
-          # puts "doImport... 2"
-          # puts ""
 
           begin
             nodes.each do |rec|
-
               node = {
                 :geom => rec[:geometry],
                 :id   => rec[:id]
@@ -224,7 +218,6 @@ module CitySDK
           sign_in
           @filereader.content.each do |rec|
             row = rec[:properties]
-            
             pc = row[@params[:postcode]].to_s
             hn = row[@params[:housenumber]].to_s
             qres = {}
@@ -254,6 +247,6 @@ module CitySDK
       end
       raise Exception.new("Addresses not well defined in dataset.")
     end
-
   end
 end
+
