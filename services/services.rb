@@ -6,6 +6,21 @@ require 'faraday'
 require 'sinatra'
 require 'json'
 
+require './services_utils.rb'
+
+configure do | sinatraApp |
+  set :environment, :production  
+  if defined?(PhusionPassenger)
+    PhusionPassenger.on_event(:starting_worker_process) do |forked|
+      if forked
+        # We're in smart spawning mode.
+        CitySDK_Services.memcache_new  
+      end
+      # Else we're in direct spawning mode. We don't need to do anything.
+    end
+  end   
+end
+
 class CitySDK_Services < Sinatra::Base
   def do_abort(code,message)
     throw(:halt, [code, {'Content-Type' => 'application/json'}, message])
@@ -49,6 +64,10 @@ class CitySDK_Services < Sinatra::Base
     }.to_json 
   end
   
+  ##############################################################################################################
+  ## Helsinki Open311 ##########################################################################################
+  ##############################################################################################################
+  
   Helsinki311_URL = "https://asiointi.hel.fi"
   Helsinki311_PATH = "/palautews/rest/v1/requests.json?service_request_id="
   post '/311.helsinki' do
@@ -70,10 +89,11 @@ class CitySDK_Services < Sinatra::Base
     }.to_json 
   end
   
+  #############################################################################################################
+  ## SmartCitizen sensors #####################################################################################
+  #############################################################################################################
   
-  
-  
-  # curl --data '{"sensorid":"216"}' http://services.citysdk.waag.org/sck
+    # curl --data '{"sensorid":"216"}' http://services.citysdk.waag.org/sck
   SCK_KEY = JSON.parse(File.read('/var/www/citysdk/shared/config/sck.json').force_encoding('utf-8'))['key'] 
   SCK_URL = "http://api.smartcitizen.me"
   SCK_PATH = "/v0.0.1/#{SCK_KEY}/"
@@ -106,6 +126,9 @@ class CitySDK_Services < Sinatra::Base
     }.to_json 
   end
   
+  ##############################################################################################################
+  ## Amsterdam Open311 #########################################################################################
+  ##############################################################################################################  
     
   Amsterdam311_URL = "http://open311.dataplatform.nl"
   Amsterdam311_PATH = "/opentunnel/open311/v21/requests.xml?jurisdiction_id=0363&api_key=" + JSON.parse(File.read('/var/www/citysdk/shared/config/adam311.json'))['key'] + "&service_request_id="
@@ -141,8 +164,11 @@ class CitySDK_Services < Sinatra::Base
     }.to_json 
   end
   
-  
-#  http://gps.buienradar.nl/getrr.php?lat=52.3715975723131&lon=4.89971325769402
+  ##############################################################################################################
+  ## Buienradar ################################################################################################
+  ##############################################################################################################
+    
+  # http://gps.buienradar.nl/getrr.php?lat=52.3715975723131&lon=4.89971325769402
   BR_Url = "http://gps.buienradar.nl" 
   BR_Getr = "/getrr.php?"
   # curl --data '{"centroid:lat":"52.3715975723131", "centroid:lon":"4.89971325769402"}' http://localhost:3000/rain
@@ -173,6 +199,11 @@ class CitySDK_Services < Sinatra::Base
     end
   end
 
+  ##############################################################################################################
+  ## Nederlandse Spoorwegen ####################################################################################
+  ##############################################################################################################
+  
+  
   NS_Key = JSON.parse(File.read('/var/www/citysdk/shared/config/nskey.json')) 
   NS_Url = "https://webservices.ns.nl" 
   NS_AVT = "/ns-api-avt?station="
@@ -275,9 +306,71 @@ class CitySDK_Services < Sinatra::Base
         :data => @json
       }.to_json 
     end
-
-    
+      
   end
+  
+  ##############################################################################################################
+  ## Oplaadpalen.nl ############################################################################################
+  ##############################################################################################################  
+  
+  OPLAADPALEN_KEY = JSON.parse(File.read('/var/www/citysdk/shared/config/oplaadpalen_key.json'))["key"]
+  OPLAADPALEN_HOST = "http://oplaadpalen.nl"
+  OPLAADPALEN_PATH = "/api/availability/#{OPLAADPALEN_KEY}/json"
+
+  post '/oplaadpalen' do
+    @json = self.parse_request_json
+      
+    @json["cards"] = JSON.parse @json["cards"]
+    @json["facilities"] = JSON.parse @json["facilities"]
+    
+    @json["id"] = @json["id"].to_i
+    @json["price"] = @json["price"].to_f
+    @json["nroutlets"] = @json["nroutlets"].to_i
+    @json["realtimestatus"] = (@json["realtimestatus"] == "true")
+        
+    @json.select! { |k,v| v != '' } 
+    
+    if @json["realtimestatus"] == "true"
+      id = @json["id"]
+            
+      # TODO: naming convention!
+      key = "oplaadpalen!!!#{id}"      
+      data = CitySDK_Services.memcache_get(key)
+      if data
+        @json["availability"] = data
+      else
+        # Download availability data from oplaadpunten.nl
+        @connection = Faraday.new OPLAADPALEN_HOST    
+        response = httpget(@connection, OPLAADPALEN_PATH)
+        if response.status == 200
+          availability = JSON.parse response.body          
+          availability.each { |data|
+            _id = data["id"]
+            data.delete("id")
+            
+            # Convert strings to integers:
+            data = Hash[data.map{|k,str| [k, str.to_i] } ]
+            
+            if _id == id
+              @json["availability"] = data
+            end          
+            key = "oplaadpalen!!!#{_id}" 
+            # TODO: get timeout from layer data
+            CitySDK_Services.memcache_set(key, data, 5 * 60 )
+          }        
+        end
+      end      
+    end
+      
+    return { :status => 'success', 
+      :url => request.url, 
+      :data => @json
+    }.to_json 
+  end 
+  
+  ##############################################################################################################
+  ## Arts Holland ##############################################################################################
+  ############################################################################################################## 
 
   AH_Key = '91f8cb2755d2683eb442b3837dbe6274' 
   AH_Query = File.open('artsholland.sparql','r').read
