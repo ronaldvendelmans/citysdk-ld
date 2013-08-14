@@ -125,17 +125,19 @@ module CitySDK
       return if @content[0][:geometry].nil?
       @params[:srid] = 4326 
       g = @content[0][:geometry][:coordinates]
-      while g[0].is_a?(Array)
-        g = g[0]
-      end
-      lon = g[0]
-      lat = g[1]
-      # if lon > -180.0 and lon < 180.0 and lat > -90.0 and lat < 90.0 
-      #   @params[:srid] = 4326 
-      # els
-      if lon > -7000.0 and lon < 300000.0 and lat > 289000.0 and lat < 629000.0
-        # Dutch new rd system
-        @params[:srid] = 28992
+      if(g)
+        while g[0].is_a?(Array)
+          g = g[0]
+        end
+        lon = g[0]
+        lat = g[1]
+        # if lon > -180.0 and lon < 180.0 and lat > -90.0 and lat < 90.0 
+        #   @params[:srid] = 4326 
+        # els
+        if lon > -7000.0 and lon < 300000.0 and lat > 289000.0 and lat < 629000.0
+          # Dutch new rd system
+          @params[:srid] = 28992
+        end
       end
     end
     
