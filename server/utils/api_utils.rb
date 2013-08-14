@@ -83,7 +83,7 @@ class CitySDK_API < Sinatra::Base
     #  replace sequences of non-word characters by '.',
     #  Remove leading and trailing '.'
 
-    n = text.downcase.strip
+    n = text.to_s.downcase.strip
       .to_ascii
       .gsub(/['"`]/,'')
       .gsub(/\W+/,'.')

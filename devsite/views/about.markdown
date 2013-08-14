@@ -1,4 +1,4 @@
-##What does the CitySDK distribution platform do?
+## What does the CitySDK distribution platform do?
 Governments on all levels all over Europe are releasing datasets to the general public. Generally these datasets are downloadable from a special page on a municipal website, often these days there is even a catalogue available such as the ones in [Amsterdam](http://amsterdamopendata.nl) and [Helsinki ](http://www.hri.fi/en/data-search/). This is good news of course, both from a transparency as well as a policy perspective.
 However, these data are offered as separate files, that are not linked to each other. To use these data, you have to download the file, look into it's structure, and then link it to other files. E.g. a dataset with parking locations may just contain coordinates but has no link with addresses or streets. Therefore, the parking dataset has to be linked to a map, or an address file to enable its effective use. Because you often need to connect several dataset for a useful application, this is a huge amount of work.
 
