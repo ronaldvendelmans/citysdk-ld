@@ -319,17 +319,7 @@ class CitySDK_Services < Sinatra::Base
 
   post '/oplaadpalen' do
     @json = self.parse_request_json
-      
-    @json["cards"] = JSON.parse @json["cards"]
-    @json["facilities"] = JSON.parse @json["facilities"]
-    
-    @json["id"] = @json["id"].to_i
-    @json["price"] = @json["price"].to_f
-    @json["nroutlets"] = @json["nroutlets"].to_i
-    @json["realtimestatus"] = (@json["realtimestatus"] == "true")
-        
-    @json.select! { |k,v| v != '' } 
-    
+          
     if @json["realtimestatus"] == "true"
       id = @json["id"]
             
@@ -361,6 +351,16 @@ class CitySDK_Services < Sinatra::Base
         end
       end      
     end
+    
+    @json["cards"] = JSON.parse @json["cards"]
+    @json["facilities"] = JSON.parse @json["facilities"]
+    
+    @json["price"] = @json["price"].to_f
+    @json["nroutlets"] = @json["nroutlets"].to_i
+    @json["realtimestatus"] = (@json["realtimestatus"] == "true")
+    @json["id"] = @json["id"].to_i
+        
+    @json.select! { |k,v| v != '' } 
       
     return { :status => 'success', 
       :url => request.url, 
