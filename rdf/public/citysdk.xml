@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:geos="http://www.opengis.net/ont/geosparql#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns="http://rdf.citysdk.eu/" xml:base="file:///Users/tom/Develop/citysdk/rdf/public/citysdk.ttl%23">
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/">
+    <owl:versionInfo>1.0</owl:versionInfo>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/CitysdkEndpoint">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/Layer">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/Layer">
+    <rdfs:subClassOf rdf:resource="http://www.opengis.net/ont/geosparql#SpatialObject"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/Node">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/Node">
+    <rdfs:subClassOf rdf:resource="http://www.opengis.net/ont/geosparql#SpatialObject"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/NodeDatum">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/Ptline">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/Ptline">
+    <rdfs:subClassOf rdf:resource="http://rdf.citysdk.eu/Route"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/Ptstop">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/Ptstop">
+    <rdfs:subClassOf rdf:resource="http://rdf.citysdk.eu/Node"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/Region">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/Region">
+    <rdfs:subClassOf rdf:resource="http://www.opengis.net/ont/geosparql#SpatialObject"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/Route">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/Route">
+    <rdfs:subClassOf rdf:resource="http://www.opengis.net/ont/geosparql#SpatialObject"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/TransportModality">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/apiUrl">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/apiUrl">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/CitysdkEndpoint"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/cmsUrl">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/cmsUrl">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/CitysdkEndpoint"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/infoUrl">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/infoUrl">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/CitysdkEndpoint"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/createdOnLayer">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/createdOnLayer">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/Route"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/createdOnLayer">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/Region"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/createdOnLayer">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/Node"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/createdOnLayer">
+    <rdfs:range rdf:resource="http://rdf.citysdk.eu/Layer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/createdBy">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/createdBy">
+    <rdfs:range rdf:resource="http://xmlns.com/foaf/0.1/Organization"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/createdBy">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/Layer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/endpointCode">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/endpointCode">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/CitysdkEndpoint"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/hasTransportModality">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/hasTransportModality">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/Route"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/hasTransportModality">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/Ptstop"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/hasTransportModality">
+    <rdfs:range rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/layerProperty">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/layerProperty">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/NodeDatum"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/identifierProperty">
+    <rdfs:subPropertyOf rdf:resource="http://rdf.citysdk.eu/layerProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/layerData">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/layerData">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/Region"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/layerData">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/Route"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/layerData">
+    <rdfs:domain rdf:resource="http://rdf.citysdk.eu/Node"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/layerData">
+    <rdfs:range rdf:resource="http://rdf.citysdk.eu/NodeDatum"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/timespanProperty">
+    <rdfs:subPropertyOf rdf:resource="http://rdf.citysdk.eu/layerProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_airplane">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_airplane">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_any">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_any">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_bicycle">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_bicycle">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_bus">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_bus">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_cable_car">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_cable_car">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_car">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_car">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_ferry">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_ferry">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_foot">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_foot">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_funicular">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_funicular">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_gondola">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_gondola">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_horse">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_horse">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_moped">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_moped">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_motorbike">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_motorbike">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_rail">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_rail">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_subway">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_subway">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_tram">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_tram">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_truck">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_truck">
+    <rdf:type rdf:resource="http://rdf.citysdk.eu/TransportModality"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.opengis.net/ont/geosparql#SpatialObject">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+</rdf:RDF>

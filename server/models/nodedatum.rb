@@ -22,14 +22,22 @@ class NodeDatum < Sequel::Model
   KEY_SEPARATOR = ':'
   
   def self.atonestedh(a,v,h)
-    g = h
-    while(a.length > 1 )
-      aa = a.shift.to_sym
-      g[aa] = {} if g[aa].nil?
-      g = g[aa]
+    begin
+      g = h
+      while(a.length > 1 )
+        aa = a.shift.to_sym
+        if g[aa].nil?
+          g[aa] = {} 
+        elsif g[aa].class == String
+          g[aa] = {'->' => g[aa]} 
+        end
+        g = g[aa]
+      end
+      g[a[0].to_sym] = v
+      h
+    rescue => e
+      puts e.message;
     end
-    g[a[0].to_sym] = v
-    h
   end
 
   def self.nest(h)
@@ -40,7 +48,10 @@ class NodeDatum < Sequel::Model
         a = k.to_s.split(KEY_SEPARATOR)
         atonestedh(a,h[k],xtra)
         h.delete(k)
-        h.delete(a) if h[a]
+        h.delete(a[0]) if h[a[0]]
+        xtra.each_key do |k|
+          xtra[k]['->'] = h[k] if (h[k] and h[k].class == String)
+        end
         h = h.merge(xtra)
       end
     end
