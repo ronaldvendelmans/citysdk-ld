@@ -5,6 +5,7 @@ GEM
       activesupport (= 3.0.0)
     activesupport (3.0.0)
     daemon_controller (1.1.4)
+    dalli (2.6.4)
     faraday (0.8.8)
       multipart-post (~> 1.2.0)
     i18n (0.6.4)
@@ -31,6 +32,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_support
+  dalli
   faraday
   i18n
   passenger

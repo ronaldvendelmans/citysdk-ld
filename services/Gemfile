@@ -8,3 +8,4 @@ gem "rgeo"
 gem "rgeo-geojson"
 gem "i18n"
 gem "passenger"
+gem 'dalli' # memcache 
