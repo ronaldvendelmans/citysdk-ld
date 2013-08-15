@@ -127,7 +127,7 @@ class NodeDatum < Sequel::Model
         else
           lng = nil
           tpe = nil
-          prp = "#{name}.#{k.to_s}>"
+          prp = "<#{name}.#{k.to_s}>"
           # prp = "<#{::CitySDK_API::EP_ENDPOINT}.#{name}.#{k.to_s}>"
         end
         params[:layerdataproperties] << "#{prp} rdfs:subPropertyOf :layerProperty ."
