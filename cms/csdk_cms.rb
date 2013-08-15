@@ -231,7 +231,7 @@ class CSDK_CMS < Sinatra::Base
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
         @period = @layer.period_select()
-        @ptypeSelect = '<select style="border 0px;" id="ptype" onchange="selectFieldType(this.value)"> <option>select...</option> <option>Quantity</option> <option>Percentage</option> <option>Identifier</option> <option>Date</option> <option>Time</option>  <option>Timespan</option> <option>Descriptive</option> </select>'  
+        @ptypeSelect = '<select style="border 0px;" id="ptype" onchange="selectFieldType(this.value)"> <option>select...</option> <option>Quantity</option> <option>Percentage</option> <option>Identifier</option> <option>Date/Time</option>  <option>Descriptive</option> </select>'  
         if params[:nolayout]
           erb :layer_data, :layout => false
         else

@@ -3,7 +3,6 @@
     "Quantity": "om:quantity",
     "Date/Time": "xsd:datetime",
     "Identifier": "csdk:identifierProperty",
-    "Timespan": "csdk:timespanProperty",
     "Descriptive": "rdfs:description",
     "Percentage": "om:percent"
   };
@@ -155,16 +154,18 @@
     console.info(s)
     
    $("#relation_type").val(pTypes[s])
+   
+   
    if(s=='Quantity') {
-     $("#relation_unit").prop('disabled',false)
+     $("#relation_unit").show()
    } else {
-     $("#relation_unit").prop('disabled',true)
+     $("#relation_unit").hide()
    }
    
    if(s=='Descriptive') {
-     $("#relation_lang").prop('disabled',false)
+     $("#relation_lang").show()
    } else {
-     $("#relation_lang").prop('disabled',true)
+     $("#relation_lang").hide()
    }
   }
   
