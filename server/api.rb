@@ -50,23 +50,17 @@ class CitySDK_API < Sinatra::Base
   
   
   before do 
-    
-    
     # puts "REQ = #{JSON.pretty_generate(request.env)}"
-    
-    
-    # text/turtle
-    # application/x-turtle
-    # 
-    # content_type 'application/json'
     # @do_cache = (request.env['REQUEST_METHOD'] == 'GET')
     # @cache_time = 300
+    params[:request_format] = CitySDK_API.geRequestFormat(params, request)
   end
   
   after do
     # if @do_cache and (request.url =~ /http:\/\/.+?(\/.*$)/)
     #   @@memcache.set($1,response.body[0], @cache_time, :raw => true)
     # end
+    response.headers['Content-type'] = params[:request_format] + "; charset=utf-8"
     response.headers['Access-Control-Allow-Origin'] = '*'
   end
 

@@ -53,6 +53,7 @@ class CitySDK_API < Sinatra::Base
         end
        
         # TODO: also filter on node_data, name etc!
+        Node.serializeStart(params,req)
         res = Node.dataset
           .join_table(:inner, :nodes, Sequel.function(:ST_Intersects, :nodes__geom, :containing_node__geom), {:table_alias=>:containing_node})
           .where(:containing_node__cdk_id=>cdk_id)
@@ -65,9 +66,14 @@ class CitySDK_API < Sinatra::Base
               al.values
             } ) 
           }
-          .map { |item| Node.serialize(item,params) }
-                    
-        CitySDK_API.json_simple_results(res, req) 
+          .each { |item| Node.serialize(item,params) }
+
+          # .map { |item| Node.serialize(item,params) }
+          Node.serializeEnd(params, req)
+
+        # 
+        #             
+        # CitySDK_API.json_simple_results(res, req) 
       else 
         CitySDK_API.do_abort(422,"Command #{params[:cmd]} not defined for this node type.")
       end

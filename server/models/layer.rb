@@ -49,8 +49,64 @@ class Layer < Sequel::Model
       return false, @@LayerValidity[id]
     end
   end
+  
+  def serialize(params,request)
+    case params[:request_format]
+    when 'text/turtle'
+      prefixes = Set.new
+      prfs = ["@base <#{::CitySDK_API::EP_BASE_URI}#{::CitySDK_API::EP_ENDPOINT}/> ."]
+      prfs << "@prefix : <#{::CitySDK_API::EP_BASE_URI}> ."
+      res = turtelize(params)
+      prefixes.each do |p|
+        puts p
+        prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
+      end
+      return [prfs.join("\n"),"",res.join("\n")].join("\n")
+    when 'application/json'
+      return { :status => 'success', 
+        :url => request.url,  
+        :results => [ make_hash(params) ]
+      }.to_json 
+    end
+  end
+  
+  
+  def turtelize(params)    
+    @@prefixes << 'rdf:'
+    @@prefixes << 'rdfs:'
+    @@prefixes << 'foaf:'
+    @@prefixes << 'geos:'
+    triples = []
+    
+    triples << "<layer/#{name}>"
+    triples << "  a :Layer ;"
 
-  def serialize(params)
+    triples << "  rdfs:description \"#{description}\" ;"
+
+    triples << "  :createdBy ["
+    triples << "    foaf:name \"#{organization}\" ;"
+    triples << "    foaf:mbox \"#{owner.email}\""
+    triples << "  ] ;"
+
+    
+    if data_sources 
+      data_sources.each { |s| 
+        a = s.index('=') ? s[s.index('=')+1..-1] : s 
+        triples << "  rdfs:comment \"#{a}\" ;"
+      }
+    end
+    
+    if params.has_key? "geom" and !bbox.nil?
+      triples << "  geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(bbox) )  + "\" ;"
+    end
+
+    triples[-1][-1] = '.'
+    triples << ""
+    @@noderesults += triples
+    triples
+  end
+
+  def make_hash(params)
     h = {
       :name => name,
       :category => category,
@@ -69,6 +125,7 @@ class Layer < Sequel::Model
       if !bbox.nil? and params.has_key? 'geom'
          h[:bbox] = RGeo::GeoJSON.encode(CitySDK_API.rgeo_factory.parse_wkb(bbox))
       end
+      @@noderesults << h
       h
   end
 
