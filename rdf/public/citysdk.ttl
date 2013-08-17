@@ -86,9 +86,6 @@
       rdfs:domain :Region , :Route , :Node ;
       rdfs:range :NodeDatum .
 
-:timespanProperty
-      rdfs:subPropertyOf :layerProperty .
-
 :transportModality_airplane
       rdf:type owl:NamedIndividual , :TransportModality .
 
@@ -141,5 +138,3 @@
       rdf:type owl:NamedIndividual , :TransportModality .
 
 
-geos:SpatialObject
-      rdf:type owl:Class .

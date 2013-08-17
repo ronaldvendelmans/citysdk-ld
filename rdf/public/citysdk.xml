@@ -135,9 +135,6 @@
   <rdf:Description rdf:about="http://rdf.citysdk.eu/layerData">
     <rdfs:range rdf:resource="http://rdf.citysdk.eu/NodeDatum"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://rdf.citysdk.eu/timespanProperty">
-    <rdfs:subPropertyOf rdf:resource="http://rdf.citysdk.eu/layerProperty"/>
-  </rdf:Description>
   <rdf:Description rdf:about="http://rdf.citysdk.eu/transportModality_airplane">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
   </rdf:Description>
