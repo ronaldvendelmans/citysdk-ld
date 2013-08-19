@@ -1,4 +1,4 @@
-set :stages, %w(production testing opt)
+set :stages, %w(production testing opt lamia istb)
 set :default_stage, "testing"
 require 'capistrano/ext/multistage'
 #require "bundler/capistrano"
