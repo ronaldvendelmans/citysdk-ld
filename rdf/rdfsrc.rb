@@ -30,7 +30,7 @@ class CSDKRdf < Sinatra::Base
   get '/' do
     case @type
       when 'application/rdf+xml'
-        send_file './public/citysdk.xml', :type => @type, :disposition => :inline
+        send_file './public/citysdk.rdf', :type => @type, :disposition => :inline
       when 'text/turtle'
         send_file './public/citysdk.ttl', :type => @type, :disposition => :inline
       else
