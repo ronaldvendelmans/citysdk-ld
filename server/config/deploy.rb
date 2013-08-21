@@ -18,7 +18,7 @@ set :branch, "master"
 set :deploy_to, "/var/www/citysdk"
 # set :deploy_via, :remote_cache
 
-set :copy_exclude, ['database.json','tmp']
+set :copy_exclude, ['database.json','tmp','utils/epConfig.rb']
 
 set :deploy_via, :copy
 
@@ -42,6 +42,7 @@ namespace :deploy do
       rm -rf #{latest_release}/log &&
       ln -s #{shared_path}/log #{latest_release}/log &&
       ln -s #{shared_path}/config/database.json #{release_path} &&
+      ln -s #{shared_path}/config/epConfig.rb #{release_path}/utils &&
       mkdir -p #{latest_release}/tmp &&
       mkdir -p #{latest_release}/public
     CMD

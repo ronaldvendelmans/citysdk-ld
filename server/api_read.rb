@@ -7,8 +7,8 @@ class CitySDK_API < Sinatra::Base
       
       case params[:request_format]
       when 'text/turtle'
-        a = ["@base <#{EP_BASE_URI}#{EP_ENDPOINT}/> ."]
-        a << "@prefix : <#{EP_BASE_URI}> ."
+        a = ["@base <#{LD_BASE_URI}#{EP_ENDPOINT}/> ."]
+        a << "@prefix : <#{LD_BASE_URI}> ."
         a << "@prefix foaf: <http://xmlns.com/foaf/0.1/> ."
         a << "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> ."
         a << ""
@@ -16,10 +16,10 @@ class CitySDK_API < Sinatra::Base
         a << ' a :CitysdkEndpoint ;'
         a << " rdfs:description \"#{EP_DESCRIPTION}\" ;"
         a << " :endpointCode \"#{EP_ENDPOINT}\" ;"
-        a << ' :apiUrl "http://api.citysdk.waag.org" ;'
-        a << ' :cmsUrl "http://cms.citysdk.waag.org" ;'
-        a << ' :infoUrl "http://dev.citysdk.waag.org" ;'
-        a << ' foaf:mbox "citysdk@waag.org" .'
+        a << " :apiUrl \"#{EP_API_URL}\" ;"
+        a << " :cmsUrl \"#{EP_CMS_URL}\" ;"
+        a << " :infoUrl \"#{EP_INFO_URL}\" ;"
+        a << " foaf:mbox \"#{EP_MAINTAINER_EMAIL}\" ."
         return a.join("\n")
       when 'application/json'
         return { :status => 'success', 

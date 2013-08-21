@@ -40,6 +40,10 @@ configure do | sinatraApp |
 end
 
 class CitySDK_API < Sinatra::Base
+  
+  LD_BASE_URI = "http://rdf.citysdk.eu/"
+  
+  
   set :protection, :except => [:json_csrf]
 
   Sequel.extension :pg_hstore_ops

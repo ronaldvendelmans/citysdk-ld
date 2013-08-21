@@ -1,7 +1,5 @@
 require 'set'
 
-require_relative('../utils/appConfig')
-
 class Sequel::Model
   @@node_types = ['node','route','ptstop','ptline']  
   @@noderesults = []
@@ -41,8 +39,8 @@ class Node < Sequel::Model
   
   
   def self.prefixes
-    prfs = ["@base <#{::CitySDK_API::EP_BASE_URI}#{::CitySDK_API::EP_ENDPOINT}/> ."]
-    prfs << "@prefix : <#{::CitySDK_API::EP_BASE_URI}> ."
+    prfs = ["@base <#{::CitySDK_API::LD_BASE_URI}#{::CitySDK_API::EP_ENDPOINT}/> ."]
+    prfs << "@prefix : <#{::CitySDK_API::LD_BASE_URI}> ."
     @@prefixes.each do |p|
       
       puts p
