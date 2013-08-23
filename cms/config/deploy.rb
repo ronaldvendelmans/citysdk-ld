@@ -39,7 +39,7 @@ namespace :deploy do
       ln -s #{shared_path}/log #{latest_release}/log &&
       ln -s #{shared_path}/filetmp #{latest_release}/filetmp
     CMD
-    run "ln -s /var/www/citysdk/shared/config/database.json #{release_path}"
+    run "ln -s /var/www/citysdk/shared/config/config.json #{release_path}"
   end
 end  
 
