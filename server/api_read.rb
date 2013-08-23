@@ -1,25 +1,26 @@
 class CitySDK_API < Sinatra::Base
   
   get '/' do
+    
       kv8  = CitySDK_API::memcache_get('kv8daemon');
       divv = CitySDK_API::memcache_get('divvdaemon');
       @do_cache = false
       
       case params[:request_format]
       when 'text/turtle'
-        a = ["@base <#{LD_BASE_URI}#{EP_ENDPOINT}/> ."]
-        a << "@prefix : <#{LD_BASE_URI}> ."
+        a = ["@base <#{CDK_BASE_URI}#{Config[:ep_code]}/> ."]
+        a << "@prefix : <#{CDK_BASE_URI}> ."
         a << "@prefix foaf: <http://xmlns.com/foaf/0.1/> ."
         a << "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> ."
         a << ""
         a << '_:ep'
         a << ' a :CitysdkEndpoint ;'
-        a << " rdfs:description \"#{EP_DESCRIPTION}\" ;"
-        a << " :endpointCode \"#{EP_ENDPOINT}\" ;"
-        a << " :apiUrl \"#{EP_API_URL}\" ;"
-        a << " :cmsUrl \"#{EP_CMS_URL}\" ;"
-        a << " :infoUrl \"#{EP_INFO_URL}\" ;"
-        a << " foaf:mbox \"#{EP_MAINTAINER_EMAIL}\" ."
+        a << " rdfs:description \"#{Config[:ep_description]}\" ;"
+        a << " :endpointCode \"#{Config[:ep_code]}\" ;"
+        a << " :apiUrl \"#{Config[:ep_api_url]}\" ;"
+        a << " :cmsUrl \"#{Config[:ep_cms_url]}\" ;"
+        a << " :infoUrl \"#{Config[:ep_info_url]}\" ;"
+        a << " foaf:mbox \"#{Config[:ep_maintainer_email]}\" ."
         return a.join("\n")
       when 'application/json'
         return { :status => 'success', 

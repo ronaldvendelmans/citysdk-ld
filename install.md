@@ -96,7 +96,7 @@ The /shared directory has some more entries than the default:
 
 From now, we'll assume you're working in the 'current' directory (the contents of which should be that of the api/server directory in the download)
 
-Change 'example.database.json' into 'database.json' and make sure the contents reflect your configuration.
+Change 'example.config.json' into 'config.json' and make sure the contents reflect your configuration.
 
 To set up the admin user, edit db/migrations/002_insert_constants.rb and at the bottom, change the line:     
     

@@ -11,7 +11,7 @@ $email = ARGV[0] || (pw ? pw['email'] : nil) || 'citysdk@waag.org'
 $passw = ARGV[1] || (pw ? pw[$email]  : nil) || ''
 $host  = ARGV[2] || (pw ? pw['host']  : nil) || 'api.dev'
 
-dbconf = '/var/www/citysdk/shared/config/database.json'
+dbconf = '/var/www/citysdk/shared/config/config.json'
 dbconf = File.exists?(dbconf) ? JSON.parse(File.read(dbconf)) : nil
 
 if dbconf.nil?
@@ -19,7 +19,7 @@ if dbconf.nil?
   exit!
 end
 
-DB = Sequel.connect( "postgres://#{dbconf['user']}:#{dbconf['password']}@#{dbconf['host']}/#{dbconf['database']}" )
+DB = Sequel.connect( "postgres://#{dbconf['db_user']}:#{dbconf['db_pass']}@#{dbconf['db_host']}/#{dbconf['db_name']}" )
 
 class Layer < Sequel::Model
 end

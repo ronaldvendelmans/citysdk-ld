@@ -13,7 +13,7 @@ set :branch, "master"
 
 set :deploy_to, "/var/www/csdk_cms"
 
-set :copy_exclude, ['database.json','tmp','filetmp']
+set :copy_exclude, ['config.json','tmp','filetmp']
 
 set :deploy_via, :copy
 

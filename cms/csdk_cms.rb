@@ -20,9 +20,8 @@ configure do | app |
       end
   end
 
-  dbconf = JSON.parse(File.read('./database.json')) 
-  # set :database, "postgres://#{dbconf['user']}:#{dbconf['password']}@#{dbconf['host']}/#{dbconf['database']}"
-  app.database = "postgres://#{dbconf['user']}:#{dbconf['password']}@#{dbconf['host']}/#{dbconf['database']}"
+  $config = JSON.parse(File.read('./config.json')) 
+  app.database = "postgres://#{$config['db_user']}:#{$config['db_pass']}@#{$config['db_host']}/#{$config['db_name']}"
   app.database.extension :pg_array
   app.database.extension :pg_range
 
@@ -53,18 +52,9 @@ class CSDK_CMS < Sinatra::Base
   end
 
   before do
-
-    case request.url
-    when /cms\-test/
-      @apiServer = 'test-api.citysdk.waag.org'
-      @sampleUrl = "http://dev.citysdk.waag.org/map#http://test-api.citysdk.waag.org/"
-    when /cms\.citysdk/
-      @apiServer = 'api.citysdk.waag.org'
-      @sampleUrl = "http://dev.citysdk.waag.org/map#"
-    else
-      @apiServer = 'api.dev'
-      @sampleUrl = "http://dev.dev/map#http://api.dev/"
-    end
+    
+    @apiServer = $config['ep_api_url'].gsub('http://','')
+    @sampleUrl = $config['ep_info_url'] + "/map#http://#{@apiServer}/"
 
     @oid = session? ? session[:oid] : nil
     # puts "request: #{request.env['PATH_INFO']}"

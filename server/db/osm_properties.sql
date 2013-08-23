@@ -18,6 +18,8 @@ SET default_with_oids = false;
 -- Name: osmprops; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
+DROP table if exists osmprops;
+
 CREATE TABLE osmprops (
     key text NOT NULL,
     val text,

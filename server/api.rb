@@ -4,6 +4,11 @@ require 'sinatra'
 require 'json'
 require 'csv'
 
+class CitySDK_API < Sinatra::Base
+  attr_reader :config
+  Config = JSON.parse(File.read('./config.json'),{:symbolize_names => true}) 
+end
+
 configure do | sinatraApp |
   set :environment, :production
   
@@ -18,8 +23,7 @@ configure do | sinatraApp |
     end
   end
     
-  dbconf = JSON.parse(File.read('./database.json')) 
-  sinatraApp.database = "postgres://#{dbconf['user']}:#{dbconf['password']}@#{dbconf['host']}/#{dbconf['database']}"
+  sinatraApp.database = "postgres://#{CitySDK_API::Config[:db_user]}:#{CitySDK_API::Config[:db_pass]}@#{CitySDK_API::Config[:db_host]}/#{CitySDK_API::Config[:db_name]}"
   
 
   # sinatraApp.database.logger = Logger.new(STDOUT)
@@ -41,7 +45,7 @@ end
 
 class CitySDK_API < Sinatra::Base
   
-  LD_BASE_URI = "http://rdf.citysdk.eu/"
+  CDK_BASE_URI = "http://rdf.citysdk.eu/"
   
   
   set :protection, :except => [:json_csrf]
