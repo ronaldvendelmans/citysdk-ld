@@ -13,10 +13,11 @@ layers = {
   "temp" => "watertemperatuur",
   "nap" => "waterstanden"
 }
-$api = CitySDK::API.new($host)
 
 
 begin
+  $api = CitySDK::API.new($host)
+
   $api.authenticate($email,$passw)
 
   layers.each { |layer, rws_name| 
