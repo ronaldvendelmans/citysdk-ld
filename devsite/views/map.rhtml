@@ -49,7 +49,6 @@
       </div>
      </div>
    </div>
-
  </div> 
 
 <script>
@@ -146,7 +145,7 @@
     });
     map.addControl(new Crosshair());
 
-    map.setView(new L.LatLng(parseFloat(curr_location[0]), parseFloat(curr_location[1])), parseInt(curr_location[2]));
+    map.setView(new L.LatLng(parseFloat(curr_location[1]), parseFloat(curr_location[0])), parseInt(curr_location[2]));
           
     map.on("move", function(e) {
       printGeoStrings();
@@ -367,7 +366,12 @@
         var hash = window.location.hash;
         if (hash.length > 1) {
           var url = hash.substring(1);
-          $("#url").val(url);
+          var srv = "<%= @config[:ep_api_url] %>"
+          if (url.substring(0, srv.length) == srv) {
+            $("#url").val(url.substring(srv.length));
+          } else {
+            $("#url").val(url);
+          }
           loadCitySDKData(url, false);
         }
       }
