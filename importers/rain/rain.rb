@@ -4,12 +4,12 @@ require 'pg'
 
 local_ip = UDPSocket.open {|s| s.connect("123.123.123.123", 1); s.addr.last}
 if(local_ip =~ /192\.168|10\.0\.135/)
-  dbconf = JSON.parse(File.read('../../server/database.json'))
+  dbconf = JSON.parse(File.read('../../server/config.json'))
 else
-  dbconf = JSON.parse(File.read('/var/www/citysdk/current/database.json'))
+  dbconf = JSON.parse(File.read('/var/www/citysdk/current/config.json'))
 end
 
-conn = PGconn.new(dbconf['host'], '5432', nil, nil, dbconf['database'], dbconf['user'], dbconf['passwd'])
+conn = PGconn.new(dbconf['db_host'], '5432', nil, nil, dbconf['db_name'], dbconf['db_user'], dbconf['db_pass'])
 
 rain_layer_name = 'rain'
 admr_layer_name = 'admr'

@@ -4,6 +4,11 @@ require 'sinatra'
 require 'json'
 require 'csv'
 
+class CitySDK_API < Sinatra::Base
+  attr_reader :config
+  Config = JSON.parse(File.read('./config.json'),{:symbolize_names => true}) 
+end
+
 configure do | sinatraApp |
   set :environment, :production
   
@@ -18,8 +23,7 @@ configure do | sinatraApp |
     end
   end
     
-  dbconf = JSON.parse(File.read('./database.json')) 
-  sinatraApp.database = "postgres://#{dbconf['user']}:#{dbconf['password']}@#{dbconf['host']}/#{dbconf['database']}"
+  sinatraApp.database = "postgres://#{CitySDK_API::Config[:db_user]}:#{CitySDK_API::Config[:db_pass]}@#{CitySDK_API::Config[:db_host]}/#{CitySDK_API::Config[:db_name]}"
   
 
   # sinatraApp.database.logger = Logger.new(STDOUT)
@@ -40,6 +44,10 @@ configure do | sinatraApp |
 end
 
 class CitySDK_API < Sinatra::Base
+  
+  CDK_BASE_URI = "http://rdf.citysdk.eu/"
+  
+  
   set :protection, :except => [:json_csrf]
 
   Sequel.extension :pg_hstore_ops
@@ -50,23 +58,17 @@ class CitySDK_API < Sinatra::Base
   
   
   before do 
-    
-    
     # puts "REQ = #{JSON.pretty_generate(request.env)}"
-    
-    
-    # text/turtle
-    # application/x-turtle
-    # 
-    # content_type 'application/json'
     # @do_cache = (request.env['REQUEST_METHOD'] == 'GET')
     # @cache_time = 300
+    params[:request_format] = CitySDK_API.geRequestFormat(params, request)
   end
   
   after do
     # if @do_cache and (request.url =~ /http:\/\/.+?(\/.*$)/)
     #   @@memcache.set($1,response.body[0], @cache_time, :raw => true)
     # end
+    response.headers['Content-type'] = params[:request_format] + "; charset=utf-8"
     response.headers['Access-Control-Allow-Origin'] = '*'
   end
 

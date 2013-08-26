@@ -4,7 +4,7 @@
        <table>   
          <tr>
            <td class="minimize server">
-             http://api.citysdk.waag.org/
+             <%= @config[:ep_api_url] %>/
            </td>
            <td class="fill">
              <input id="url" type="text" />
@@ -49,12 +49,18 @@
       </div>
      </div>
    </div>
-
  </div> 
 
 <script>
   $(document).ready(function() {
     
+    // var tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    //var tileUrl = 'http://test-api.citysdk.waag.org:8888/v2/citysdk/{z}/{x}/{y}.png';
+    var server  = "<%= @config[:ep_api_url] %>".split('http://')[1] + '/';
+    var tileUrl = "<%= @config[:ep_tileserver_url] %>" + '/{z}/{x}/{y}.png';
+    var curr_location = "<%= @config[:ep_mapxyz] %>".split(',');
+    var http = 'http://';
+
     var spinnerOpts = {
       lines: 12, // The number of lines to draw
       length: 4, // The length of each line
@@ -85,11 +91,6 @@
     // ================================================================================
     // Leaflet map initialization 
     // ================================================================================
-
-
-    // var tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    //var tileUrl = 'http://test-api.citysdk.waag.org:8888/v2/citysdk/{z}/{x}/{y}.png';
-    var tileUrl = 'http://tiles.citysdk.waag.org/v2/citysdk/{z}/{x}/{y}.png';
 
     var osmAttrib = 'Map data © OpenStreetMap contributors';  
     
@@ -144,7 +145,7 @@
     });
     map.addControl(new Crosshair());
 
-    map.setView(new L.LatLng(52.37274, 4.90312), 13);
+    map.setView(new L.LatLng(parseFloat(curr_location[1]), parseFloat(curr_location[0])), parseInt(curr_location[2]));
           
     map.on("move", function(e) {
       printGeoStrings();
@@ -256,9 +257,6 @@
     
       spinner.spin(document.getElementById('busy'))
       
-      var http = 'http://';
-      var server = 'api.citysdk.waag.org/';
-
       if (url.substring(0, http.length) !== http) {
         url = http + server + url;
       }
@@ -368,7 +366,12 @@
         var hash = window.location.hash;
         if (hash.length > 1) {
           var url = hash.substring(1);
-          $("#url").val(url);
+          var srv = "<%= @config[:ep_api_url] %>"
+          if (url.substring(0, srv.length) == srv) {
+            $("#url").val(url.substring(srv.length));
+          } else {
+            $("#url").val(url);
+          }
           loadCitySDKData(url, false);
         }
       }
@@ -566,7 +569,7 @@
         if (index == 0) {
           cls += " last_history";
         }
-        var tr = "<tr class=\"" + cls + "\" data-url=\"" + this + "\"><td class=\"minimize server\">http://api.citysdk.waag.org/</td><td class=\"fill\" colspan=\"4\"><span class=\"url\">" + this + "</span></td></tr>";
+        var tr = "<tr class=\"" + cls + "\" data-url=\"" + this + "\"><td class=\"minimize server\"><%= @config[:ep_api_url] %>/</td><td class=\"fill\" colspan=\"4\"><span class=\"url\">" + this + "</span></td></tr>";
         $(tr).insertAfter($('#before_history'));          
       });      
     }

@@ -1,4 +1,4 @@
-set :stages, %w(production testing opt)
+set :stages, %w(production testing opt lamia istb)
 set :default_stage, "testing"
 require 'capistrano/ext/multistage'
 #require "bundler/capistrano"
@@ -13,7 +13,7 @@ set :branch, "master"
 
 set :deploy_to, "/var/www/csdk_cms"
 
-set :copy_exclude, ['database.json','tmp','filetmp']
+set :copy_exclude, ['config.json','tmp','filetmp']
 
 set :deploy_via, :copy
 
@@ -39,7 +39,7 @@ namespace :deploy do
       ln -s #{shared_path}/log #{latest_release}/log &&
       ln -s #{shared_path}/filetmp #{latest_release}/filetmp
     CMD
-    run "ln -s /var/www/citysdk/shared/config/database.json #{release_path}"
+    run "ln -s /var/www/citysdk/shared/config/config.json #{release_path}"
   end
 end  
 

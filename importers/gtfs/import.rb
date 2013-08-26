@@ -10,15 +10,15 @@ require './gtfs_funcs.rb'
 
 
 if($isLocal)
-  dbconf = JSON.parse(File.read('../../server/database.json'))
+  dbconf = JSON.parse(File.read('../../server/config.json'))
 else
-  dbconf = JSON.parse(File.read('/var/www/citysdk/current/database.json'))
+  dbconf = JSON.parse(File.read('/var/www/citysdk/current/config.json'))
 end
 
 
-$DB_name = dbconf['database']
-$DB_user = dbconf['user']
-$DB_pass = dbconf['passwd']
+$DB_name = dbconf['db_name']
+$DB_user = dbconf['db_user']
+$DB_pass = dbconf['db_pass']
 $newDir = ''
 $pg_csdk = nil
 $prefix = ''
@@ -335,7 +335,7 @@ def trips
     select += cls.include?('trip_bikes_allowed') ? ", trip_bikes_allowed" : ", 0"
     select += cls.include?('shape_id') ? ", '#{$prefix}' || shape_id" : ", ''"
     
-    $pg_csdk.exec "update igtfs.trips set direction_id = 0 where direction_id is NULL"
+    $pg_csdk.exec "update igtfs.trips set direction_id = 0 where direction_id is NULL" if cls.include?('direction_id')
 
     $zrp.p "Merging trips.." 
     

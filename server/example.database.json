@@ -1,8 +1,0 @@
-// copy to 'database.json', fill in the right values; do not check 'database.json' in!
-
-{
-  "host": "localhost",
-  "database": "citysdk",
-  "user": "tom",
-  "passwd": ""
-}

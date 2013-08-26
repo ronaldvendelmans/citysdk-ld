@@ -1,0 +1,50 @@
+<h4>Layer Properties Mapping<span class="codecomment">Map the properties to meaningful linked data uri's. </span></h4>
+
+<div>
+  <table style='table-layout:fixed'>
+    <tr>
+      <td class="sel_lab">Property:</td>
+      <td class="sel_sel"><span id='ldmap'/></td>
+      <td class="sel_uri"></td>
+    </tr>
+    <tr>
+      <td class="sel_lab">type:</td>
+      <td class="sel_sel"><%= @ptypeSelect %></td>
+      <td class="sel_uri"><input class='layer' type="text" id="relation_type" name="relation_type", value="" placeholder="<URI> or select above" onchange=""/></td>
+    </tr>
+
+    <tr id="relation_unit" style="display: none">
+      <td class="sel_lab">unit:</td>
+      <td class="sel_sel"><%= @ptypeSelect %></td>
+      <td class="sel_uri"><input class='layer' type="text" id="" name="relation_unit", value="aap" onchange=""/></td>
+    </tr>
+
+    <tr id="relation_lang" style="display: none">
+      <td class="sel_lab">language:</td>
+      <td class="sel_sel">&nbsp;</td>
+      <td class="sel_uri"><input class='layer' type="text" id="" name="relation_lang", value="aap" onchange=""/></td>
+    </tr>
+
+  </table>
+  
+  <div id="relation_desc">
+    description of property:
+    <textarea rows="2" cols="50" name="relation_desc">
+    </textarea>
+  </div>
+    
+
+
+</div>
+
+
+
+
+
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() { 
+    selectFieldTags( "<%= @layer.name %>", 'fields')
+  })
+</script>
+
+

@@ -55,7 +55,7 @@ module CitySDK
       pd = pc = hn = ad = false
       @params[:fields].reverse.each do |f|
         pd = f if ( f.to_s =~ /postcode|post/i )
-        pc = f if ( f.to_s =~ /^(post|zip)code$/i )
+        pc = f if ( f.to_s =~ /^(post|zip|postal)code$/i )
         hn = f if ( f.to_s =~ /huisnummer|housenumber|(house|huis)(nr|no)|number/i)
         ad = f if ( f.to_s =~ /address|street|straat|adres/i)
       end
@@ -125,7 +125,7 @@ module CitySDK
       return if @content[0][:geometry].nil?
       @params[:srid] = 4326 
       g = @content[0][:geometry][:coordinates]
-      if g
+      if(g)
         while g[0].is_a?(Array)
           g = g[0]
         end

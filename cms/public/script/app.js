@@ -1,6 +1,17 @@
 
-   optionsForSelect = function(a) {
-     var s = '<option>select..</option>';
+  var pTypes = {
+    "Quantity": "om:quantity",
+    "Date/Time": "xsd:datetime",
+    "Identifier": "csdk:identifierProperty",
+    "Descriptive": "rdfs:description",
+    "Percentage": "om:percent"
+  };
+
+   optionsForSelect = function(a,addSel) {
+     var s = '';
+     if(addSel==true) {
+       s='<option>select..</option>';
+     }
      a.forEach(function(item) {
        s = s + "<option>" + item + '</option>'
      });
@@ -8,7 +19,7 @@
    }
    
    addHtml = function(a,ts, i) {
-     if( a.length < 15 ) {
+     if( a.length < 25 ) {
        $('#'+ts).parent()
             .html( $('<select id="' + ts + '" name="tag_select[' + i + ']"></select>')
                     .append(
@@ -23,7 +34,6 @@
                   );
      }
    }
-   
    
   
    tagsForLayer = function(l,ts, i) {
@@ -133,3 +143,56 @@
   function postData(layerid,update_rate,wsurl,toupdate) {
     
   }
+  
+  function loadFieldDef(field,layer) {
+    console.info(field)
+    console.info(layer)
+    
+  }
+  
+  selectFieldType = function(s) {
+    console.info(s)
+    
+   $("#relation_type").val(pTypes[s])
+   
+   
+   if(s=='Quantity') {
+     $("#relation_unit").show()
+   } else {
+     $("#relation_unit").hide()
+   }
+   
+   if(s=='Descriptive') {
+     $("#relation_lang").show()
+   } else {
+     $("#relation_lang").hide()
+   }
+  }
+  
+  selectFieldTags = function(layer,fieldselect) {
+    if ( availableTags[layer] != null ) {
+      $('#ldmap')
+           .prepend( $('<select id="' + fieldselect + '" name="field" onchange="loadFieldDef(this.value,\''+ layer + '\')"></select>')
+                   .append(
+                     optionsForSelect(availableTags[layer],false)
+                   )
+                 );
+      return;
+    }
+    
+    $.ajax({
+      url: '/get_layer_keys/' + layer,
+      type: 'get',
+      success: function(data){
+        obj = $.parseJSON(data)
+        availableTags[layer] = obj[0]["keys_for_layer"]
+        return selectFieldTags(layer,fieldselect)
+      }
+    });  
+    
+  }
+  
+
+  
+  
+  

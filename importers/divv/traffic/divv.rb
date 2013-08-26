@@ -6,11 +6,11 @@ require 'active_support/core_ext'
 
 local_ip = UDPSocket.open {|s| s.connect("123.123.123.123", 1); s.addr.last}
 if(local_ip =~ /192\.168|10\.0\.135/)
-  dbconf = JSON.parse(File.read('../../../server/database.json'))
+  dbconf = JSON.parse(File.read('../../../server/config.json'))
   HOST = 'localhost'
   PORT = 3000
 else
-  dbconf = JSON.parse(File.read('/var/www/citysdk/current/database.json'))
+  dbconf = JSON.parse(File.read('/var/www/citysdk/current/config.json'))
   HOST = 'test-api.citysdk.waag.org'
   PORT = 80
 end
@@ -63,7 +63,7 @@ end
 divv_url = 'http://www.trafficlink-online.nl/trafficlinkdata/wegdata/TrajectSensorsNH.GeoJSON'
 divv_conn = Faraday.new(:url => divv_url)
 
-db_conn = PGconn.new(dbconf['host'], '5432', nil, nil, dbconf['database'], dbconf['user'], dbconf['passwd'])
+db_conn = PGconn.new(dbconf['db_host'], '5432', nil, nil, dbconf['db_name'], dbconf['db_user'], dbconf['db_pass'])
 
 layer_name = 'divv.traffic'
 

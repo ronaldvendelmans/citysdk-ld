@@ -6,9 +6,9 @@ require 'socket'
 
 local_ip = UDPSocket.open {|s| s.connect("123.123.123.123", 1); s.addr.last}
 if(local_ip =~ /192\.168|10\.0\.135/)
-  dbconf = JSON.parse(File.read('../../server/database.json'))
+  dbconf = JSON.parse(File.read('../../server/config.json'))
 else
-  dbconf = JSON.parse(File.read('/var/www/citysdk/current/database.json'))
+  dbconf = JSON.parse(File.read('/var/www/citysdk/current/config.json'))
 end
 
 
@@ -117,8 +117,8 @@ end
 
 
 begin
-  $pg_csdk = PGconn.new(dbconf['host'], '5432', nil, nil, dbconf['database'], dbconf['user'], dbconf['passwd'])
-  $pg_cbs = PGconn.new(dbconf['host'], '5432', nil, nil, 'cbs', dbconf['user'], dbconf['passwd'])
+  $pg_csdk = PGconn.new(dbconf['db_host'], '5432', nil, nil, dbconf['db_name'], dbconf['db_user'], dbconf['db_pass'])
+  $pg_cbs = PGconn.new(dbconf['db_host'], '5432', nil, nil, 'cbs', dbconf['db_user'], dbconf['db_pass'])
 rescue
   do_exit "Couldn't connect to database..."
 end

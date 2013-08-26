@@ -8,6 +8,7 @@ set :application, "CSDKDoc"
 set :repository,  "."
 set :scm, :none
 
+set :copy_exclude, ['config.json','tmp']
 
 set :branch, "master"
 
@@ -20,10 +21,6 @@ set :user, "bert"
 
 default_run_options[:shell] = '/bin/bash'
 
-role :web, "dev.citysdk.waag.org"                          # Your HTTP server, Apache/etc
-role :app, "dev.citysdk.waag.org"                          # This may be the same as your `Web` server
-role :db,  "dev.citysdk.waag.org", :primary => true       # This is where Rails migrations will run
-
 namespace :deploy do
   task :start do ; end
   task :stop do ; end
@@ -35,6 +32,7 @@ namespace :deploy do
   task :finalize_update, :except => { :no_release => true } do
     run <<-CMD
       rm -rf #{latest_release}/log &&
+      ln -s /var/www/citysdk/shared/config/config.json #{release_path} &&
       mkdir -p #{latest_release}/public &&
       mkdir -p #{latest_release}/tmp &&
       ln -s #{shared_path}/log #{latest_release}/log

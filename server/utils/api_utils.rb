@@ -1,3 +1,5 @@
+require 'set'
+
 class CitySDK_API < Sinatra::Base
   
   ##########################################################################################
@@ -118,68 +120,44 @@ class CitySDK_API < Sinatra::Base
     @do_cache = false
     throw(:halt, [code, {'Content-Type' => 'application/json'}, {:status => 'fail', :message  => message}.to_json])
   end  
-  
-  def self.json_simple_results(res, req)
-    { :status => 'success',
-      :url => req.url,
-      :results => res
-    }.to_json 
-  end
-  
-  def self.json_results(res, params, pagination_data, req)
-    pagination_results = self.pagination_results(params, pagination_data, res.length)      
-    { :status => 'success',
-      :url => req.url
-    }.merge(pagination_results).merge({
-      :results => res
-    }).to_json
-  end  
-  
-  
-  def self.nodes_results(dataset, params, req)
+
+  def self.geRequestFormat(params, req)
     case req.env['HTTP_ACCEPT']
+      # accept header takes precedence
     when 'application/json'
-      return self.json_nodes_results(dataset, params, req)
-    when 'text/turtle', 'application/x-turtle'
-      return self.ttl_nodes_results(dataset, params, req)
+      return 'application/json'
+    when 'text/turtle'
+      return 'text/turtle'
     else
       case params[:format]
       when 'turtle'
-        return self.ttl_nodes_results(dataset, params, req)
+        return 'text/turtle'
       when 'json'
-        return self.json_nodes_results(dataset, params, req)
+        return 'application/json'
       else
-        return self.json_nodes_results(dataset, params, req)
+        # json if nothing specified
+        return 'application/json'
       end
     end
   end
-  
-  
-  
-  def self.json_nodes_results(dataset, params, req)
-    begin
-      res = dataset.nodes(params).map { |item| Node.serialize(item,params) }    
-      json_results(res, params, dataset.get_pagination_data(params), req)      
-    rescue Exception => e
-      self.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
-    end
-  end  
-    
-  def self.ttl_nodes_results(dataset, params, req)
-    "turtle!"
-  end  
-    
+
+  def self.nodes_results(dataset, params, req)
+    res = 0
+    Node.serializeStart(params, req)
+    dataset.nodes(params).each { |h| Node.serialize(h,params); res += 1 }
+    Node.serializeEnd(params, req, pagination_results(params, dataset.get_pagination_data(params), res))
+  end
 
   def self.pagination_results(params, pagination_data, res_length)
     if pagination_data
-      if res_length < pagination_data[:page_size]
+      if res_length < pagination_data[:page_size] 
         {
           :pages => pagination_data[:current_page],
           :per_page => pagination_data[:page_size],
           :record_count => pagination_data[:page_size] * (pagination_data[:current_page] - 1) + res_length,
           :next_page => -1, 
         } 
-      else        
+      else 
         {
           :pages => params.has_key?('count') ? pagination_data[:page_count] : 'not counted.',
           :per_page => pagination_data[:page_size],

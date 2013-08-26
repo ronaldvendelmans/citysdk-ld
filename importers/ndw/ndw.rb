@@ -4,9 +4,9 @@ require 'rexml/document'
 
 # use active_support xml.to_hash
 
-dbconf = JSON.parse(File.read('../../server/database.json'))
+dbconf = JSON.parse(File.read('../../server/config.json'))
 
-conn = PGconn.new(dbconf['host'], '5432', nil, nil, dbconf['database'], dbconf['user'], dbconf['password'])
+conn = PGconn.new(dbconf['db_host'], '5432', nil, nil, dbconf['db_name'], dbconf['db_user'], dbconf['db_pass'])
 
 @xml_path = "../../../data/ndw/meetlocatietabel.xml"
 

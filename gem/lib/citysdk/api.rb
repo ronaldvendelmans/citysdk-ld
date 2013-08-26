@@ -25,7 +25,7 @@ module CitySDK
       :nodes => []
     }
 
-    def initialize(host, port=80)
+    def initialize(host, port=nil)
       @error = '';
       @layer = '';
       @batch_size = 10;
@@ -36,7 +36,7 @@ module CitySDK
     def authenticate(e,p)
       @email = e;
       @passw = p;
-      if !( @host == 'api.dev' or @host == 'localhost' or @host == '127.0.0.1')
+      if !( @host == 'api.dev' or @host == 'localhost' or @host == '127.0.0.1' or @host == '0.0.0.0')
         auth_connection = Faraday.new :url => "https://#{@host}", :ssl => {:verify => false}
         resp = auth_connection.get '/get_session', { :e => @email, :p => @passw }
       else 
@@ -60,9 +60,19 @@ module CitySDK
       true
     end
 
-    def set_host(host,port=80)
-      @host  = host
-      @port  = port
+    def set_host(host,port=nil)
+      @host = host
+      @port = port
+      
+      if port.nil?
+        if host =~ /^(.*):(\d+)$/
+          @port = $2
+          @host = $1
+        else
+          @port = 80
+        end
+      end
+      
       @connection = Faraday.new :url => "http://#{@host}:#{@port}"
       @connection.headers = {
         :user_agent => 'CitySDK_API GEM ' + CitySDK::VERSION,

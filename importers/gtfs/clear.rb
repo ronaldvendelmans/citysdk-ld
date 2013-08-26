@@ -9,15 +9,15 @@ require './gtfs_funcs.rb'
 
 local_ip = UDPSocket.open {|s| s.connect("123.123.123.123", 1); s.addr.last}
 if(local_ip =~ /192\.168|10\.0\.135/)
-  dbconf = JSON.parse(File.read('../../server/database.json'))
+  dbconf = JSON.parse(File.read('../../server/config.json'))
 else
-  dbconf = JSON.parse(File.read('/var/www/citysdk/current/database.json'))
+  dbconf = JSON.parse(File.read('/var/www/citysdk/current/config.json'))
 end
 
 
-$DB_name = dbconf['database']
-$DB_user = dbconf['user']
-$DB_pass = dbconf['passwd']
+$DB_name = dbconf['db_name']
+$DB_user = dbconf['db_user']
+$DB_pass = dbconf['db_pass']
 $pg_csdk = nil
 
 $gtfs_files = ['agency', 'feed_info', 'calendar_dates', 'stops', 'routes', 'trips', 'stop_times','shapes']
