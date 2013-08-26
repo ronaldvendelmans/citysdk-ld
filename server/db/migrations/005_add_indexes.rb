@@ -34,6 +34,8 @@ Sequel.migration do
     run <<-SQL
     ALTER TABLE nodes ADD CONSTRAINT constraint_cdk_id_unique UNIQUE (cdk_id);
     ALTER TABLE nodes ADD CONSTRAINT constraint_geom_4326 CHECK (ST_SRID(geom) = 4326);
+    ALTER TABLE nodes ADD CONSTRAINT constraint_geom_no_geomcoll CHECK (GeometryType(geom) != 'GEOMETRYCOLLECTION');
+    
     create trigger node_lb_update
         after insert on nodes
         for each row execute procedure node_ulb();    
