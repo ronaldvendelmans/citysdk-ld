@@ -7,3 +7,4 @@ cms/database.json
 .SyncID
 .SyncIgnore
 server/.cap_tasks~
+server/config.json
