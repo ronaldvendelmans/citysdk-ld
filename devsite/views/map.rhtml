@@ -368,7 +368,7 @@
           var url = hash.substring(1);
           var srv = "<%= @config[:ep_api_url] %>"
           if (url.substring(0, srv.length) == srv) {
-            $("#url").val(url.substring(srv.length));
+            $("#url").val(url.substring(srv.length+1));
           } else {
             $("#url").val(url);
           }

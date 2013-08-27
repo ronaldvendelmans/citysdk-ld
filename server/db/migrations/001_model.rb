@@ -34,7 +34,7 @@ Sequel.migration do
 			String :type
 			String :unit
 			String :lang
-			String :desc
+			String :descr
     end
 
 		create_table :node_types do

@@ -35,6 +35,7 @@ Sequel.migration do
     ALTER TABLE nodes ADD CONSTRAINT constraint_cdk_id_unique UNIQUE (cdk_id);
     ALTER TABLE nodes ADD CONSTRAINT constraint_geom_4326 CHECK (ST_SRID(geom) = 4326);
     ALTER TABLE nodes ADD CONSTRAINT constraint_geom_no_geomcoll CHECK (GeometryType(geom) != 'GEOMETRYCOLLECTION');
+    ALTER TABLE nodes ALTER COLUMN id set default nextval('nodes1_id_seq');
     
     create trigger node_lb_update
         after insert on nodes
@@ -64,6 +65,8 @@ Sequel.migration do
       run "CREATE INDEX ON node_data USING btree (layer_id);"
 
       run <<-SQL
+      ALTER TABLE node_data ALTER COLUMN id set default nextval('node_data_id_seq');
+      
       create trigger nodedata_lb_update
           after insert on node_data
           for each row execute procedure nodedata_ulb();    

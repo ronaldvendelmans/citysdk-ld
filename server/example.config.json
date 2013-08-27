@@ -4,9 +4,9 @@
   "db_host": "localhost",
   "db_name": "citysdk",
   "db_user": "postgres",
-  "db_pass": "",
+  "db_pass": "<passwd>",
   
-  "ep_code": "asd",
+  "ep_code":             "asd",
   "ep_description":      "Amsterdam/NL CitySDK endpoint.",
   "ep_api_url":          "http://api.citysdk.waag.org",
   "ep_cms_url":          "http://cms.citysdk.waag.org",
@@ -14,5 +14,5 @@
   "ep_services_url":     "http://services.citysdk.waag.org",
   "ep_tileserver_url":   "http://tiles.citysdk.waag.org/v2/citysdk",
   "ep_maintainer_email": "citysdk@waag.org",
-  "ep_mapxyz":           "4.90312,52.37274,13",
+  "ep_mapxyz":           "4.90312,52.37274,13"
 }
