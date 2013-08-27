@@ -1,5 +1,6 @@
 require "sequel/model"
 
+
 class Layer < Sequel::Model
   many_to_one :owner
   plugin :validation_helpers
@@ -14,6 +15,42 @@ class Layer < Sequel::Model
       errors.add(:import_url,"Cannot be set without config. Upload file once, first.")
     end
   end
+  
+  def fieldDefsSelect() 
+  end
+  
+  
+  def self.languageSelect() 
+    '<select style="border 0px;" id="relation_lang"> \
+      <option value="@ca">català</option> \
+      <option value="@de">deutsch</option> \
+      <option value="@el">ελληνικά</option> \
+      <option value="@en" selected = "selected">english</option> \
+      <option value="@es">español</option> \
+      <option value="@fr">français</option> \
+      <option value="@fy">frysk</option> \
+      <option value="@li">limburgs</option> \
+      <option value="@nl">nederlands</option> \
+      <option value="@pt">português</option> \
+      <option value="@fi">suomi</option> \
+      <option value="@sv">svenska</option> \
+      <option value="@tr">türkçe</option> \
+    </select>'  
+  end
+
+  def self.propertyTypeSelect() 
+    '<select style="border 0px;" id="ptype" onchange="selectFieldType(this.value)"> \
+      <option>select...</option> \
+      <option>Quantity</option> \
+      <option>URI</option> \
+      <option>Label/Identifier</option> \
+      <option>Date/Time</option>  \
+      <option>Descriptive</option> \
+    </select>'  
+  end
+  
+  
+  
   
   def self.category_select(sel=false, all=false)
     s= all ? 

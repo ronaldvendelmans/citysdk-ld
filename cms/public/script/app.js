@@ -1,10 +1,10 @@
 
-  var pTypes = {
-    "Quantity": "om:quantity",
-    "Date/Time": "xsd:datetime",
-    "Identifier": "csdk:identifierProperty",
-    "Descriptive": "rdfs:description",
-    "Percentage": "om:percent"
+  var propertyTypes = {
+    "Quantity":     "qudt:numericValue",
+    "Date/Time":    "xsd:datetime",
+    "Identifier":   "csdk:identifierProperty",
+    "Descriptive":  "rdfs:description",
+    "URI":          "xsd:anyURI",
   };
 
    optionsForSelect = function(a,addSel) {
@@ -144,35 +144,43 @@
     
   }
   
-  function loadFieldDef(field,layer) {
-    console.info(field)
-    console.info(layer)
-    
+  var loadFieldDef = function(field) {
+    if($.layerProperties[field] != undefined) {
+      $("#relation_desc").val($.layerProperties[field].descr)
+      $("#relation_type").val($.layerProperties[field].type)
+      $("#relation_lang").val($.layerProperties[field].lang)
+      $("#relation_unit").val($.layerProperties[field].unit)
+    } else {
+      $("#relation_desc").val('')
+      $("#relation_type").val('')
+      $("#relation_lang").val('')
+      $("#relation_unit").val('')
+    }
+      
   }
   
   selectFieldType = function(s) {
     console.info(s)
     
-   $("#relation_type").val(pTypes[s])
-   
+   $("#relation_type").val(propertyTypes[s])
    
    if(s=='Quantity') {
-     $("#relation_unit").show()
+     $("#relationunit").show()
    } else {
-     $("#relation_unit").hide()
+     $("#relationunit").hide()
    }
    
    if(s=='Descriptive') {
-     $("#relation_lang").show()
+     $("#relationlang").show()
    } else {
-     $("#relation_lang").hide()
+     $("#relationlang").hide()
    }
   }
   
   selectFieldTags = function(layer,fieldselect) {
     if ( availableTags[layer] != null ) {
       $('#ldmap')
-           .prepend( $('<select id="' + fieldselect + '" name="field" onchange="loadFieldDef(this.value,\''+ layer + '\')"></select>')
+           .prepend( $('<select id="' + fieldselect + '" name="field" onchange="loadFieldDef(this.value)"></select>')
                    .append(
                      optionsForSelect(availableTags[layer],false)
                    )

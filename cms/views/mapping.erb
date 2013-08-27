@@ -10,26 +10,25 @@
     <tr>
       <td class="sel_lab">type:</td>
       <td class="sel_sel"><%= @ptypeSelect %></td>
-      <td class="sel_uri"><input class='layer' type="text" id="relation_type" name="relation_type", value="" placeholder="<URI> or select above" onchange=""/></td>
+      <td class="sel_uri"><input class='layer' type="text" id="relation_type" id="relation_type" name="relation_type", value="" placeholder="<URI> or select above" onchange=""/> </td>
     </tr>
 
-    <tr id="relation_unit" style="display: none">
+    <tr id="relationunit" style="display: none">
       <td class="sel_lab">unit:</td>
       <td class="sel_sel"><%= @ptypeSelect %></td>
-      <td class="sel_uri"><input class='layer' type="text" id="" name="relation_unit", value="aap" onchange=""/></td>
+      <td class="sel_uri"><input class='layer' type="text" id="" id="relation_unit" name="relation_unit", value="aap" onchange=""/></td>
     </tr>
 
-    <tr id="relation_lang" style="display: none">
+    <tr id="relationlang" style="display: none">
       <td class="sel_lab">language:</td>
-      <td class="sel_sel">&nbsp;</td>
-      <td class="sel_uri"><input class='layer' type="text" id="" name="relation_lang", value="aap" onchange=""/></td>
+      <td class="sel_sel"><%= @langSelect %></td>
     </tr>
 
   </table>
   
-  <div id="relation_desc">
+  <div id="relationdesc">
     description of property:
-    <textarea rows="2" cols="50" name="relation_desc">
+    <textarea rows="2" cols="50" name="relation_desc" id="relation_desc">
     </textarea>
   </div>
     
@@ -43,6 +42,7 @@
 
 <script type="text/javascript" charset="utf-8">
   $(document).ready(function() { 
+    $.layerProperties = <%= @props %>
     selectFieldTags( "<%= @layer.name %>", 'fields')
   })
 </script>

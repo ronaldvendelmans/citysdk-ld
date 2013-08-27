@@ -221,7 +221,15 @@ class CSDK_CMS < Sinatra::Base
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
         @period = @layer.period_select()
-        @ptypeSelect = '<select style="border 0px;" id="ptype" onchange="selectFieldType(this.value)"> <option>select...</option> <option>Quantity</option> <option>Percentage</option> <option>Identifier</option> <option>Date/Time</option>  <option>Descriptive</option> </select>'  
+        
+        @langSelect  = Layer.languageSelect
+        @ptypeSelect = Layer.propertyTypeSelect
+        @props = {}
+        LayerProperty.where(:layer_id => @layer.id).each do |p|
+          @props[p.key] = p.serialize
+        end
+        @props = @props.to_json
+
         if params[:nolayout]
           erb :layer_data, :layout => false
         else

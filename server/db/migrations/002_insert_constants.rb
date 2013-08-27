@@ -44,8 +44,6 @@ Sequel.migration do
     self[:node_data_types].insert([0, 'layer_data'])
     self[:node_data_types].insert([1, 'comment'])
     
-    
-    
     # Insert ontology prefixes
     self[:ldprefix].insert(:name => 'ArtsHolland', :prefix => 'ah:', :url => 'http://purl.org/artsholland/1.0#')
     self[:ldprefix].insert(:name => 'DC-Elements', :prefix => 'dc:', :url => 'http://purl.org/dc/elements/1.1/')
@@ -62,8 +60,12 @@ Sequel.migration do
     self[:ldprefix].insert(:name => 'Time', :prefix => 'time:', :url => 'http://www.w3.org/2006/time#')
     self[:ldprefix].insert(:name => 'XML', :prefix => 'xml:', :url => 'http://www.w3.org/XML/1998/namespace')
     self[:ldprefix].insert(:name => 'XSD', :prefix => 'xsd:', :url => 'http://www.w3.org/2001/XMLSchema#')
+    self[:ldprefix].insert(:name => 'QUDT', :prefix => 'qudt:', :url => 'http://data.nasa.gov/qudt/owl/qudt#')
+    self[:ldprefix].insert(:name => 'Unit', :prefix => 'unit:', :url => 'http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#')
     self[:ldprefix].insert(:name => 'LinkedGeoData', :prefix => 'lgdo:', :url => 'http://linkedgeodata.org/ontology/')    
     self[:ldprefix].insert(:name => 'CitySDK', :prefix => 'csdk:', :url => 'http://purl.org/citysdk/1.0/')    
+        
+        
         
     # Insert default layers 
     # TODO: categories for default layers!!

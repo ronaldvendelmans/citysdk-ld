@@ -92,7 +92,7 @@ class Layer < Sequel::Model
     if data_sources 
       data_sources.each { |s| 
         a = s.index('=') ? s[s.index('=')+1..-1] : s 
-        triples << "  rdfs:comment \"#{a}\" ;"
+        triples << "  :dataSource \"#{a}\" ;"
       }
     end
     

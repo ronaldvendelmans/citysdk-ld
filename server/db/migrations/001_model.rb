@@ -32,8 +32,9 @@ Sequel.migration do
       integer :layer_id, :null => false     
 			String :key, :null => false
 			String :type
-			String :uri
+			String :unit
 			String :lang
+			String :desc
     end
 
 		create_table :node_types do
