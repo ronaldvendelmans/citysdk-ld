@@ -11,7 +11,7 @@
     <div class="code">
       <h4>Name</h4>
       <% if @prefix %>
-        <div ><span class='flex'><%= @prefix %>&nbsp;.&nbsp;</span><span class='flexinput'><input class='layer' type="text" size="100" name="name", value="<%= @layer.name %>"/></span></div>
+        <div ><span class='flex'><%= @prefix %></span><span class='flexinput'><input class='layer' type="text" size="100" name="name", value="<%= @layer.name %>"/></span></div>
       <% else %>
         <div><input class='layer' type="text" size="100" name="name", value="<%= @layer.name %>"/></div>
       <% end %>
@@ -24,7 +24,7 @@
 
     <div class="code">
       <h4>Category</h4>
-      <div ><span class='flex'><%= @categories %>&nbsp;.&nbsp;</span><span class='flexinput'><input class='layer' type="text" size="100" name="category", value="<%= @layer.category %>"/></span></div>
+      <div ><span class='flex'><%= @categories %></span><span class='flexinput'><input class='layer' type="text" size="100" name="category", value="<%= @layer.category %>"/></span></div>
     </div>
     
     <div class="code">

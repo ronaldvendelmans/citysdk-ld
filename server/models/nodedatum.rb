@@ -121,19 +121,31 @@ class NodeDatum < Sequel::Model
       nd[:data].to_hash.each do |k,v|
         res = LDProps.where({:layer_id => layer_id, :key => k.to_s }).first
         if res
-          lng = res[:lang]
-          prp = res[:uri]
-          tpe = res[:type]
+          lang = res[:lang]  == '' ? nil : res[:lang]
+          type = res[:type]  == '' ? nil : res[:type]
+          unit = res[:unit]  == '' ? nil : res[:unit]
+          desc = res[:descr] == '' ? nil : res[:descr]
         else
-          lng = nil
-          tpe = nil
-          prp = "<#{name}.#{k.to_s}>"
-          # prp = "<#{$config[:ep_code]}.#{name}.#{k.to_s}>"
+          lang = type = unit = desc = nil
         end
-        params[:layerdataproperties] << "#{prp} rdfs:subPropertyOf :layerProperty ."
-        s = "\t #{prp} \"#{v}\""
-        s += "^^xsd:#{tpe}" if tpe
-        s += "@#{lng}" if lng
+        prop = "<#{name}.#{k.to_s}>"
+        
+        
+        lp  = "#{prop}"
+        lp += "\n\t rdfs:subPropertyOf :layerProperty ;"
+        lp += "\n\t rdfs:subPropertyOf #{type} ;" if type
+        if desc and desc =~ /\n/
+          lp += "\n\t rdfs:description \"\"\"#{desc}\"\"\" ;"
+        elsif desc
+          lp += "\n\t rdfs:description \"#{desc}\" ;"
+        end
+        lp += "\n\t :hasValueUnitsOf #{unit} ;" if unit and type = 'qudt:numericValue' and unit != 'unit:Unitless'
+        lp[-1] = '.'
+        params[:layerdataproperties] << lp
+        
+        s  = "\t #{prop} \"#{v}\""
+        s += "^^#{type}" if type and type =~ /^xsd/
+        s += "#{lang}" if lang and type == 'rdfs:description'
         datas << s + " ;"
       end
 

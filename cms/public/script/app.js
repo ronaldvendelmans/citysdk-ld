@@ -2,7 +2,7 @@
   var propertyTypes = {
     "Quantity":     "qudt:numericValue",
     "Date/Time":    "xsd:datetime",
-    "Identifier":   "csdk:identifierProperty",
+    "Label":        "rdfs:label",
     "Descriptive":  "rdfs:description",
     "URI":          "xsd:anyURI",
   };
@@ -141,10 +141,40 @@
 	}
 
   function postData(layerid,update_rate,wsurl,toupdate) {
-    
+  }
+  
+  
+  
+  var saveLayerProperties = function(layerid) {
+    console.info("aap: " + layerid)
+    if( $.selectedField != undefined )
+      loadFieldDef($.selectedField)
+      
+    $.post( "/layer/" + layerid + "/ldprops", 
+            JSON.stringify($.layerProperties),  
+            function(data, textStatus, jqXHR) {
+              $("#was_saved").show()
+              setTimeout(function(){$("#was_saved").hide()},2000);
+            }
+          )
   }
   
   var loadFieldDef = function(field) {
+    
+    if( $.selectedField != undefined ) {
+      
+      if(! $.layerProperties[$.selectedField] ) 
+        $.layerProperties[$.selectedField] = {};
+      
+      $.layerProperties[$.selectedField].descr = $("#relation_desc").val()
+      $.layerProperties[$.selectedField].type  = $("#relation_type").val()
+      $.layerProperties[$.selectedField].lang  = $("#relation_lang").val()
+      $.layerProperties[$.selectedField].unit  = $("#relation_unit").val()
+    }
+
+    $("#pname").html(field)
+    
+    
     if($.layerProperties[field] != undefined) {
       $("#relation_desc").val($.layerProperties[field].descr)
       $("#relation_type").val($.layerProperties[field].type)
@@ -153,38 +183,63 @@
     } else {
       $("#relation_desc").val('')
       $("#relation_type").val('')
-      $("#relation_lang").val('')
-      $("#relation_unit").val('')
+      $("#relation_lang").val('@en')
+      $("#relation_unit").val('Unitless')
     }
-      
+    $.selectedField = field;
+    
+    if( $.layerProperties[field].unit != '' ) {
+      $("#relationunit").show()
+      $('#relation_unit').autocomplete({ source: 
+        function( request, response ) {
+          var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
+          response ( $.grep( $.units, function( item ) { return matcher.test( item ); } ) );
+        }       
+      })
+    }
+
+    if( $.layerProperties[field].type == 'rdfs:description' ) {
+      $("#relationlang").show()
+    }
+    
   }
   
   selectFieldType = function(s) {
-    console.info(s)
     
-   $("#relation_type").val(propertyTypes[s])
+    field = $("#pname").val();
+
+    if( $.layerProperties[field] && $.layerProperties[field].type && $.layerProperties[field].type != '')
+      $("#relation_type").val($.layerProperties[field].type)
+    else
+      $("#relation_type").val(propertyTypes[s])
+
+    if(s=='Quantity') {
+      $("#relationunit").show()
+      $('#relation_unit').autocomplete({ source: 
+        function( request, response ) {
+          var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
+          response ( $.grep( $.units, function( item ) { return matcher.test( item ); } ) );
+        }       
+      })
+    } else {
+      $("#relationunit").hide()
+    }
    
-   if(s=='Quantity') {
-     $("#relationunit").show()
-   } else {
-     $("#relationunit").hide()
-   }
-   
-   if(s=='Descriptive') {
-     $("#relationlang").show()
-   } else {
-     $("#relationlang").hide()
-   }
-  }
+    if(s=='Descriptive') {
+      $("#relationlang").show()
+    } else {
+      $("#relationlang").hide()
+    }
+ }
   
   selectFieldTags = function(layer,fieldselect) {
     if ( availableTags[layer] != null ) {
       $('#ldmap')
            .prepend( $('<select id="' + fieldselect + '" name="field" onchange="loadFieldDef(this.value)"></select>')
-                   .append(
-                     optionsForSelect(availableTags[layer],false)
-                   )
-                 );
+                         .append(  optionsForSelect(availableTags[layer],false) )
+                   );
+      $("#pname").html(availableTags[layer][0])
+      loadFieldDef(availableTags[layer][0])
       return;
     }
     

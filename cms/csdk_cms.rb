@@ -467,6 +467,30 @@ class CSDK_CMS < Sinatra::Base
     end
   end
   
+  post '/layer/:layer_id/ldprops' do |l|
+    if Owner.validSession(session[:auth_key])
+      @layer = Layer[l]
+      if(@layer && (@oid == @layer.owner_id) or @oid==0)
+        request.body.rewind  # in case someone already read it
+        data = JSON.parse(request.body.read, {:symbolize_names => true})
+        puts data
+        data.each_key do |k|
+          dk = data[k]
+          dk[:unit] = "unit:#{dk[:unit]}" if dk[:unit] != '' and dk[:unit] !~ /^unit:/
+          p = LayerProperty.where(:layer_id => l, :key => k.to_s).first
+          p = LayerProperty.new({:layer_id => l, :key => k.to_s}) if p.nil?
+          p.unit  = dk[:unit]
+          p.type  = dk[:type]
+          p.lang  = dk[:lang]
+          p.descr = dk[:descr]
+          if !p.save
+            return [422,{},"error saving property data."]
+          end
+        end
+      end
+    end
+  end
+  
   post '/layer/:layer_id/webservice' do |l|
     if Owner.validSession(session[:auth_key])
       @layer = Layer[l]

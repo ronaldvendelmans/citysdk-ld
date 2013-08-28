@@ -1,4 +1,4 @@
-var units = [ 
+$.units = [ 
  "Abampere",
  "AbamperePerSquareCentimeter",
  "Abcoulomb",

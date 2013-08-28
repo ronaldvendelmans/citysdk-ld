@@ -34,7 +34,7 @@
     <h4>Periodic update<span class="codecomment">Download data periodically. Configuration above. </span></h4>
      <form id="pu" action="/layer/<%= @layer.id %>/periodic" method="post">
       <div id='csvupl2'>
-        <span class='flex'><%= @period %> update url:&nbsp;&nbsp;</span>
+        <span class='flex'><%= @period %> update url:</span>
         <span class='flexinput'>
             <input class='layer' type="text" id="update_url" name="update_url" value="<%= @layer.import_url %>" placeholder="enter url to data file"/>
         </span>
@@ -45,24 +45,24 @@
   <% end %>
 
 
-    <div class="code">
-      <h4>Webservice <span class="codecomment">Sends the layer data to a web service upon request. Should return the (enhanced) data object.</span></h4>
-      <form id="ws" action="/layer/<%= @layer.id %>/webservice" method="post">
-        <div class='webservice'>
-          <span class='flex'>url:&nbsp;&nbsp;</span>
-          <span class='flexinput'>
-            <input class='layer' type="text" id="wsurl" name="wsurl", value="<%= @layer.webservice %>" onchange=""/>
-          </span>
-        </div>
-        <div class='webservice'>
-          <span class='flex'>cache for (sec):&nbsp;&nbsp;</span>
-          <span class='flexinput'>
-              <input class='layer' type="text" name="update_rate", value="<%= @layer.update_rate %>"/>
-          </span>
-        </div>
-        <input class='submitb' type="submit" value="save changes"/>
-      </form>
-    </div>
+  <div class="code">
+    <h4>Webservice <span class="codecomment">Sends the layer data to a web service upon request. Should return the (enhanced) data object.</span></h4>
+    <form id="ws" action="/layer/<%= @layer.id %>/webservice" method="post">
+      <div class='webservice'>
+        <span class='flex'>url:</span>
+        <span class='flexinput'>
+          <input class='layer' type="text" id="wsurl" name="wsurl", value="<%= @layer.webservice %>" onchange=""/>
+        </span>
+      </div>
+      <div class='webservice' style="padding-top: 5px">
+        <span class='flex'>cache for (sec):</span>
+        <span class='flexinput'>
+            <input class='layer' type="text" name="update_rate", value="<%= @layer.update_rate %>"/>
+        </span>
+      </div>
+      <input class='submitb' type="submit" value="save changes"/>
+    </form>
+  </div>
 
 
 
@@ -79,6 +79,7 @@ $(function() {
         return false; 
     });
 
+    $.getScript( "/script/units.js" )
 }); 
 
 

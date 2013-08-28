@@ -1,49 +1,49 @@
 <h4>Layer Properties Mapping<span class="codecomment">Map the properties to meaningful linked data uri's. </span></h4>
 
 <div>
-  <table style='table-layout:fixed'>
+
+  <table class="proptable">
+  
     <tr>
       <td class="sel_lab">Property:</td>
       <td class="sel_sel"><span id='ldmap'/></td>
       <td class="sel_uri"></td>
+      <td class="sel_4"></td>
     </tr>
+  
     <tr>
       <td class="sel_lab">type:</td>
       <td class="sel_sel"><%= @ptypeSelect %></td>
-      <td class="sel_uri"><input class='layer' type="text" id="relation_type" id="relation_type" name="relation_type", value="" placeholder="<URI> or select above" onchange=""/> </td>
+      <td class="sel_uri"><input class='layer' type="text" id="relation_type" value="" placeholder="<URI> or select left" onchange=""/> </td>
+      <td id="relationlang"  class="sel_4" style="display: none"><%= @langSelect %></td>
     </tr>
 
     <tr id="relationunit" style="display: none">
       <td class="sel_lab">unit:</td>
-      <td class="sel_sel"><%= @ptypeSelect %></td>
-      <td class="sel_uri"><input class='layer' type="text" id="" id="relation_unit" name="relation_unit", value="aap" onchange=""/></td>
-    </tr>
-
-    <tr id="relationlang" style="display: none">
-      <td class="sel_lab">language:</td>
-      <td class="sel_sel"><%= @langSelect %></td>
+      <td class="sel_sel">&nbsp;</td>
+      <td class="sel_uri"><input class='layer' type="text" id="relation_unit" value="" placeholder="type to select unit.."/></td>
+      <td class="sel_4"></td>
     </tr>
 
   </table>
-  
+
   <div id="relationdesc">
-    description of property:
+    description of property <span id='pname'></span>:
     <textarea rows="2" cols="50" name="relation_desc" id="relation_desc">
     </textarea>
   </div>
-    
+
+  <input class='submitb' type="submit" value="save changes" onclick="saveLayerProperties(<%= @layer.id %>)"/> <span id='was_saved' style="display: none">&nbsp;&nbsp;Saved!</span>
 
 
 </div>
 
 
-
-
-
 <script type="text/javascript" charset="utf-8">
   $(document).ready(function() { 
-    $.layerProperties = <%= @props %>
-    selectFieldTags( "<%= @layer.name %>", 'fields')
+    $.layerProperties = <%= @props %>;
+    $.selectedField = null;
+    selectFieldTags( "<%= @layer.name %>", 'fields');
   })
 </script>
 
