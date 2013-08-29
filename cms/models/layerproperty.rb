@@ -7,7 +7,7 @@ class LayerProperty < Sequel::Model(:ldprops)
       "type"  =>  self.type,
       "descr" =>  self.descr,
       "lang" => self.lang,
-      "unit" => self.unit.gsub(/^unit:/,'')
+      "unit" => self.unit.gsub(/^csdk:unit/,'')
     }
   end
   

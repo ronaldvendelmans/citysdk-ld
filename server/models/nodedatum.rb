@@ -133,19 +133,18 @@ class NodeDatum < Sequel::Model
         
         lp  = "#{prop}"
         lp += "\n\t rdfs:subPropertyOf :layerProperty ;"
-        lp += "\n\t rdfs:subPropertyOf #{type} ;" if type
         if desc and desc =~ /\n/
           lp += "\n\t rdfs:description \"\"\"#{desc}\"\"\" ;"
         elsif desc
           lp += "\n\t rdfs:description \"#{desc}\" ;"
         end
-        lp += "\n\t :hasValueUnitsOf #{unit} ;" if unit and type = 'qudt:numericValue' and unit != 'unit:Unitless'
+        lp += "\n\t :hasValueUnit #{unit} ;" if unit and type =~ /xsd:(integer|float)/
         lp[-1] = '.'
         params[:layerdataproperties] << lp
         
         s  = "\t #{prop} \"#{v}\""
-        s += "^^#{type}" if type and type =~ /^xsd/
-        s += "#{lang}" if lang and type == 'rdfs:description'
+        s += "^^#{type}" if type and type !~ /^xsd:string/
+        s += "#{lang}" if lang and type == 'xsd:string'
         datas << s + " ;"
       end
 

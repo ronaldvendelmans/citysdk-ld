@@ -8,7 +8,7 @@ psql -d citysdk -U postgres < osm_schema.sql
 
 # # for each additional country or regionp:
 #  
-# osm2pgsql --slim -d citysdk -l -C2000 -U postgres <additional>.osm.bz2
+# osm2pgsql --slim -j -d citysdk -l -C6000 -U postgres <additional file>
 # 
 # # Merge OSM data
 # psql -d citysdk -U postgres < osm_merge.sql

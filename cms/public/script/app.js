@@ -1,12 +1,25 @@
 
+  // var propertyTypes = {
+  //   "Quantity":     "qudt:numericValue",
+  //   "Date/Time":    "xsd:datetime",
+  //   "Label":        "rdfs:label",
+  //   "Descriptive":  "rdfs:description",
+  //   "URI":          "xsd:anyURI",
+  // };
+  // 
   var propertyTypes = {
-    "Quantity":     "qudt:numericValue",
-    "Date/Time":    "xsd:datetime",
-    "Label":        "rdfs:label",
-    "Descriptive":  "rdfs:description",
-    "URI":          "xsd:anyURI",
+    "anyURI":       "xsd:anyURI",
+    "base64Binary": "xsd:base64Binary",
+    "boolean":      "xsd:boolean",
+    "date":         "xsd:date",
+    "dateTime":     "xsd:dateTime",
+    "float":        "xsd:float",
+    "integer":      "xsd:integer",
+    "string":       "xsd:string",
+    "time":         "xsd:time"
   };
 
+  
    optionsForSelect = function(a,addSel) {
      var s = '';
      if(addSel==true) {
@@ -140,13 +153,8 @@
 	  });
 	}
 
-  function postData(layerid,update_rate,wsurl,toupdate) {
-  }
-  
-  
-  
   var saveLayerProperties = function(layerid) {
-    console.info("aap: " + layerid)
+
     if( $.selectedField != undefined )
       loadFieldDef($.selectedField)
       
@@ -174,21 +182,22 @@
 
     $("#pname").html(field)
     
-    
     if($.layerProperties[field] != undefined) {
       $("#relation_desc").val($.layerProperties[field].descr)
       $("#relation_type").val($.layerProperties[field].type)
+      $("#ptype").val($.layerProperties[field].type.substring(4))
       $("#relation_lang").val($.layerProperties[field].lang)
       $("#relation_unit").val($.layerProperties[field].unit)
     } else {
       $("#relation_desc").val('')
-      $("#relation_type").val('')
+      $("#relation_type").val('xsd:string')
+      $("#ptype").val('string')
       $("#relation_lang").val('@en')
-      $("#relation_unit").val('Unitless')
+      $("#relation_unit").val('Count')
     }
     $.selectedField = field;
     
-    if( $.layerProperties[field].unit != '' ) {
+    if( $.layerProperties[field].type == 'xsd:integer' || $.layerProperties[field].type == 'xsd:float') {
       $("#relationunit").show()
       $('#relation_unit').autocomplete({ source: 
         function( request, response ) {
@@ -196,12 +205,15 @@
           response ( $.grep( $.units, function( item ) { return matcher.test( item ); } ) );
         }       
       })
+    } else {
+      $("#relationunit").hide()
     }
 
-    if( $.layerProperties[field].type == 'rdfs:description' ) {
+    if( $.layerProperties[field].type == 'xsd:string' || $.layerProperties[field].type == 'string') {
       $("#relationlang").show()
+    } else {
+      $("#relationlang").hide()
     }
-    
   }
   
   selectFieldType = function(s) {
@@ -213,7 +225,7 @@
     else
       $("#relation_type").val(propertyTypes[s])
 
-    if(s=='Quantity') {
+    if(s == 'integer' || s == 'float' ) {
       $("#relationunit").show()
       $('#relation_unit').autocomplete({ source: 
         function( request, response ) {
@@ -225,7 +237,7 @@
       $("#relationunit").hide()
     }
    
-    if(s=='Descriptive') {
+    if(s=='string') {
       $("#relationlang").show()
     } else {
       $("#relationlang").hide()

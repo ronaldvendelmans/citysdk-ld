@@ -20,6 +20,7 @@ table td {
 
 .proptable td.sel_sel {
   white-space: nowrap;
+  padding-right: 1em;
 }
 
 .proptable td.sel_uri {

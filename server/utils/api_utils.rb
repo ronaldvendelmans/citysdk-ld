@@ -130,7 +130,7 @@ class CitySDK_API < Sinatra::Base
       return 'text/turtle'
     else
       case params[:format]
-      when 'turtle'
+      when 'turtle', 'ttl'
         return 'text/turtle'
       when 'json'
         return 'application/json'

@@ -20,6 +20,7 @@ class Layer < Sequel::Model
   def fieldDefsSelect() 
   end
   
+
   
   def self.languageSelect() 
     '<select style="border 0px;" id="relation_lang">
@@ -39,15 +40,12 @@ class Layer < Sequel::Model
     </select>'  
   end
 
-  def self.propertyTypeSelect() 
-    '<select style="border 0px;" id="ptype" onchange="selectFieldType(this.value)">
-      <option>select...</option>
-      <option>Quantity</option>
-      <option>Descriptive</option>
-      <option>Date/Time</option>
-      <option>Label</option>
-      <option>URI</option>
-    </select>'  
+  def self.propertyTypeSelect()
+    s = '<select style="border 0px;" id="ptype" onchange="selectFieldType(this.value)">'
+    %w{ anyURI base64Binary boolean date dateTime float integer string time }.each do |w|
+      s += "<option>#{w}</option>"
+    end
+    s += '</select>'  
   end
   
   

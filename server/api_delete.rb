@@ -33,6 +33,7 @@ class CitySDK_API < Sinatra::Base
     CitySDK_API.do_abort(422,"OSM, GTFS or ADMR layers cannot be deleted..")
   end
 
+
   delete '/:cdk_id/:layer' do |cdk_id, layer|
     layer_id = Layer.idFromText(layer)
     CitySDK_API.do_abort(422,"Invalid layer spec: #{layer}") if layer_id.nil? or layer_id.is_a? Array
