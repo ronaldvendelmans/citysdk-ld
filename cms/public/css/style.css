@@ -3,6 +3,37 @@
 @import url('reset.css');
 
 
+table {
+/*  border-collapse:collapse;*/
+}
+
+table td {
+  word-break: break-all;
+  vertical-align: top;
+}
+
+.proptable td.sel_lab {
+  text-align: right;
+  padding-right: 1em;
+  white-space: nowrap;
+}
+
+.proptable td.sel_sel {
+  white-space: nowrap;
+  padding-right: 1em;
+}
+
+.proptable td.sel_uri {
+  width: 99%;
+}
+
+.proptable td.sel_4 {
+  white-space: nowrap;
+  padding-left: 0.5em;
+}
+
+
+
 /* Columns 
 -------
 .col_33 | .col_33 | .col_33
@@ -137,16 +168,6 @@ span.editlinks {
   border-top: 6px solid black;
 }
 
-table {
-  width: 100%;
-  font-size: 0.9em;
-}
-
-table td {
-  width: 20%;
-  word-break: break-all;
-  vertical-align: top;
-}
 
 table td.desc {
   width: 80%;
@@ -360,21 +381,6 @@ div#stats {
   -moz-border-radius: 5px;
 }
 
-.sel_lab {
-  overflow: hidden;
-  text-align: right;
-  padding-right: 1em;
-  width: 5px;
-}
-
-.sel_sel {
-  overflow: hidden;
-  width: 30px;
-}
-
-.sel_url {
-  overflow: hidden;
-}
 
 textarea {
   width: 100%;
@@ -404,6 +410,7 @@ input.login {
 
 span.flex {
   float: left;
+  padding-right: 1em;
 }
 
 .flexinput {
@@ -422,8 +429,8 @@ input.layer {
   margin: 0;
   padding: 0;
   border-width: 1px;
-  margin-bottom: 10px;
-  border: 1px solid #b8c6c9;
+/*  margin-bottom: 10px;
+*/  border: 1px solid #b8c6c9;
   color: #848484;
   font-weight: normal;
   font-size: 0.9em;
