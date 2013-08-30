@@ -46,7 +46,7 @@ if tilesets.length > 1
   # (do not use file with 2 zoom levels and merge file with more zoom levels into it!)  
 
   cp_cmd = "cp #{tiles_path}/#{base}.mbtiles #{tiles_path}/#{dst}.mbtiles"
-  system cp_cmb
+  system cp_cmd
 
   # Merge mbtiles files
   # https://github.com/mapbox/node-mbtiles/wiki/Post-processing-MBTiles-with-MBPipe
