@@ -119,7 +119,7 @@ class NodeDatum < Sequel::Model
       end
 
       nd[:data].to_hash.each do |k,v|
-        res = LDProps.where({:layer_id => layer_id, :key => k.to_s }).first
+        res = LayerProperty.where({:layer_id => layer_id, :key => k.to_s }).first
         if res
           lang = res[:lang]  == '' ? nil : res[:lang]
           type = res[:type]  == '' ? nil : res[:type]
