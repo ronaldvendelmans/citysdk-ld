@@ -33,6 +33,25 @@ table td {
 }
 
 
+table.twotable {
+  width: 100%;
+}
+
+.twotable td.left {
+  color: #6f8993;
+  font-size: 90%;
+  padding-right: 2em;
+  text-align: right;
+  white-space: nowrap;
+  width: 10%;
+}
+
+.twotable td.right {
+  width: 99%;
+}
+
+
+
 
 /* Columns 
 -------
@@ -147,6 +166,14 @@ a:visited {
 span.editlinks {
   color: #BBB;
   float: right;
+}
+
+.code span.editlinks {
+  color: #63AD00
+}
+
+.code span.editlinks a {
+  color: #63AD00
 }
 
 .full-width-header {

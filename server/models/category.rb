@@ -12,7 +12,7 @@ class OSMProps < Sequel::Model(:osmprops)
 end
 
 
-class LDProps < Sequel::Model(:ldprops)
+class LayerProperty < Sequel::Model(:ldprops)
 end
 
 

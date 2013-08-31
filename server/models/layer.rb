@@ -81,11 +81,16 @@ class Layer < Sequel::Model
     triples << "<layer/#{name}>"
     triples << "  a :Layer ;"
 
-    triples << "  rdfs:description \"#{description}\" ;"
+    d = description.strip
+    if d =~ /\n/
+      triples << "  rdfs:description \"\"\"#{d}\"\"\" ;"
+    else
+      triples << "  rdfs:description \"#{d}\" ;"
+    end
 
     triples << "  :createdBy ["
-    triples << "    foaf:name \"#{organization}\" ;"
-    triples << "    foaf:mbox \"#{owner.email}\""
+    triples << "    foaf:name \"#{organization.strip}\" ;"
+    triples << "    foaf:mbox \"#{owner.email.strip}\""
     triples << "  ] ;"
 
     
@@ -95,6 +100,25 @@ class Layer < Sequel::Model
         triples << "  :dataSource \"#{a}\" ;"
       }
     end
+    
+    res = LayerProperty.where(:layer_id => id)
+    res.each do |r|
+      triples << "  :hasDataField ["
+      triples << "    rdfs:label #{r.key} ;"
+      triples << "    :valueType #{r.type} ;"
+      triples << "    :valueUnit #{r.unit} ;" if r.type =~ /(integer|float|double)/ and r.unit != ''
+      triples << "    :valueLanguange \"#{r.lang}\" ;" if r.lang != '' and r.type == 'xsd:string'
+      if not r.descr.empty?
+        if r.descr =~ /\n/
+          triples << "    rdfs:description \"\"\"#{r.descr}\"\"\" ;"
+        else
+          triples << "    rdfs:description \"#{r.descr}\" ;"
+        end
+      end
+      triples[-1] = triples[-1][0...-1]
+      triples << "  ] ;"
+    end
+    
     
     if params.has_key? "geom" and !bbox.nil?
       triples << "  geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(bbox) )  + "\" ;"
@@ -115,18 +139,32 @@ class Layer < Sequel::Model
       :description => description,
       :data_sources => data_sources ? data_sources.map { |s| s.index('=') ? s[s.index('=')+1..-1] : s } : [],
       :imported_at => imported_at
-      }
-      if realtime 
-        h[:update_rate] = update_rate
-      else
-        h[:validity] = [validity.begin, validity.end] if validity
-      end
+    }
       
-      if !bbox.nil? and params.has_key? 'geom'
-         h[:bbox] = RGeo::GeoJSON.encode(CitySDK_API.rgeo_factory.parse_wkb(bbox))
-      end
-      @@noderesults << h
-      h
+    res = LayerProperty.where(:layer_id => id)
+    h[:fields] = [] if res.count > 0
+    res.each do |r|
+      a = {
+        :key => r.key,
+        :type => r.type
+      }
+      a[:valueUnit]      = r.unit if r.type =~ /(integer|float|double)/ and r.unit != ''
+      a[:valueLanguange] = r.lang if r.lang != '' and r.type == 'xsd:string'
+      a[:description]    = r.descr if not r.descr.empty?
+      h[:fields] << a
+    end
+    
+    if realtime 
+      h[:update_rate] = update_rate
+    # else
+    #   h[:validity] = [validity.begin, validity.end] if validity
+    end
+    
+    if !bbox.nil? and params.has_key? 'geom'
+       h[:bbox] = RGeo::GeoJSON.encode(CitySDK_API.rgeo_factory.parse_wkb(bbox))
+    end
+    @@noderesults << h
+    h
   end
 
   def self.idFromText(p)

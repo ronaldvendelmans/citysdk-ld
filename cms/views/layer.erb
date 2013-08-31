@@ -12,26 +12,26 @@
       <% end %>
     </span>
   
-  <table border="0">
+  <table class = "twotable" border="0">
     <tr>
-      <td>category:</td>
-      <td><%= @layer.category %></td>
+      <td class = "left">category:</td>
+      <td class = "right"><%= @layer.category %></td>
     </tr>
     <tr>
-      <td class='data'>description:</td>
-      <td class='form'><%= @layer.description %></td>
+      <td class = "left">description:</td>
+      <td class = "right"><%= @layer.description %></td>
     </tr>
     <tr>
-      <td>organization:</td>
-      <td><%= @layer.organization %></td>
+      <td class = "left">organization:</td>
+      <td class = "right"><%= @layer.organization %></td>
     </tr>
     <tr>
-      <td>maintainer:</td>
-      <td><%= @layer.owner.email %></td>
+      <td class = "left">maintainer:</td>
+      <td class = "right"><%= @layer.owner.email %></td>
     </tr>
     <tr>
-      <td>source:</td>
-      <td>
+      <td class = "left">source:</td>
+      <td class = "right">
         <% if @layer.data_sources %>
           <% @layer.data_sources.each do |s| %>
             <%= s %><br/>

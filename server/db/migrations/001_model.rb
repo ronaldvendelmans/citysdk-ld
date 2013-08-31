@@ -97,7 +97,6 @@ Sequel.migration do
       integer :owner_id, :null => false, :default => 0
       timestamptz :imported_at, :default => nil                                                
       timestamptz :created_at, :null => false, :default => :now.sql_function
-      column :bbox, 'geometry'
       String :category
       String :organization
       
@@ -111,6 +110,8 @@ Sequel.migration do
     end
 
     run = <<-SQL
+      SELECT AddGeometryColumn('layers', 'bbox', 4326, 'GEOMETRY', 2 );
+    
       ALTER TABLE layers ADD CONSTRAINT constraint_layer_name_unique UNIQUE(name);
       
       ALTER TABLE layers ADD CONSTRAINT constraint_layer_name_alphanumeric_with_dots      
