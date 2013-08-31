@@ -17,6 +17,8 @@
       <div id="info">
         <h2>Info</h2>
         <p>All 9,866,539 <a href="http://www.kadaster.nl/web/file?uuid=25da4675-fc9c-47a6-8039-1af04c142965&owner=23cbe925-35ce-4a72-ac8c-a33a0c19ae1e&contentid=2585">buildings</a> in the Netherlands, shaded according to year of construction. Data from <a href="http://www.kadaster.nl/bag">BAG</a>, via <a href="http://dev.citysdk.waag.org/">CitySDK</a>. Map made with <a href="http://www.mapbox.com/tilemill/">TileMill</a> by <a href="mailto:bert@waag.org">Bert Spaan</a>, <a href="http://www.waag.org/">Waag Society</a>, inspired by <a href="http://bklynr.com/block-by-block-brooklyns-past-and-present/">BKLYNR</a>.
+        </p>
+        <p>If you encounter incorrect building data, you can always <a href="http://www.kadaster.nl/web/Themas/themaartikel/BAGartikel/BAG-terugmelden.htm">inform the Kadaster!</a></p>
       </div>
       <div id="legend">
         <h2>Legend</h2>        
@@ -31,7 +33,6 @@
       </div>
       <div id="data">
         <h2>Data</h2>
-
         <table class="data-table">
           <tr><td><h3>City</h3></td><td><span class="help" id="gemeente-help">(click on building for data)</span></td></tr>
           <tr><td class="key">Name:</td><td class="value" id="admr-naam"></td></tr>
@@ -84,48 +85,80 @@
       var lat = e.latlng.lat;        
       var lon = e.latlng.lng;
             
-      var admrUrl = "http://api.citysdk.waag.org/regions?lat=" + lat + "&lon=" + lon + "&admr::admn_level=3&per_page=2&layer=cbs";
-      $.getJSON(admrUrl, function(data) {
-
-        // Reset data:
-        $("#admr-naam").html("");
-        $("#cbs-oppervlakte").html("");
-        $("#cbs-inwoners").html("");
-
-        if (data.status === "success" && data.results.length > 0) {
-          var admrData = data.results[0].layers["admr"].data;
-          var cbsData = data.results[0].layers["cbs"].data;
-
-          var naam = admrData.name;
-          var oppervlakte = cbsData.opp_tot;
-          var inwoners = cbsData.aant_inw;          
-          
-          $("#admr-naam").html(naam);
-          $("#cbs-oppervlakte").html(formatNumber(oppervlakte) + " m&#178;");
-          $("#cbs-inwoners").html(formatNumber(inwoners));
-        }
-      });
-        
+      // var admrUrl = "http://api.citysdk.waag.org/regions?lat=" + lat + "&lon=" + lon + "&admr::admn_level=3&per_page=2&layer=cbs";
+      // $.getJSON(admrUrl, function(data) {
+      // 
+      //   // Reset data:
+      //   $("#admr-naam").html("");
+      //   $("#cbs-oppervlakte").html("");
+      //   $("#cbs-inwoners").html("");
+      // 
+      //   if (data.status === "success" && data.results.length > 0) {
+      //     var admrData = data.results[0].layers["admr"].data;
+      //     var cbsData = data.results[0].layers["cbs"].data;
+      // 
+      //     var naam = admrData.name;
+      //     var oppervlakte = cbsData.opp_tot;
+      //     var inwoners = cbsData.aant_inw;          
+      //     
+      //     $("#admr-naam").html(naam);
+      //     $("#cbs-oppervlakte").html(formatNumber(oppervlakte) + " m&#178;");
+      //     $("#cbs-inwoners").html(formatNumber(inwoners));
+      //   }
+      // });
+      //   
         
       var pandUrl = "http://api.citysdk.waag.org/nodes?lat=" + lat + "&lon=" + lon + "&layer=bag.panden&per_page=1&radius=" + radius;
       
       $.getJSON(pandUrl, function(data) {
         
         // Reset data:
+        $("#admr-naam").html("");
+        $("#cbs-oppervlakte").html("");
+        $("#cbs-inwoners").html("");
+        
         $("#pand-bouwjaar").html("");
         
         $("#vbo-adres").html("");
         $("#vbo-postcode").html("");
         $("#vbo-plaats").html("");
         $("#vbo-oppervlakte").html("");
-        $("#vbo-gebruiksdoel").html("");  
-        
+        $("#vbo-gebruiksdoel").html("");
+                
         if (data.status === "success" && data.results.length > 0) {
           var pandData = data.results[0].layers["bag.panden"].data;
           var pand_id = pandData.pand_id;
           var bouwjaar = pandData.bouwjaar;
               
           $("#pand-bouwjaar").html(bouwjaar);
+          
+          var admrUrl = "http://api.citysdk.waag.org/bag.panden." + pand_id + "/select/regions?admr::admn_level=3&layer=cbs,admr";
+          $.getJSON(admrUrl, function(data) {            
+            if (data.status === "success" && data.results.length > 0) {
+              
+              var node;
+              for (var i = 0; i < data.results.length; i++) {
+                if (parseInt(data.results[i].layers.admr.data.admn_level) == 3) {
+                  node = data.results[i];  
+                  break;
+                }                
+              }
+              
+              if (node) {
+                var admrData = node.layers["admr"].data;
+                var cbsData = node.layers["cbs"].data;
+
+                var naam = admrData.name;
+                var oppervlakte = cbsData.opp_tot;
+                var inwoners = cbsData.aant_inw;          
+              
+                $("#admr-naam").html(naam);
+                $("#cbs-oppervlakte").html(formatNumber(oppervlakte) + " m&#178;");
+                $("#cbs-inwoners").html(formatNumber(inwoners));
+              } 
+            }
+            
+          });          
                   
           var vboUrl = "http://api.citysdk.waag.org/nodes?bag.vbo::pand_ids=" + pand_id;
           $.getJSON(vboUrl, function(data) {
