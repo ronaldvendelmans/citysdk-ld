@@ -84,29 +84,6 @@
     map.on('click', function(e) {
       var lat = e.latlng.lat;        
       var lon = e.latlng.lng;
-            
-      // var admrUrl = "http://api.citysdk.waag.org/regions?lat=" + lat + "&lon=" + lon + "&admr::admn_level=3&per_page=2&layer=cbs";
-      // $.getJSON(admrUrl, function(data) {
-      // 
-      //   // Reset data:
-      //   $("#admr-naam").html("");
-      //   $("#cbs-oppervlakte").html("");
-      //   $("#cbs-inwoners").html("");
-      // 
-      //   if (data.status === "success" && data.results.length > 0) {
-      //     var admrData = data.results[0].layers["admr"].data;
-      //     var cbsData = data.results[0].layers["cbs"].data;
-      // 
-      //     var naam = admrData.name;
-      //     var oppervlakte = cbsData.opp_tot;
-      //     var inwoners = cbsData.aant_inw;          
-      //     
-      //     $("#admr-naam").html(naam);
-      //     $("#cbs-oppervlakte").html(formatNumber(oppervlakte) + " m&#178;");
-      //     $("#cbs-inwoners").html(formatNumber(inwoners));
-      //   }
-      // });
-      //   
         
       var pandUrl = "http://api.citysdk.waag.org/nodes?lat=" + lat + "&lon=" + lon + "&layer=bag.panden&per_page=1&radius=" + radius;
       
