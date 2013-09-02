@@ -59,7 +59,11 @@
     disableHashChange = false;
     
 		var map = L.map('map');
-		L.tileLayer('http://tiles.citysdk.waag.org/v2/bag/{z}/{x}/{y}.png', {
+    
+    //var tileUrl = "http://tiles.citysdk.waag.org/v2/bag/{z}/{x}/{y}.png";
+    var tileUrl = "http://195.169.149.30:8888/v2/bag/{z}/{x}/{y}.png";    
+    
+		L.tileLayer(tileUrl, {
       attributionControl: false,
 			minZoom: 8,
 			maxZoom: 16
