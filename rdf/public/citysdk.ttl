@@ -82,8 +82,8 @@ dc:description rdf:type owl:AnnotationProperty .
                
                rdfs:domain :NodeDatum .
 
-
-
+:dataSource rdf:type owl:AnnotationProperty ;
+           rdfs:domain  :Layer .
 
 
 #################################################################
@@ -93,6 +93,27 @@ dc:description rdf:type owl:AnnotationProperty .
 #################################################################
 
 
+:hasValueUnit rdf:type owl:ObjectProperty ;
+             rdfs:domain  :layerProperty ;
+             rdfs:range   :Unit .
+
+:valueType rdf:type owl:AnnotationProperty ;
+          rdfs:domain  :LayerField  ;
+          rdfs:range   xsd:anyURI  .
+
+:valueUnit rdf:type owl:ObjectProperty ;
+          rdfs:domain  :LayerField  ;
+          rdfs:range   :Unit  .
+
+:valueLanguange rdf:type owl:AnnotationProperty ;
+          rdfs:domain  :LayerField  ;
+          rdfs:range   xsd:string  .
+
+
+:hasDataField rdf:type owl:ObjectProperty ;
+             rdfs:domain  :Layer ;
+             rdfs:range   :LayerField .
+              
 ###  http://rdf.citysdk.eu/createdBy
 
 :createdBy rdf:type owl:ObjectProperty ;
@@ -149,11 +170,16 @@ dc:description rdf:type owl:AnnotationProperty .
 #################################################################
 
 
+:LayerField rdf:type owl:Class ;
+             dc:description "An abstraction of a key-value field in the layer specification."@en .
+
+:Unit rdf:type owl:Class ;
+       dc:description "Unit of measurement, like SI units, including abstractions as 'Percent' and 'Count' (for dimensionless units)."@en .
+
 ###  http://rdf.citysdk.eu/CitysdkEndpoint
 
 :CitysdkEndpoint rdf:type owl:Class ;
-                 
-                 dc:description "A CitySDKEndPoint is a server running an instance of the API, serving particular categories of data for a particular geographical area."@en .
+       dc:description "A CitySDKEndPoint is a server running an instance of the API, serving particular categories of data for a particular geographical area."@en .
 
 
 
@@ -360,6 +386,73 @@ foaf:Organization rdf:type owl:Class .
                                   owl:NamedIndividual .
 
 
+:unitAcre rdf:type :Unit, owl:NamedIndividual .
+:unitAmpere rdf:type :Unit, owl:NamedIndividual .
+:unitAre rdf:type :Unit, owl:NamedIndividual .
+:unitCandela rdf:type :Unit, owl:NamedIndividual .
+:unitCentimeter rdf:type :Unit, owl:NamedIndividual .
+:unitCoulomb rdf:type :Unit, owl:NamedIndividual .
+:unitCount rdf:type :Unit, owl:NamedIndividual .
+:unitCubicCentimeter rdf:type :Unit, owl:NamedIndividual .
+:unitCubicFoot rdf:type :Unit, owl:NamedIndividual .
+:unitCubicInch rdf:type :Unit, owl:NamedIndividual .
+:unitCubicMeter rdf:type :Unit, owl:NamedIndividual .
+:unitCubicYard rdf:type :Unit, owl:NamedIndividual .
+:unitCurie rdf:type :Unit, owl:NamedIndividual .
+:unitDay rdf:type :Unit, owl:NamedIndividual .
+:unitDecibel rdf:type :Unit, owl:NamedIndividual .
+:unitDegreeCelsius rdf:type :Unit, owl:NamedIndividual .
+:unitDegreeFahrenheit rdf:type :Unit, owl:NamedIndividual .
+:unitDegreeKelvin rdf:type :Unit, owl:NamedIndividual .
+:unitFoot rdf:type :Unit, owl:NamedIndividual .
+:unitGallonImperial rdf:type :Unit, owl:NamedIndividual .
+:unitGallonUS rdf:type :Unit, owl:NamedIndividual .
+:unitGigaHertz rdf:type :Unit, owl:NamedIndividual .
+:unitGram rdf:type :Unit, owl:NamedIndividual .
+:unitHectare rdf:type :Unit, owl:NamedIndividual .
+:unitHertz rdf:type :Unit, owl:NamedIndividual .
+:unitHorsepower rdf:type :Unit, owl:NamedIndividual .
+:unitHour rdf:type :Unit, owl:NamedIndividual .
+:unitInch rdf:type :Unit, owl:NamedIndividual .
+:unitJoule rdf:type :Unit, owl:NamedIndividual .
+:unitKilo rdf:type :Unit, owl:NamedIndividual .
+:unitKilocalorie rdf:type :Unit, owl:NamedIndividual .
+:unitKilogram rdf:type :Unit, owl:NamedIndividual .
+:unitKiloHertz rdf:type :Unit, owl:NamedIndividual .
+:unitKilometer rdf:type :Unit, owl:NamedIndividual .
+:unitKilometerPerHour rdf:type :Unit, owl:NamedIndividual .
+:unitKilometerPerSecond rdf:type :Unit, owl:NamedIndividual .
+:unitKilowatt rdf:type :Unit, owl:NamedIndividual .
+:unitKilowatthour rdf:type :Unit, owl:NamedIndividual .
+:unitLiter rdf:type :Unit, owl:NamedIndividual .
+:unitLumen rdf:type :Unit, owl:NamedIndividual .
+:unitLux rdf:type :Unit, owl:NamedIndividual .
+:unitMegaHertz rdf:type :Unit, owl:NamedIndividual .
+:unitMegaWatt rdf:type :Unit, owl:NamedIndividual .
+:unitMeter rdf:type :Unit, owl:NamedIndividual .
+:unitMeterPerSecond rdf:type :Unit, owl:NamedIndividual .
+:unitMeterPerSecondSquared rdf:type :Unit, owl:NamedIndividual .
+:unitMilePerHour rdf:type :Unit, owl:NamedIndividual .
+:unitMillibar rdf:type :Unit, owl:NamedIndividual .
+:unitMilliMeter rdf:type :Unit, owl:NamedIndividual .
+:unitMilliSecond rdf:type :Unit, owl:NamedIndividual .
+:unitNauticalMile rdf:type :Unit, owl:NamedIndividual .
+:unitNauticalMilePerHour rdf:type :Unit, owl:NamedIndividual .
+:unitPercent rdf:type :Unit, owl:NamedIndividual .
+:unitPint rdf:type :Unit, owl:NamedIndividual .
+:unitRadian rdf:type :Unit, owl:NamedIndividual .
+:unitSecond rdf:type :Unit, owl:NamedIndividual .
+:unitSquareCentimeter rdf:type :Unit, owl:NamedIndividual .
+:unitSquareFoot rdf:type :Unit, owl:NamedIndividual .
+:unitSquareInch rdf:type :Unit, owl:NamedIndividual .
+:unitSquareMeter rdf:type :Unit, owl:NamedIndividual .
+:unitSquareMile rdf:type :Unit, owl:NamedIndividual .
+:unitSquareKilometer rdf:type :Unit, owl:NamedIndividual .
+:unitSquareYard rdf:type :Unit, owl:NamedIndividual .
+:unitTonMetric rdf:type :Unit, owl:NamedIndividual .
+:unitWatt rdf:type :Unit, owl:NamedIndividual .
+:unitYear rdf:type :Unit, owl:NamedIndividual .
+:unitYard rdf:type :Unit, owl:NamedIndividual .
 
 
 ###  Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net
