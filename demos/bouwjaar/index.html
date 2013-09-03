@@ -5,7 +5,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<link rel="stylesheet" href="style.css" />
 	<link rel="stylesheet" href="leaflet.css" />
-	<!--[if lte IE 8]><link rel="stylesheet" href="../dist/leaflet.ie.css" /><![endif]-->
 	<script src="jquery-2.0.3.min.js"></script>
 	<script src="leaflet.js"></script>
 </head>
@@ -60,8 +59,8 @@
     
 		var map = L.map('map');
     
-    //var tileUrl = "http://tiles.citysdk.waag.org/v2/bag/{z}/{x}/{y}.png";
-    var tileUrl = "http://195.169.149.30:8888/v2/bag/{z}/{x}/{y}.png";    
+    var tileUrl = "http://tiles.citysdk.waag.org/v2/bag/{z}/{x}/{y}.png";
+    //var tileUrl = "http://195.169.149.30:8888/v2/bag/{z}/{x}/{y}.png";    
     
 		L.tileLayer(tileUrl, {
       attributionControl: false,
