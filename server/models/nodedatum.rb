@@ -138,7 +138,7 @@ class NodeDatum < Sequel::Model
         elsif desc
           lp += "\n\t rdfs:description \"#{desc}\" ;"
         end
-        lp += "\n\t :hasValueUnit #{unit} ;" if unit and type =~ /xsd:(integer|float)/
+        lp += "\n\t :hasValueUnit #{unit} ;" if unit and type =~ /xsd:(integer|float|double)/
         lp[-1] = '.'
         params[:layerdataproperties] << lp
         
