@@ -2,7 +2,6 @@ class CitySDK_API < Sinatra::Base
 
   module Nodes
     
-    
     def self.processCommand?(n,params)
       ['routes','regions', 'routes_start', 'routes_end'].include?(params[:cmd])
     end

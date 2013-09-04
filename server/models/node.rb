@@ -12,6 +12,25 @@ class Node < Sequel::Model
   #plugin :validation_helpers
   one_to_many :node_data
 
+  def self.processPredicate(n,params)
+
+    layer,field = params[:p].split('/')
+    if 0 == Layer.where(:name=>layer).count
+      CitySDK_API.do_abort(422,"Layer not found: 'layer'")
+    end
+    nd = NodeDatum.where(:node_id => n[:id]).first
+    if nd
+      case params[:request_format]
+      when'application/json'
+        @@noderesults << {field => nd[:data][field]}
+      when'text/turtle'
+        l = Layer.where(:name=>layer).first
+        @@noderesults = NodeDatum.turtelizeOneField(n[:cdk_id],nd,field,params)
+      end
+    end
+  end
+  
+
   def getLayer(n)
     if n.is_a?(String)
       self.node_data.each do |nd|
