@@ -24,7 +24,6 @@ class Node < Sequel::Model
       when'application/json'
         @@noderesults << {field => nd[:data][field]}
       when'text/turtle'
-        l = Layer.where(:name=>layer).first
         @@noderesults = NodeDatum.turtelizeOneField(n[:cdk_id],nd,field,params)
       end
     end
