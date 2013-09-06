@@ -12,6 +12,7 @@ set :scm, :none
 set :branch, "master"
 
 set :deploy_to, "/var/www/cat.citysdk"
+set :copy_exclude, ['db.json','tmp','log']
 
 set :deploy_via, :copy
 
@@ -32,8 +33,10 @@ namespace :deploy do
   task :finalize_update, :except => { :no_release => true } do
     run <<-CMD
       rm -rf #{latest_release}/log &&
+      ln -s #{shared_path}/log #{latest_release}/log &&
+      ln -s #{shared_path}/config/db.json #{release_path} &&
       mkdir -p #{latest_release}/tmp &&
-      ln -s #{shared_path}/log #{latest_release}/log
+      mkdir -p #{latest_release}/public
     CMD
   end
 end  

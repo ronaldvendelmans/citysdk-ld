@@ -1,0 +1,6 @@
+{
+  "db_host": "localhost",
+  "db_name": "endpoints",
+  "db_user": "tom",
+  "db_pass": ""
+}
