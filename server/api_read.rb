@@ -188,7 +188,11 @@ class CitySDK_API < Sinatra::Base
       CitySDK_API.do_abort(422,"Node not found: '#{params[:node]}'")
     end
     Node.serializeStart(params, request)
-    results.map { |item| Node.serialize(item,params) }
+    if params[:p]
+      Node.processPredicate(results.first,params)      
+    else
+      results.map { |item| Node.serialize(item,params) }
+    end
     Node.serializeEnd(params, request)
   end
 

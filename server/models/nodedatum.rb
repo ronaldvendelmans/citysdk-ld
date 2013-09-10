@@ -58,47 +58,39 @@ class NodeDatum < Sequel::Model
     h
   end
   
+  
+  def self.osmprop(k,v)
+    o = OSMProps.where({:key => k,:val => v}).first
+    return "\t #{o[:type]} #{o[:uri]} ;" if(o)
+
+    o = OSMProps.where(:key => k).where(Sequel.~(:lang => nil)).first
+    return "\t #{o[:uri]} \"#{v}\"@#{o[:lang]} ;" if(o)
+
+    o = OSMProps.where({:type => 'string', :key => k}).where(Sequel.~(:uri => nil)).first
+    return "\t #{o[:uri]} \"#{v}\" ;" if(o)
+
+    o = OSMProps.where({:type => 'a', :key => k}).where(Sequel.~(:uri => nil)).first
+    return "\t #{o[:type]} #{o[:uri]} ;" if(o)
+
+    o = OSMProps.where(:key => k).where(Sequel.~(:type => nil)).first
+    return "\t #{o[:uri]} \"#{v}\"^^xsd:#{o[:type]} ;" if(o)
+
+    nil
+  end
+  
   # deal with osm rdf mapping separately...
   def self.osmprops(h,datas,triples,params)
     h.each do |k,v|
-
-      o = OSMProps.where({:key => k,:val => v}).first
-      if(o)
-        triples << "\t #{o[:type]} #{o[:uri]} ;"
-        next
+      t = self.osmprop(k,v)
+      if t
+        triples << t
+      else
+        prop = "<osm.#{k.to_s}>"
+        params[:layerdataproperties] << "#{prop} rdfs:subPropertyOf :layerProperty ."
+        datas << "\t #{prop} \"#{v}\" ;"
       end
-
-      o = OSMProps.where(:key => k).where(Sequel.~(:lang => nil)).first
-      if(o)
-        triples << "\t #{o[:uri]} \"#{v}\"@#{o[:lang]} ;"
-        next
-      end
-
-      o = OSMProps.where({:type => 'string', :key => k}).where(Sequel.~(:uri => nil)).first
-      if(o)
-        triples << "\t #{o[:uri]} \"#{v}\" ;"
-        next
-      end
-
-      o = OSMProps.where({:type => 'a', :key => k}).where(Sequel.~(:uri => nil)).first
-      if(o)
-        triples << "\t #{o[:type]} #{o[:uri]} ;"
-        next
-      end
-
-      o = OSMProps.where(:key => k).where(Sequel.~(:type => nil)).first
-      if(o)
-        triples << "\t #{o[:uri]} \"#{v}\"^^xsd:#{o[:type]} ;"
-        next
-      end
-      
-      prop = "<osm.#{k.to_s}>"
-      params[:layerdataproperties] << "#{prop} rdfs:subPropertyOf :layerProperty ."
-      datas << "\t #{prop} \"#{v}\" ;"
-
     end # h.each
   end
-  
   
   def self.turtelize_one(nd,triples,base_uri,params,cdk_id)
     datas = []
@@ -119,6 +111,7 @@ class NodeDatum < Sequel::Model
       end
 
       nd[:data].to_hash.each do |k,v|
+
         res = LayerProperty.where({:layer_id => layer_id, :key => k.to_s }).first
         if res
           lang = res[:lang]  == '' ? nil : res[:lang]
@@ -129,8 +122,7 @@ class NodeDatum < Sequel::Model
           lang = type = unit = desc = nil
         end
         prop = "<#{name}.#{k.to_s}>"
-        
-        
+      
         lp  = "#{prop}"
         lp += "\n\t rdfs:subPropertyOf :layerProperty ;"
         if desc and desc =~ /\n/
@@ -141,13 +133,13 @@ class NodeDatum < Sequel::Model
         lp += "\n\t :hasValueUnit #{unit} ;" if unit and type =~ /xsd:(integer|float|double)/
         lp[-1] = '.'
         params[:layerdataproperties] << lp
-        
+      
         s  = "\t #{prop} \"#{v}\""
         s += "^^#{type}" if type and type !~ /^xsd:string/
         s += "#{lang}" if lang and type == 'xsd:string'
         datas << s + " ;"
-      end
 
+      end
     end
     
     if datas.length > 1
@@ -160,6 +152,67 @@ class NodeDatum < Sequel::Model
     return datas
   end
   
+  def self.turtelizeOneField(cdk_id,nd,field,params)
+    
+    ret = []
+
+    if Layer.isWebservice?(nd[:layer_id]) and !params.has_key?('skip_webservice')
+      nd[:data] = WebService.load(nd[:layer_id], cdk_id, nd[:data])
+    end
+    
+    name = Layer.textFromId(nd[:layer_id])
+    prop = "<#{name}.#{field}>"
+
+    res = LayerProperty.where({:layer_id => nd[:layer_id], :key => field }).first
+    if res
+      lang = res[:lang]  == '' ? nil : res[:lang]
+      type = res[:type]  == '' ? nil : res[:type]
+      unit = res[:unit]  == '' ? nil : res[:unit]
+      desc = res[:descr] == '' ? nil : res[:descr]
+    else
+      lang = type = unit = desc = nil
+    end
+    
+    @@prefixes << 'xsd:'
+    @@prefixes << 'rdfs:'
+    
+    # puts type
+    # if type =~ /^\w+\:/
+    #   puts $0
+    # end
+    #    
+    # puts unit
+    # if unit =~ /^\w+\:/
+    #   puts $0
+    # end
+    #    
+    # @@prefixes << $1 if type =~ /^\w+\:/
+    
+
+    lp  = "#{prop}"
+    lp += "\n\t rdfs:subPropertyOf :layerProperty ;"
+    if desc and desc =~ /\n/
+      lp += "\n\t rdfs:description \"\"\"#{desc}\"\"\" ;"
+    elsif desc
+      lp += "\n\t rdfs:description \"#{desc}\" ;"
+    end
+    lp += "\n\t :hasValueUnit #{unit.gsub(/^csdk\:/,':')} ;" if unit and type =~ /xsd:(integer|float|double)/
+    lp[-1] = '.'
+    
+    ret << lp
+    ret << ""
+
+    # ret << "<#{cdk_id}> a :#{@@node_types[h[:node_type]].capitalize} ;"
+    ret << "<#{cdk_id}> a :Node ;"
+
+    s  = "\t #{prop} \"#{nd[:data][field]}\""
+    s += "^^#{type}" if type and type !~ /^xsd:string/
+    s += "#{lang}" if lang and type == 'xsd:string'
+    ret << s + " ."
+
+    return ret
+  end
+
   def self.turtelize(cdk_id, h, params)    
     triples = []
     gdatas = []
@@ -168,7 +221,6 @@ class NodeDatum < Sequel::Model
     h.each do |nd|
       gdatas += self.turtelize_one(nd,triples,base_uri,params,cdk_id)
     end
-    
     return triples, gdatas
   end
 

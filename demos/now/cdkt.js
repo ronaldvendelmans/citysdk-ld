@@ -1,8 +1,5 @@
 
 
-
-
-
 $(document).ready( function() {
   $.stops = {};
   $.lines = {};
@@ -10,7 +7,9 @@ $(document).ready( function() {
   $.currentLines = [];
   $.currentLinesMarkup = {};
   $.tzoffset = new Date().getTimezoneOffset() / 60;
-  
+  $.cdk_url = '';
+  // $.cdk_url = 'http://api.citysdk.waag.org/';
+
   $.loadTimer = false;
   $.currentPosition = {
     'latitude': 0,
@@ -81,6 +80,20 @@ $(document).ready( function() {
   
   function updatePosition(pos) {
     loadingMessage(false)
+    
+    if($.cdk_url == '') {
+      var url = 'http://cat.citysdk.eu/layers/mobility.public_transport?ll=';
+      url = url + pos.coords.latitude + ',' + pos.coords.longitude;
+      $.getJSON(url, function(data) {
+        if(data.results.length > 0) {
+          $.cdk_url = data.results[0].api + '/'
+          console.info($.cdk_url)
+          $.currentPosition = pos.coords;
+          newLocationFound();
+        }
+      })
+    }
+
     if( distance($.currentPosition, pos.coords) > 50 ) {
       $.currentPosition = pos.coords;
       newLocationFound();
@@ -193,22 +206,25 @@ $(document).ready( function() {
       })
     } else {
       lines = $.stops[stop.cdk_id].lines
-      for (var i = 0; i < lines.length; i++) {
-        getLineInfo(lines[i],stop)
+      if(lines) {
+        for (var i = 0; i < lines.length; i++) {
+          getLineInfo(lines[i],stop)
+        }
       }
     }
   }
 
   function loadCitySDKData(path,cb) {
-    var cdk_url = 'http://api.citysdk.waag.org/';
-    url = cdk_url+path;
-    url += (url.split('?')[1] ? '&':'?') + 'geom';
-    if( url.indexOf("per_page") == -1 ) {
-      url += '&per_page=50';
+    if($.cdk_url != '') {
+      url = $.cdk_url+path;
+      url += (url.split('?')[1] ? '&':'?') + 'geom';
+      if( url.indexOf("per_page") == -1 ) {
+        url += '&per_page=50';
+      }
+      $.getJSON(url, function(data) {
+        cb(data)
+      })
     }
-    $.getJSON(url, function(data) {
-      cb(data)
-    })
   }
 
   function getQueryParams(qs) {
@@ -237,16 +253,13 @@ $(document).ready( function() {
     updatePosition({'coords': {'latitude':ll[0], 'longitude': ll[1]}})
   } else {
     if (navigator.geolocation) {
-      console.info("geo location on.")
       loadingMessage(true)
       navigator.geolocation.watchPosition(updatePosition,locationError);
     } else {
-      console.info("geo location off.")
       alert("Location services on, please.")
     }
     if (window.DeviceOrientationEvent) {
       window.addEventListener("deviceorientation", function (e) {
-        console.info(e.alpha)
         // rotate(360 - e.alpha);
       }, false);
     }

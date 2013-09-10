@@ -154,6 +154,10 @@ class Layer < Sequel::Model
       h[:fields] << a
     end
     
+    if sample_url
+      h[:sample_url] = sample_url
+    end
+    
     if realtime 
       h[:update_rate] = update_rate
     # else
