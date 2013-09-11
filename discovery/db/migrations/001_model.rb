@@ -9,6 +9,8 @@ Sequel.migration do
       primary_key :id
       String      :code, :unique => true
       String      :api
+      String      :docs
+      String      :type
       String      :name, nil => false
       String      :description
       String      :email

@@ -43,9 +43,6 @@ $wkb_generator = RGeo::WKRep::WKBGenerator.new({
   :emit_ewkb_srid => true 
 })  
 
-
-
-
 def makeGeom(bbox)
   # puts bbox
   # puts JSON.pretty_generate(bbox)
@@ -55,10 +52,6 @@ def makeGeom(bbox)
   return Sequel.function(:ST_SetSRID, Sequel.lit("'#{wkb}'").cast(:geometry), 4326)
 end
 
-# curl -X PUT -d '{"name": "Istanbul", "code": "istb", "api": "apicitysdk.ibb.gov.tr", "email": "sercan.erhan@ibb.gov.tr", "description": "CitySDK Endpoint in Istanbul, Turkey" }' http://cat.citysdk.eu/endpoint
-# curl -X PUT -d '{"name": "Amsterdam", "code": "asd", "api": "api.citysdk.waag.org", "email": "citsdk@waag.org", "description": "CitySDK Endpoint in Amsterdam, Holland" }' http://cat.citysdk.eu/endpoint
-# curl -X PUT -d '{"name": "Lamia", "code": "lamia", "api": "api.citysdk.lamia-city.gr", "email": "laoukas@gnosis.gr", "description": "CitySDK Endpoint in Lamia, Greece" }' http://cat.citysdk.eu/endpoint
-# curl -X PUT -d '{"name": "Amsterdam-Test", "code": "asdt", "api": "test-api.citysdk.waag.org", "email": "citsdk@waag.org", "description": "CitySDK TESTING Endpoint in Amsterdam, Holland" }' http://cat.citysdk.eu/endpoint
 
 
 def update_layer(ep,l)
@@ -75,9 +68,10 @@ end
 
 def update(code)
   ep = Endpoint.where(:code => code).first
-  if ep
+  if ep and ep.type == 'csdk_mobility'
+    puts JSON.pretty_generate(ep)
     page = 0
-    api = CitySDK::API.new(ep.api)
+    api = CitySDK::API.new(ep.api.gsub('http://',''))
     begin
       page = page + 1
       layers = api.get("/layers?geom&page=#{page}")

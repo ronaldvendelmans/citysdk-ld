@@ -65,12 +65,12 @@ class CSDK_CAT < Sinatra::Base
     h = []
     layers = Layer.where(Sequel.expr(:category).ilike("#{params['category']}%"))
              .layer_geosearch(params)
-             .order(Sequel.function(:ST_Area, :bbox))
+             .order(Sequel.desc(:id),Sequel.function(:ST_Area, :bbox))
     layers.each do |l|
       a = l.to_hash
       a.delete(:bbox)
       a.delete(:id)
-      a[:api] = 'http://' + Endpoint.where(:id => a[:endpoint_id]).first[:api]
+      a[:api] = Endpoint.where(:id => a[:endpoint_id]).first[:api]
 
       a[:sample] = a[:sample_url] ?
         a[:api] + '/' + a[:sample_url]
