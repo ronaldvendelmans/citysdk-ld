@@ -1,6 +1,6 @@
-##GET Interface
+## GET Interface
               
-####General database-wide access to nodes:
+#### Read access to nodes
 
 <div class="code">
   <table>
@@ -52,7 +52,7 @@
   </table>
 </div>
 
-####URL parameters:
+#### URL parameters
               
 There are several ways to specify and narrow down the extend of your request. 
 You can specify the geographic area of interest (other than searching 'within' 
@@ -179,7 +179,7 @@ The following URL parameters are used to filter routes by the nodes they consist
   </table>
 </div>
                         
-####Access to elements within a geographic boundary
+#### Access to elements within a geographic boundary
 
 Apart from limiting your selection to bounding box or circle radius
 parameters in the url (see below), more ususally you'll want to limit
@@ -232,7 +232,7 @@ sense in the case of a node with definite area.
   </table>
 </div>
 
-####Interface to individual nodes:
+#### Interface to individual nodes
 
 <div class="code">
   <table>
@@ -263,7 +263,7 @@ sense in the case of a node with definite area.
     </tr>
   </table>
 </div>
-<h4>Layers:</h4>
+<h4>Layers</h4>
 <div class="code">
   <table>
     <tr>
@@ -288,7 +288,7 @@ sense in the case of a node with definite area.
   </table>
 </div>
 
-####Going deeper:
+#### Commands
               
 Information on nodes can be static, or dynamic. Also, some information is
 not stored as such, but can be derived from the data that is. To provide an

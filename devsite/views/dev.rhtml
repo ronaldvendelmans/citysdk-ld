@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title><%= title %> | CitySDK API</title>
+    <title><%= title %> | CitySDK Linked Open Data Distribution API </title>
     <meta charset="utf-8">
     <meta name="viewport"content="width=device-width,initial-scale=1">
     <link href="img/favicon.ico" rel="shortcut icon" type=image/x-icon>
@@ -11,53 +11,55 @@
     <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->    
     <% if map %>
       <link rel="stylesheet" href="leaflet/leaflet.css" />
+      <link rel="stylesheet" href="map.css">
       <script src="spin.min.js"></script>
       <script src="leaflet/leaflet.js"></script>
-      <script src="jquery-migrate-1.2.1.min.js"></script>
+      <script src="jquery-migrate-1.2.1.min.js"></script>      
     <% end %>
+  	<script type="text/javascript">
+      $(document).ready(function () {
+        hljs.initHighlightingOnLoad();
+        $("a.ep_cms_url").attr("href", "<%= config[:ep_cms_url] %>");
+  		});
+      // Dynamic endpoint URL, used on data page
+      var epApiUrl = "<%= config[:ep_api_url] %>";
+  	</script>
   </head>
-  <body>
-	
-	<script type="text/javascript">
-    $(document).ready(function () {
-      hljs.initHighlightingOnLoad();
-		});
-	</script>
-	
-    <div class="full-width-header">
+  <body>	
+    <header>
       <div class="container">
-        <header class="header clearfix">
-          &nbsp;
-        </header>
-      </div>
-    </div>
-    
-    <div class="full-width-content">
-      <div class="container">
-        <nav id = 'menu' class="menu">
+        <h1>CitySDK Linked Open Data Distribution API </h1>
+        <div class="logo">
+          <img src="img/citysdk.png" />
+        </div>
+        <nav>
           <ul>
             <li><a href="/">Home</a></li>
-            <% if api==false %>
-              <li><a href="about">About</a></li>
-              <li><a href="faq">FAQ</a></li>
-              <li><a href="apps">Apps</a></li>
-              <li><a href="<%= config[:ep_cms_url] %>">CMS</a></li>
-              <li><a href="dev">API</a></li>
-            <% else %>
-              <li><a href="dev">API</a></li>
-              <li><a href="read">Read</a></li>
-              <li><a href="write">Write</a></li>
-              <li><a href="match">Match</a></li>
-            <% end %>
-            <li><a href="map">Viewer</a></li>
+            <li>
+              <ul>
+                <li><a href="about">About</a></li>
+                <li><a href="faq">FAQ</a></li>
+              </ul>
+            </li>
+            <li><a href="apps">Apps</a></li>
+            <li><a href="data">Data</a></li>
+            <li><a href="api">API</a></li>
+            <li>
+              <ul>                
+                <li><a href="api-read">Read</a></li>
+                <li><a href="api-write">Write</a></li>
+                <li><a href="api-match">Match</a></li>
+              </ul>
+            </li>
+            <li><a href="map">Map viewer</a></li>
           </ul>
         </nav>
       </div>
-    </div>
+  	</header>
     <% if map %>
       <%= map %>
     <% else %>
-      <div  id="maincontent" class="full-width-content">      
+      <div id="maincontent" class="full-width-content">      
         <div class="container">
           <div class="info">
             <article class="hero clearfix">
@@ -77,14 +79,17 @@
           </div>
         </div>
       </div>
-      <div class="full-width-footer">
+      <footer>
         <div class="container">
-          <footer class="footer clearfix">
-              CitySDK - <a href='http://waag.org'>Waag Society</a> 2013
-              <img class = "logo" src="/img/logos.jpg" />
-          </footer>
-        </div>
-      </div>
+          <a href='http://waag.org'>Waag Society</a> &ndash; 2013
+          <div class="logos">
+            <a href="http://www.waag.org/"><img src="/img/waag-small.png" /></a>
+            <a href="http://www.citysdk.eu/"><img src="/img/citysdk-small.png" /></a>
+            <a href="http://ec.europa.eu/information_society/activities/ict_psp/about/index_en.htm"><img src="/img/ict-psp.png" /></a>
+            <a href="http://europa.eu/"><img src="/img/europa.png" /></a>
+          </div>
+        </div>          
+      </footer>
     <% end %>
   </body>
 </html>

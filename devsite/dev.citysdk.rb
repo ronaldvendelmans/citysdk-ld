@@ -20,7 +20,13 @@ class CSDK_Docs < Sinatra::Base
   }
 
   get '/' do
-    erb :dev, :locals => { :config => @config, :api => false, :text => markdown(:index, rc_options), :info => markdown(:info, rc_options), :title => "Documentation", :map => false }
+    erb :dev, :locals => { 
+      :config => @config, 
+      :text => markdown(:index, rc_options), 
+      :info => markdown(:info, rc_options), 
+      :title => "Documentation", 
+      :map => false
+    }
   end
 
   get '/index.html' do
@@ -37,13 +43,24 @@ class CSDK_Docs < Sinatra::Base
 
   get '/:path.html' do |path|
     redirect path
-  end
-  
-  
+  end  
 
   get '/:path' do |path|
-    begin
-    erb :dev, :locals => { :config => @config, :api => ['dev','write','read','match'].include?(path), :text => markdown(path.to_sym, rc_options), :info => false, :title => path.capitalize, :map => false }
+    begin  
+      info = false
+      if path.index("api") == 0
+        info = markdown(:'api-examples', rc_options)
+      elsif ["index", "faq", "apps", "data"].include? path
+        info = markdown(:'info', rc_options)
+      end  
+        
+      erb :dev, :locals => { 
+        :config => @config, 
+        :text => markdown(path.to_sym, rc_options), 
+        :info => info, 
+        :title => path.capitalize, 
+        :map => false 
+      }
     rescue Errno::ENOENT
       redirect "/"
     end 

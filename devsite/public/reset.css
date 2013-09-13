@@ -2,7 +2,6 @@
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section { display:block; }
 audio[controls], canvas, video { display:inline-block; *display:inline; *zoom:1; }
 html { font-size: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
-body { margin: 0; font-size: 14px; line-height: 1.4; }
 /*body, button, input, select, textarea { font-family:sans-serif; }*/
 a:focus { outline:thin dotted; }
 a:hover, a:active { outline:0; }

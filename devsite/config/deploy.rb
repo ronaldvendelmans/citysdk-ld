@@ -1,5 +1,5 @@
 set :stages, %w(production testing opt)
-set :default_stage, "testing"
+set :default_stage, "production"
 require 'capistrano/ext/multistage'
 #require "bundler/capistrano"
 

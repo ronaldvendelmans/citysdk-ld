@@ -1,20 +1,4 @@
-## Links
-
- - [CitySDK project site](http://www.citysdk.eu/)
- - [CitySDK Linked Open Data Distribution API endpoint](http://api.citysdk.waag.org/)
- - [Visualization of CitySDK Mobility data](http://dev.citysdk.waag.org/visualisation/)
- - [Map with building and address data](http://dev.citysdk.waag.org/buildings/)
- - [Additional APIs in the CitySDK toolkit](http://www.citysdk.eu/developers/) 
-
-Most important data sources currently available:
-
-- Public transport, schedules and real-time &ndash; GTFS, [openOV](http://www.openov.nl/)
-- Amsterdam infrastructure and transportation data &ndash; [DIVV](http://www.amsterdam.nl/parkeren-verkeer/open-data/overzicht/)
-- Dutch addresses and buildings &ndash; [BAG](http://www.kadaster.nl/BAG/)
-- [OpenStreetMap](http://www.openstreetmap.org/) data.
-- More information about available data sets on the [data page](/data), via the [`/layers` API](http://api.citysdk.waag.org/layers) or in the [CMS](https://cms.citysdk.waag.org/).
-
-## API examples
+## API Examples
 
 - [Statistical data of all neighbourhoods in Zwolle](http://api.citysdk.waag.org/admr.nl.zwolle/regions?admr::admn_level=4&layer=cbs&per_page=50)
 - [Rain forecast per neighbourhood in Groningen](http://api.citysdk.waag.org/admr.nl.groningen/regions?admr::admn_level=4&layer=rain)

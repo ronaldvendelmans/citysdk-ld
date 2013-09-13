@@ -1,8 +1,8 @@
 # Data & other APIs
 
-##### What is CitySDK?
+##### What is the CitySDK Linked Open Data Distribution API?
 
-The CitySDK API is a linked data distribution platform. See the [about page](about) for more information.
+The CitySDK Linked Open Data Distribution API is a linked data distribution platform. See the [about page](about) for more information.
 
 ##### What's the difference between CitySDK and other data catalogs and platforms (e.g. CKAN, Socrata)?
 
@@ -60,4 +60,6 @@ This depends on what you need. A minimum version would consist of costs for a se
 
 This also depends on the individual use case. When sharing datasets between departments in your organisation, quick efficiency wins are possible. When you want to interest developers in working with your data, it is important to offer a comprehensive set of related data. 
 
-##### Is your question missing? Send us an <a href="citysdk@waag.org">email</a>.
+##### Other questions
+
+Is your question missing? Send us an <a href="citysdk@waag.org">email</a>.

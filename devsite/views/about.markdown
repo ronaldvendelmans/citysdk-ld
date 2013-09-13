@@ -1,39 +1,66 @@
-## What does the CitySDK distribution platform do?
-Governments on all levels all over Europe are releasing datasets to the general public. Generally these datasets are downloadable from a special page on a municipal website, often these days there is even a catalogue available such as the ones in [Amsterdam](http://amsterdamopendata.nl) and [Helsinki ](http://www.hri.fi/en/data-search/). This is good news of course, both from a transparency as well as a policy perspective.
-However, these data are offered as separate files, that are not linked to each other. To use these data, you have to download the file, look into it's structure, and then link it to other files. E.g. a dataset with parking locations may just contain coordinates but has no link with addresses or streets. Therefore, the parking dataset has to be linked to a map, or an address file to enable its effective use. Because you often need to connect several dataset for a useful application, this is a huge amount of work.
+## About CitySDK Linked Open Data Distribution API
 
-CitySDK links all datasets to Open Street Map and to each other. In that way you can search for an address, coordinate or datapoint and see what connections or data are available in all datasets together.
+<table id="about">
+  <tr>
+    <td>
+      <p>The concept of CitySDK Linked Open Data Distribution API is best explained using Tim Berners-Lee’s <a href="http://5stardata.info/">Five Star Linked Open Data model</a>.</p>
+      <p>
+On the right, you see a city. Like more and more cities all over Europe, this city is opening its data to the public, and making it available through data catalog portals like <a href="http://ckan.org/">CKAN</a>. Moreover, it is also working on APIs and services to facilitate the communication with citizens (i.e. <a href="http://open311.org/">Open311</a>).
+      </p>
+    </td>
+    <td class="number"><div>1</div></td>
+    <td><img src="img/city-01.png" /></td>
+  </tr>
+  <tr>
+    <td>
+Although many different open datasets are available through this city’s data catalog, it’s not always easy for developers to use the data. Data is offered in different file formats, has unclear update policies and incomplete metadata. When the data is accessible under an open license and offered in a structured and non-propriatory format, the data is rated with three stars.
+  </td>
+  <td class="number"><div>2</div></td>
+  <td><img src="img/city-02.png" /></td>
+</tr>
+<tr>
+  <td>
+Moreover, it can be difficult to find out that different datasets have data about the same objects. According to the five star model, URIs should be used to uniquely identify objects and links should be created between those objects to define relations; it is not unusual that data about one object is contained in multiple datasets.
+  </td>
+  <td class="number"><div>3</div></td>
+  <td><img src="img/city-03.png" /></td>
+</tr>
+<tr>
+  <td>
+    The city on the right has decided to use CitySDK to give all individual objects - such as buildings, public parks and bus stops (or train stations, bridges, museums and parking garages) - a unique identifier. This URI can then be used to identify those objects across multiple datasets.
+  </td>
+  <td class="number"><div>4</div></td>
+  <td><img src="img/city-04.png" /></td>
+<tr>
+  <td>
+All objects with an URI have a geographic location, and are called a node within CitySDK. To those nodes, per layer, key-value data can be added. For example:  the URI of a bus stop can be used to access bus schedules, but also in Open311 service requests, and with the URI of a road, data about planned roadworks and traffic information can be accessed.
+  </td>
+  <td class="number"><div>5</div></td>  
+  <td><img src="img/city-05.png" /></td>
+</tr>
+<tr>
+  <td>
+Many of the datasets in open data catalog contain data about objects that exist in the real world. This is why CitySDK uses the <a href="http://www.openstreetmap.org/">OpenStreetMap</a> database as a geospatial base layer. Via CitySDK, all nodes, ways and relations from OSM can be used to attach data from other open datasets to. GTFS data will be attached to OSM bus stops and train stations, tourist information will be attached to OSM museums and theatres and planned roadwork data to OSM roads.
+  </td>
+  <td class="number"><div>6</div></td>  
+  <td><img src="img/city-06.png" /></td>
+</tr>
+<tr>
+  <td>
+CitySDK is a linked open data distribution platform - for static and real-time data - and connects existing open datasets, data catalogs and APIs. CitySDK provides one easy to use REST API with both JSON and <a href="http://www.w3.org/TeamSubmission/turtle/">Turtle/RDF</a> output. With this API, datasets that were previously difficult to access and use can be accessed in a single unified way, on an per-object basis.
 
-###Example Amsterdam
-<cs.png>
-An Example: Amsterdam Central Station is the most important transport hub in our city. Several datasets are available in which this place is referenced. There are of course travel schedules for trains, but also for trams, metro, (regional) buses and ferries. There are datasets for taxi stands, there's weather data, (bike)parking and information on the monumental building on wikipedia, crowd sourced info on Foursquare and many more. Although each of these datasets refer to Amsterdam Central Station, each dataset refers to it in a different way. With a different ID number, slightly different location, coordinates or data format. To get these datasets connected you need a [Rosetta Stone](http://en.wikipedia.org/wiki/Rosetta_Stone) to match them all up.
+Datasets in the following categories are currently accessible for multiple European cities using CitySDK Linked Open Data Distribution API:
 
-In our case, this Rosette Stone starts with [Open Street Map](http://openstreetmap.org). OSM is basically a database of all physical objects in the world. Each object represented in OSM is called a 'node'. If you look at this OSM image of Amsterdam Central Station, you see that each railroad track is a node, and so are the routes that the ferries take to cross the water. Buildings, roads, bridges, neighbourhoods, cities can all be a node. 
-If we link each datapoint from our datasets to a node in Open Street Map, we can link all datasets together.
-![Centraal Station](/img/cs.png)
-
-
-<hr/>
-
-###Example Manchester
-Another example: This is a busstop in Manchester: ![Manch. stop1](/img/stop1.png)
-The CitySDK API give this busstop a unique ID, which is part of a unique URI:
-![Manch. stop2](/img/stop2.png)
-Each datapoint from our datasets that have something to say that about this busstop is than linked to this URI. Via this URI a developer can query directly for departure times from this busstop, ask what the weather is, or report to the city that the busstop has been vandalised and needs repair:
-![Manch. stop3](/img/stop3.png)
-So when looking via the CitySDK API we can find a myriad of data about our cities:
-![Manch.](/img/manchester.png)
-
-<hr/>
-
-###Demo
-Via our <a href="map">map viewer</a> you can try the API yourself with some example queries. There also a number of pilot apps on our <a href="apps">Apps page</a>.
-
-###Mapping & Snapping
-To lay the connection between datasets and nodes in Open Street Map the CitySDK API has to do a lot of work. Two of the most important processes are mapping and snapping.
-
-Mapping means converting the location listed in the original dataset to the coordinates used in Open Street Map. This should be pretty straitghforward with most datasets. Many times though, the location in the original dataset is ambiguous. In Amsterdam the municipality measures the travel speed on main roads in the city. These data are released as open data. When we mapped the raw data on Open Street Map this is what we saw:
-![divv.png](/img/divv1.png)
-The space between the left and right lanes is enlarged significantly, presumably to make the direction of travel less ambiguous. This makes it impossible to connect the driving times with the roads as available in OSM. An additional process is needed, which we call snapping. An algorithm looks at dataset and OSM and calculates for which road the travel times are relevant. If you look for this data in CitySDK API you can query for the [actual travel speed](/map#nodes?layer=divv.traffic) on main roads.
-
-
+<ul>
+<li>Public transport data (GTFS) 	&ndash; static &amp; real-time</li>
+<li>Traffic, parking and electric vehicle charging points</li>
+<li>OpenStreetMap</li>
+<li>Buildings and addresses</li>
+<li>Census and statistics data</li>
+<li>POIs and events</li>
+</ul>
+  </td>
+  <td class="number"><div>7</div></td>  
+  <td><img src="img/city-07.png" /></td>
+</tr>
+</table>
