@@ -6,50 +6,53 @@ This README file explains how to get the data, create the map and export high-re
 
 Install PostgreSQL and PostGIS, download data from [NLExtract](http://nlextract.nl/) and import into database `bag`.
 
+https://nlextract.readthedocs.org/en/latest/bagextract.html
+
 # Create buildings table
 
 To create a map with buildings by year of construction (or area and function), execute the following SQL:
 
-	-- Aggregate mode function, to compute modal area and function
-	--From: http://wiki.postgresql.org/wiki/Aggregate_Mode
-	CREATE OR REPLACE FUNCTION _final_mode(anyarray)
-    RETURNS anyelement AS
-	$BODY$
-      SELECT a
-      FROM unnest($1) a
-      GROUP BY 1 
-      ORDER BY COUNT(1) DESC, 1
-      LIMIT 1;
-	$BODY$
-	LANGUAGE 'sql' IMMUTABLE;
+    -- Aggregate mode function, to compute modal area and function
+    -- From: http://wiki.postgresql.org/wiki/Aggregate_Mode
+    CREATE OR REPLACE FUNCTION _final_mode(anyarray)
+      RETURNS anyelement AS
+    $BODY$
+        SELECT a
+        FROM unnest($1) a
+        GROUP BY 1 
+        ORDER BY COUNT(1) DESC, 1
+        LIMIT 1;
+    $BODY$
+    LANGUAGE 'sql' IMMUTABLE;
  
-	-- Tell Postgres how to use our aggregate
-	CREATE AGGREGATE mode(anyelement) (
-	  SFUNC=array_append, --Function to call for each row. Just builds the array
-	  STYPE=anyarray,
-	  FINALFUNC=_final_mode, --Function to call after everything has been added to array
-	  INITCOND='{}' --Initialize an empty array when starting
-	);
+    CREATE AGGREGATE mode(anyelement) (
+      SFUNC=array_append, --Function to call for each row. Just builds the array
+      STYPE=anyarray,
+      FINALFUNC=_final_mode, --Function to call after everything has been added to array
+      INITCOND='{}' --Initialize an empty array when starting
+    );
+
+    CREATE SCHEMA tilemill;
+
+    CREATE TABLE tilemill.pand AS
+    SELECT 
+      p.identificatie::bigint, bouwjaar::int, 
+      ST_Transform(p.geovlak, 4326) AS geom,
+      round(mode(oppervlakteverblijfsobject)) AS oppervlakte,
+      mode(vg.gebruiksdoelverblijfsobject::text) AS gebruiksdoel
+    FROM verblijfsobjectactueelbestaand v
+    JOIN verblijfsobjectpandactueel vp 
+      ON vp.identificatie = v.identificatie
+    JOIN pandactueelbestaand p 
+      ON vp.gerelateerdpand = p.identificatie
+    JOIN verblijfsobjectgebruiksdoelactueel vg 
+      ON v.identificatie = vg.identificatie
+    GROUP BY 
+      p.identificatie, bouwjaar, p.geovlak;
   
-	CREATE TABLE tilemill.pand AS
-	  SELECT 
-	    p.identificatie::bigint, bouwjaar::int, 
-	    ST_Transform(p.geovlak, 4326) AS geom,
-	    round(mode(oppervlakteverblijfsobject)) AS oppervlakte,
-	    mode(vg.gebruiksdoelverblijfsobject::text) AS gebruiksdoel
-	  FROM verblijfsobjectactueelbestaand v
-	  JOIN verblijfsobjectpandactueel vp 
-	    ON vp.identificatie = v.identificatie
-	  JOIN pandactueelbestaand p 
-	    ON vp.gerelateerdpand = p.identificatie
-	  JOIN verblijfsobjectgebruiksdoelactueel vg 
-	    ON v.identificatie = vg.identificatie
-	  GROUP BY 
-	    p.identificatie, bouwjaar, p.geovlak;
-  
-	CREATE INDEX pand_geom_idx
-	  ON tilemill.pand
-	  USING gist (geom);
+  	CREATE INDEX pand_geom_idx
+  	  ON tilemill.pand
+  	  USING gist (geom);
 
 
 # Create TileMill project and map tiles
