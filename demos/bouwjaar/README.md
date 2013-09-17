@@ -1,3 +1,5 @@
+# Buildings in the Netherlands by year of construction 
+
 Map showing all 9,866,539 <a href="http://www.kadaster.nl/web/file?uuid=25da4675-fc9c-47a6-8039-1af04c142965&owner=23cbe925-35ce-4a72-ac8c-a33a0c19ae1e&contentid=2585">buildings</a> in the Netherlands, shaded according to year of construction. Data from <a href="http://www.kadaster.nl/bag">BAG</a>, via <a href="http://dev.citysdk.waag.org/">CitySDK</a>. Map made with <a href="http://www.mapbox.com/tilemill/">TileMill</a> by <a href="mailto:bert@waag.org">Bert Spaan</a>, <a href="http://www.waag.org/">Waag Society</a>, inspired by <a href="http://bklynr.com/block-by-block-brooklyns-past-and-present/">BKLYNR</a>.
 
 This README file explains how to get the data, create the map and export high-res PNG and PDF files.
@@ -24,7 +26,7 @@ To create a map with buildings by year of construction (or area and function), e
         LIMIT 1;
     $BODY$
     LANGUAGE 'sql' IMMUTABLE;
- 
+
     CREATE AGGREGATE mode(anyelement) (
       SFUNC=array_append, --Function to call for each row. Just builds the array
       STYPE=anyarray,
@@ -49,10 +51,10 @@ To create a map with buildings by year of construction (or area and function), e
       ON v.identificatie = vg.identificatie
     GROUP BY 
       p.identificatie, bouwjaar, p.geovlak;
-  
-  	CREATE INDEX pand_geom_idx
-  	  ON tilemill.pand
-  	  USING gist (geom);
+
+    CREATE INDEX pand_geom_idx
+      ON tilemill.pand
+      USING gist (geom);
 
 
 # Create TileMill project and map tiles
