@@ -17,6 +17,8 @@ formats = ["png"] # ["pdf", "png"]
 arg_selections = ARGV
 
 r = 0.9 # pixels per meter
+l = 8000 # longest edge of resulting image in pixels
+a = 3.0/2.0 # aspect ratio of image
 
 rgeo_factory = RGeo::Geographic.spherical_factory(:srid => 3785)
 
@@ -68,23 +70,21 @@ selections["features"].each do |selection|
     }
   
     puts "Converting #{name} to jpg"
-      
-    #system "convert #{export_path}/selections/#{filename}.png -resize \"8000x8000>\" -colorspace sRGB -quality 99 #{export_path}/selections/#{filename}.jpg"
-        
+    s = (l / a).round    
     image = MiniMagick::Image.open("#{export_path}/selections/#{filename}.png")    
     orientation = image[:width] > image[:height] ? :landscape : :portrait
     puts "\tOrientation: #{orientation}"
     image.combine_options do |c|
-      c.resize "8000x8000>"
+      c.resize "#{l}x#{l}>"
       
       if orientation == :landscape
-        c.crop "8000x5333+0+0"
+        c.crop "#{l}x#{s}+0+0"
       else
-        c.crop "5333x8000+0+0"
+        c.crop "#{s}x#{l}+0+0"
       end
       
       c.gravity "center"
-      c.quality 92
+      c.quality 96
     end
     image.write "#{export_path}/selections/#{filename}.jpg"
     
