@@ -1,11 +1,7 @@
 body {
   background-color: black;
   font-family: "Helvetica Neue", Helvetica, Arial, freesans, sans-serif;  
-  font-size: 12px;  
-}
-
-li {
-  list-style-type: none;
+  font-size: 15px;  
 }
 
 h2:before {
@@ -52,24 +48,43 @@ article {
   top: 170px;
   position: relative;  
   
-  padding: 10px;
+  padding: 30px;
   
-  width: 400px;
+  width: 600px;
 }
 
 #header, article {
   margin: 0 auto; 
 }
 
-article img {
-  border-color: rgba(255, 255, 255, 0.7);
-  border-width: 1px;
-  border-style: solid;
-  padding: 5px;
+article img.example {
+  margin-left: auto;
+  margin-right: auto;
+  width: 380px;
+  display: block;
 }
 
 body {
   background-image: url('../images/berkhout.png');
   background-position: 50% 10px;
   background-repeat: no-repeat;
+}
+
+ol#municipalities li {
+  list-style-type: none;
+}
+
+ol#municipalities {
+  -moz-column-count:3; /* Firefox */
+  -webkit-column-count:3; /* Safari and Chrome */
+  column-count:3;
+  
+  margin: 0;
+  padding: 0;
+}
+
+a.map {
+  text-decoration: none;
+
+  color: #aaa;
 }

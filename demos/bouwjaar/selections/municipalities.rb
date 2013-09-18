@@ -11,11 +11,10 @@ projects_path = config["paths"]["projects"]
 tilemill_path = config["paths"]["tilemill"]
 script_path = File.expand_path(File.dirname(__FILE__))
 
-formats = ["pdf", "png"]
+#formats = ["pdf", "png"]
+formats = ["png"]
 
-#FileUtils.rm_rf Dir.glob("#{export_path}/*")
-
-r = 0.5 # pixels per meter
+r = 0.16 # pixels per meter
 px = 0.015 # x padding in degrees, approx 1km.
 py = 0.01 # y padding in degrees, approx 1km.
 

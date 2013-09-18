@@ -84,7 +84,7 @@ selections["features"].each do |selection|
       end
       
       c.gravity "center"
-      c.quality 96
+      c.quality 97
     end
     image.write "#{export_path}/selections/#{filename}.jpg"
     
