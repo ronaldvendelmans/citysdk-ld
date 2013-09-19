@@ -49,12 +49,12 @@
    }
    
   
-   tagsForLayer = function(l,ts, i) {
+  tagsForLayer = function(l,ts, i) {
     if ( availableTags[l] != null ) {
       addHtml(availableTags[l],ts, i)
       return;
     }
-    
+
     $.ajax({
       url: '/get_layer_keys/' + l,
       type: 'get',
