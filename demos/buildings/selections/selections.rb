@@ -84,9 +84,12 @@ selections["features"].each do |selection|
       end
       
       c.gravity "center"
-      c.quality 97
+      
     end
-    image.write "#{export_path}/selections/#{filename}.jpg"
+    image.write "#{export_path}/selections/#{filename}_s.png"
+    
+    # Using MiniMagick to convert to JPG leads to 'invalid JPG' errors...
+    system "convert #{export_path}/selections/#{filename}_s.png -colorspace sRGB -quality 99 #{export_path}/selections/#{filename}.jpg"
     
   end
 end
