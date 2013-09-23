@@ -27,9 +27,24 @@ table td {
   width: 99%;
 }
 
+.proptable td.sel_1 {
+  text-align: left;
+  padding-right: 1em;
+  padding-left: 0.5em;
+  white-space: nowrap;
+  width: 15%;
+}
+
+.proptable td.sel_2 {
+  text-align: right;
+  padding-right: 2.5em;
+  white-space: nowrap;
+  width: 12%;
+}
+
 .proptable td.sel_4 {
   white-space: nowrap;
-  padding-left: 0.5em;
+  padding-left: 1em;
 }
 
 
@@ -271,6 +286,7 @@ h4 {
 }
 
 .codecomment {
+  color: #6f8993;
   position: relative;
   top: 4px;
   float: right;

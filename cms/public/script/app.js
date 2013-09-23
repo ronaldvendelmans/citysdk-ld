@@ -152,14 +152,32 @@
 	      }
 	  });
 	}
+  
+  
+  
+  var unloadPrefixes = function() { 
+    $('#prefix').hide(); 
+    $('#mappings').show(); 
+  }
+  
+  var loadPrefixes = function() {
+    $('#prefix').load('/prefixes', function(){
+      $('#mappings').hide();
+      $('#prefix').show();
+    });
+  }
 
   var saveLayerProperties = function(layerid) {
-
+    var ldata = {
+      "props": $.layerProperties,
+      "type": $("#layer_type").val()
+    };
+    
     if( $.selectedField != undefined )
       loadFieldDef($.selectedField)
       
     $.post( "/layer/" + layerid + "/ldprops", 
-            JSON.stringify($.layerProperties),  
+            JSON.stringify(ldata),  
             function(data, textStatus, jqXHR) {
               $("#was_saved").show()
               setTimeout(function(){$("#was_saved").hide()},2000);
@@ -178,6 +196,7 @@
       $.layerProperties[$.selectedField].type  = $("#relation_type").val()
       $.layerProperties[$.selectedField].lang  = $("#relation_lang").val()
       $.layerProperties[$.selectedField].unit  = $("#relation_unit").val()
+      $.layerProperties[$.selectedField].eqprop = $("#relation_ep").val()
     }
 
     $("#pname").html(field)
@@ -188,7 +207,9 @@
       $("#ptype").val($.layerProperties[field].type.substring(4))
       $("#relation_lang").val($.layerProperties[field].lang)
       $("#relation_unit").val($.layerProperties[field].unit)
+      $("#relation_ep").val($.layerProperties[field].eqprop)
     } else {
+      $("#relation_ep").val('')
       $("#relation_desc").val('')
       $("#relation_type").val('xsd:string')
       $("#ptype").val('string')
@@ -197,7 +218,7 @@
     }
     $.selectedField = field;
     
-    if( $.layerProperties[field].type == 'xsd:integer' || $.layerProperties[field].type == 'xsd:float') {
+    if( $.layerProperties[field] && ($.layerProperties[field].type == 'xsd:integer' || $.layerProperties[field].type == 'xsd:float')) {
       $("#relationunit").show()
       $('#relation_unit').autocomplete({ source: 
         function( request, response ) {
@@ -215,6 +236,17 @@
       $("#relationlang").hide()
     }
   }
+  
+  
+  selectEqProperty = function(s) {
+    if(s != 'select...') {
+     $("#relation_ep").val(s)
+     $("#ptype").val($.eqProperties[s])
+     selectFieldType($.eqProperties[s])
+   } else {
+     $("#relation_ep").val('')
+   }
+  }  
   
   selectFieldType = function(s) {
     

@@ -97,7 +97,6 @@ class CSDK_CMS < Sinatra::Base
     end
   end
   
-  
   get '/get_layer_keys/:layer' do |l|
     l = Layer.where(:name=>l).first
     if(l)
@@ -227,6 +226,7 @@ class CSDK_CMS < Sinatra::Base
         end
         @langSelect  = Layer.languageSelect
         @ptypeSelect = Layer.propertyTypeSelect
+        @epSelect,@eprops = Layer.epSelect
         @props = @props.to_json
 
         if params[:nolayout]
@@ -257,6 +257,17 @@ class CSDK_CMS < Sinatra::Base
       redirect '/'
     end
   end
+  
+  
+  get '/prefixes' do
+    if Owner.validSession(session[:auth_key])
+      @prefixes = LDPrefix.order(:name).all
+      erb :prefixz, :layout => false
+    else
+      redirect '/'
+    end
+  end
+  
   
   
   delete '/layer/:layer_id' do |l|
@@ -422,9 +433,9 @@ class CSDK_CMS < Sinatra::Base
     if Owner.validSession(session[:auth_key])
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
-        request.body.rewind  # in case someone already read it
+        request.body.rewind 
         data = JSON.parse(request.body.read, {:symbolize_names => true})
-        puts data
+
         data.each_key do |k|
           dk = data[k]
           dk[:unit] = "csdk:unit#{dk[:unit]}" if dk[:unit] != '' and dk[:unit] !~ /^csdk:unit/
@@ -434,6 +445,7 @@ class CSDK_CMS < Sinatra::Base
           p.unit  = p.type =~ /^xsd:(integer|float)/ ? dk[:unit] : ''
           p.lang  = dk[:lang]
           p.descr = dk[:descr]
+          p.eqprop = dk[:eqprop]
           if !p.save
             return [422,{},"error saving property data."]
           end

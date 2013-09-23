@@ -85,7 +85,7 @@ class NodeDatum < Sequel::Model
       if t
         triples << t
       else
-        prop = "<osm.#{k.to_s}>"
+        prop = "<osm/#{k.to_s}>"
         params[:layerdataproperties] << "#{prop} rdfs:subPropertyOf :layerProperty ."
         datas << "\t #{prop} \"#{v}\" ;"
       end
@@ -98,7 +98,7 @@ class NodeDatum < Sequel::Model
     name = Layer.textFromId(layer_id)
     subj = base_uri + name
 
-    datas << "<#{subj}>"
+    # datas << "<#{subj}>"
     
     if layer_id == 0 
 
@@ -118,13 +118,16 @@ class NodeDatum < Sequel::Model
           type = res[:type]  == '' ? nil : res[:type]
           unit = res[:unit]  == '' ? nil : res[:unit]
           desc = res[:descr] == '' ? nil : res[:descr]
+          eqpr = res[:eqprop] == '' ? nil : res[:eqprop]
         else
-          lang = type = unit = desc = nil
+          lang = type = unit = desc = eqpr = nil
         end
-        prop = "<#{name}.#{k.to_s}>"
+        prop = "<#{name}/#{k.to_s}>"
       
         lp  = "#{prop}"
+        lp += "\n\t :definedOnLayer <layer/#{Layer.textFromId(layer_id)}> ;"
         lp += "\n\t rdfs:subPropertyOf :layerProperty ;"
+        lp += "\n\t owl:equivalentProperty #{eqpr} ;" if eqpr 
         if desc and desc =~ /\n/
           lp += "\n\t rdfs:description \"\"\"#{desc}\"\"\" ;"
         elsif desc
@@ -143,7 +146,6 @@ class NodeDatum < Sequel::Model
     end
     
     if datas.length > 1
-      triples << "\t :layerData <#{subj}> ;"
       datas[-1][-1] = '.'
       datas << ""
     else 
@@ -161,7 +163,7 @@ class NodeDatum < Sequel::Model
     end
     
     name = Layer.textFromId(nd[:layer_id])
-    prop = "<#{name}.#{field}>"
+    prop = "<#{name}/#{field}>"
 
     res = LayerProperty.where({:layer_id => nd[:layer_id], :key => field }).first
     if res
@@ -169,8 +171,9 @@ class NodeDatum < Sequel::Model
       type = res[:type]  == '' ? nil : res[:type]
       unit = res[:unit]  == '' ? nil : res[:unit]
       desc = res[:descr] == '' ? nil : res[:descr]
+      eqpr = res[:eqprop] == '' ? nil : res[:eqprop]
     else
-      lang = type = unit = desc = nil
+      lang = type = unit = desc = eqpr = nil
     end
     
     @@prefixes << 'xsd:'
@@ -190,7 +193,11 @@ class NodeDatum < Sequel::Model
     
 
     lp  = "#{prop}"
+    lp += "\n\t :definedOnLayer <layer/#{Layer.textFromId(nd[:layer_id])}> ;"
     lp += "\n\t rdfs:subPropertyOf :layerProperty ;"
+    lp += "\n\t owl:equivalentProperty #{eqpr} ;" if eqpr 
+    
+
     if desc and desc =~ /\n/
       lp += "\n\t rdfs:description \"\"\"#{desc}\"\"\" ;"
     elsif desc

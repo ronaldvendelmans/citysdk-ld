@@ -81,7 +81,7 @@ class Layer < Sequel::Model
     triples << "<layer/#{name}>"
     triples << "  a :Layer ;"
 
-    d = description.strip
+    d = description ? description.strip : ''
     if d =~ /\n/
       triples << "  rdfs:description \"\"\"#{d}\"\"\" ;"
     else
@@ -108,6 +108,7 @@ class Layer < Sequel::Model
       triples << "    :valueType #{r.type} ;"
       triples << "    :valueUnit #{r.unit} ;" if r.type =~ /(integer|float|double)/ and r.unit != ''
       triples << "    :valueLanguange \"#{r.lang}\" ;" if r.lang != '' and r.type == 'xsd:string'
+      triples << "    owl:equivalentProperty \"#{r.eqprop}\" ;" if r.eqprop and r.eqprop != ''
       if not r.descr.empty?
         if r.descr =~ /\n/
           triples << "    rdfs:description \"\"\"#{r.descr}\"\"\" ;"
@@ -150,6 +151,7 @@ class Layer < Sequel::Model
       }
       a[:valueUnit]      = r.unit if r.type =~ /(integer|float|double)/ and r.unit != ''
       a[:valueLanguange] = r.lang if r.lang != '' and r.type == 'xsd:string'
+      a[:equivalentProperty] = r.eqprop if r.eqprop and r.eqprop != ''
       a[:description]    = r.descr if not r.descr.empty?
       h[:fields] << a
     end
