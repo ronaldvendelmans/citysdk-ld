@@ -435,6 +435,9 @@ class CSDK_CMS < Sinatra::Base
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
         request.body.rewind 
         data = JSON.parse(request.body.read, {:symbolize_names => true})
+        
+        @layer.update(:rdf_type_uri=>data[:type])
+        data = data[:props]
 
         data.each_key do |k|
           dk = data[k]
