@@ -243,8 +243,6 @@ CitySDK distinguishes the following modes of transport. You can use any combinat
 | Modality    | Description           
 | :---------- |:------------- 
 | `tram`      | Tram, Streetcar, Light rail
-| `subway`    | Subway, metro      
-| `tram`      | Tram, Streetcar, Light rail
 | `subway`    | Subway, Metro
 | `rail`      | Rail
 | `bus`       | Bus
