@@ -168,12 +168,16 @@
   }
 
   var saveLayerProperties = function(layerid) {
-
+    var ldata = {
+      "props": $.layerProperties,
+      "type": $("#layer_type").val()
+    };
+    
     if( $.selectedField != undefined )
       loadFieldDef($.selectedField)
       
     $.post( "/layer/" + layerid + "/ldprops", 
-            JSON.stringify($.layerProperties),  
+            JSON.stringify(ldata),  
             function(data, textStatus, jqXHR) {
               $("#was_saved").show()
               setTimeout(function(){$("#was_saved").hide()},2000);

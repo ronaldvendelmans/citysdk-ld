@@ -109,6 +109,8 @@ Sequel.migration do
       
       String :sample_url
       
+      String :rdf_type_uri
+      
     end
 
     run = <<-SQL

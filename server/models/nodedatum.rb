@@ -85,7 +85,7 @@ class NodeDatum < Sequel::Model
       if t
         triples << t
       else
-        prop = "<osm.#{k.to_s}>"
+        prop = "<osm/#{k.to_s}>"
         params[:layerdataproperties] << "#{prop} rdfs:subPropertyOf :layerProperty ."
         datas << "\t #{prop} \"#{v}\" ;"
       end
@@ -122,7 +122,7 @@ class NodeDatum < Sequel::Model
         else
           lang = type = unit = desc = eqpr = nil
         end
-        prop = "<#{name}.#{k.to_s}>"
+        prop = "<#{name}/#{k.to_s}>"
       
         lp  = "#{prop}"
         lp += "\n\t :definedOnLayer <layer/#{Layer.textFromId(layer_id)}> ;"
@@ -163,7 +163,7 @@ class NodeDatum < Sequel::Model
     end
     
     name = Layer.textFromId(nd[:layer_id])
-    prop = "<#{name}.#{field}>"
+    prop = "<#{name}/#{field}>"
 
     res = LayerProperty.where({:layer_id => nd[:layer_id], :key => field }).first
     if res

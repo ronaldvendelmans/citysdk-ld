@@ -161,6 +161,7 @@ class Node < Sequel::Model
     @@prefixes << 'rdf:'
     @@prefixes << 'geos:'
     @@prefixes << 'dc:'
+    @@prefixes << 'owl:'
     @@prefixes << 'lgdo:' if h[:layer_id] == 0
     triples = []
     
