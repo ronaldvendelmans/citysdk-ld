@@ -1,0 +1,35 @@
+<h4>Manage prefixes<span class="codecomment">Define prefixes for commonly uses ontologies and vocabularies. </span></h4>
+
+<div>
+  
+
+  <table class="proptable">
+
+    <tr>
+      <td class="sel_1"><input class='layer' type="text" id="prefix_nme" value="" placeholder="<name>"/></td>
+      <td class="sel_2"><input class='layer' type="text" id="prefix_pfx" value="" placeholder="<prefix>"/></td>
+      <td class="sel_uri"><input class='layer' type="text" id="prefix_uri" value="" placeholder="<full uri prefix>"/></td>
+      <td class="sel_4"><input class='submitb' type="submit" value="add" onclick="unloadPrefixes()"/></td>
+    </tr>
+
+    <% @prefixes.each do |pr| %>
+      <tr>
+        <td class="sel_1"><%= pr.name %></td>
+        <td class="sel_2"><%= pr.prefix %></td>
+        <td class="sel_uri"><%= pr.url %></td>
+        <td class="sel_4"></td>
+      </tr>
+    <% end %>
+
+
+  </table>
+
+  <input class='submitb' type="submit" value="done" onclick="unloadPrefixes()"/>
+
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+</script>
+
+

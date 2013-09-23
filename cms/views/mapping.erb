@@ -1,16 +1,37 @@
-<h4>Layer Properties Mapping<span class="codecomment">Map the properties to meaningful linked data uri's. </span></h4>
+<h4>Layer- and Properties Mapping<span class="codecomment">Map the layer and properties to meaningful linked data uri's. </span></h4>
 
 <div>
+  
+  <div style="float:right"><a href='#' onclick="loadPrefixes()">manage prefixes</a></div>
+
+  <hr style="clear:both"/>
+
+
+  <!-- <h4><span class="codecomment" style="top:-10px">Map the layer and properties to meaningful linked data uri's. </span></h4> -->
+  <table class="proptable" title="Add rdf:type relations (comma sep) defining the objects this layer describes. ">
+    <td class="sel_lab">type of object:</td>
+    <td class="sel_uri"><input class='layer' type="text" id="layer_type" value="" placeholder="<URI> dbpedia, freebase, etc" onchange=""/> </td>
+    <td class="sel_sel"></td>
+  </table>
+
+  <hr/>
 
   <table class="proptable">
   
     <tr>
-      <td class="sel_lab">Property:</td>
+      <td class="sel_lab">field:</td>
       <td class="sel_sel"><span id='ldmap'/></td>
       <td class="sel_uri"></td>
       <td class="sel_4"></td>
     </tr>
   
+    <tr>
+      <td class="sel_lab">equivalent property:</td>
+      <td class="sel_sel"><%= @epSelect %></td>
+      <td class="sel_uri"><input class='layer' type="text" id="relation_ep" value="" placeholder="<URI> or select left (or leave empty)" onchange=""/> </td>
+      <td class="sel_4"></td>
+    </tr>
+
     <tr>
       <td class="sel_lab">type:</td>
       <td class="sel_sel"><%= @ptypeSelect %></td>
@@ -33,7 +54,7 @@
     </textarea>
   </div>
 
-  <input class='submitb' type="submit" value="save changes" onclick="saveLayerProperties(<%= @layer.id %>)"/> <span id='was_saved' style="display: none">&nbsp;&nbsp;Saved!</span>
+  <input class='submitb' type="submit" value="save changes" onclick="saveLayerProperties(<%= @layer.id %>)"/> <span id='was_saved' style="display: none">&nbsp;&nbsp;<em>Saved!</em></span>
 
 
 </div>
@@ -41,6 +62,7 @@
 
 <script type="text/javascript" charset="utf-8">
   $(document).ready(function() { 
+    $.eqProperties = <%= @eprops %>;
     $.layerProperties = <%= @props %>;
     $.selectedField = null;
     selectFieldTags( "<%= @layer.name %>", 'fields');

@@ -5,6 +5,17 @@ require "sequel/model"
 class Layer < Sequel::Model
   many_to_one :owner
   plugin :validation_helpers
+  
+  @@eq_properties = {
+   'rdfs:description'=>'string',
+   'rdfs:label'=>'string',
+   'rdfs:comment'=>'string',
+   'dc:date'=>'dateTime',
+   'dc:title'=>'string',
+   'dc:creator'=>'string',
+   'dc:identifier'=>'string'
+ }
+  
 
   def validate
     super
@@ -19,8 +30,16 @@ class Layer < Sequel::Model
   
   def fieldDefsSelect() 
   end
-  
 
+  def self.epSelect() 
+    s = '<select style="border 0px;" id="eptype" onchange="selectEqProperty(this.value)">'
+    s += "<option>select...</option>"
+    @@eq_properties.each_key do |k|
+      s += "<option>#{k}</option>"
+    end
+    s += '</select>'  
+    return s,@@eq_properties.to_json
+  end
   
   def self.languageSelect() 
     '<select style="border 0px;" id="relation_lang">

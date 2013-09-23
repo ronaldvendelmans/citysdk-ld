@@ -13,16 +13,18 @@ class Node < Sequel::Model
   one_to_many :node_data
 
   def self.processPredicate(n,params)
-
-    layer,field = params[:p].split('/')
+    p = params[:p]
+    layer,field = p.split('/')
     if 0 == Layer.where(:name=>layer).count
       CitySDK_API.do_abort(422,"Layer not found: 'layer'")
     end
-    nd = NodeDatum.where(:node_id => n[:id]).first
+    layer_id = Layer.idFromText(layer)
+    nd = NodeDatum.where({:node_id => n[:id], :layer_id => layer_id}).first
     if nd
+      # puts JSON.pretty_generate(nd[:data])
       case params[:request_format]
       when'application/json'
-        @@noderesults << {field => nd[:data][field]}
+        @@noderesults << {field => nd[:data][field.to_sym]}
       when'text/turtle'
         @@noderesults = NodeDatum.turtelizeOneField(n[:cdk_id],nd,field,params)
       end
@@ -179,6 +181,13 @@ class Node < Sequel::Model
       }
     end
     
+    if h[:node_data]
+      t,d =  NodeDatum.turtelize(h[:cdk_id], h[:node_data], params) 
+      triples += t if t
+      triples += d if d
+    end
+    
+
     if params.has_key? "geom"
       if h[:member_geometries] and h[:node_type] != 3
         triples << "\t geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(h[:member_geometries]) )  + "\" ;"
@@ -186,16 +195,9 @@ class Node < Sequel::Model
         triples << "\t geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(h[:geom]) )  + "\" ;"
       end
     end
-    
-    t,d =  NodeDatum.turtelize(h[:cdk_id], h[:node_data], params) if h[:node_data]
-    triples += t if t
 
-    triples[-1][-1] = '.'
-    triples << ""
-    
-    triples += d if d
-    
     @@noderesults += triples
+    @@noderesults[-1][-1]='.' if @@noderesults[-1] and @@noderesults[-1][-1] == ';'
     triples
     
   end

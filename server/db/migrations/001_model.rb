@@ -23,6 +23,7 @@ Sequel.migration do
 			String :name, :null => false
 			String :prefix, :null => false
 			String :url, :null => false
+      integer :owner_id, :null => false     
     end
     run = <<-SQL
       ALTER TABLE ldprefix ADD CONSTRAINT constraint_prefix_unique UNIQUE(prefix);
@@ -34,6 +35,7 @@ Sequel.migration do
 			String :type
 			String :unit
 			String :lang
+			String :eqprop
 			String :descr
     end
 

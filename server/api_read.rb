@@ -179,7 +179,7 @@ class CitySDK_API < Sinatra::Base
   end
 
 
-# http://0.0.0.0:3000/admr.nl.zwolle?pred=cbs/aant_inw
+# http://0.0.0.0:3000/admr.nl.zwolle?p=cbs/aant_inw
   get '/:node/?' do
     results = Node.where(:cdk_id=>params[:node])
       .node_layers(params)
