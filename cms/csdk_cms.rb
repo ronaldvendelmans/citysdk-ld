@@ -226,6 +226,7 @@ class CSDK_CMS < Sinatra::Base
         end
         @langSelect  = Layer.languageSelect
         @ptypeSelect = Layer.propertyTypeSelect
+        @lType = @layer.rdf_type_uri
         @epSelect,@eprops = Layer.epSelect
         @props = @props.to_json
 
@@ -242,6 +243,69 @@ class CSDK_CMS < Sinatra::Base
     end
   end
   
+  post '/layer/:layer_id/ldprops' do |l|
+    if Owner.validSession(session[:auth_key])
+      @layer = Layer[l]
+      if(@layer && (@oid == @layer.owner_id) or @oid==0)
+        request.body.rewind 
+        data = JSON.parse(request.body.read, {:symbolize_names => true})
+        
+        @layer.update(:rdf_type_uri=>data[:type])
+        data = data[:props]
+
+        data.each_key do |k|
+          dk = data[k]
+          dk[:unit] = "csdk:unit#{dk[:unit]}" if dk[:unit] != '' and dk[:unit] !~ /^csdk:unit/
+          p = LayerProperty.where(:layer_id => l, :key => k.to_s).first
+          p = LayerProperty.new({:layer_id => l, :key => k.to_s}) if p.nil?
+          p.type  = dk[:type]
+          p.unit  = p.type =~ /^xsd:(integer|float)/ ? dk[:unit] : ''
+          p.lang  = dk[:lang]
+          p.descr = dk[:descr]
+          p.eqprop = dk[:eqprop]
+          if !p.save
+            return [422,{},"error saving property data."]
+          end
+        end
+      end
+    end
+  end
+  
+  post '/layer/:layer_id/webservice' do |l|
+    if Owner.validSession(session[:auth_key])
+      @layer = Layer[l]
+      if(@layer && (@oid == @layer.owner_id) or @oid==0)
+        @layer.webservice = params['wsurl']
+        @layer.update_rate = params['update_rate']
+        if !@layer.valid? 
+          @categories = @layer.cat_select
+          redirect "/layer/#{l}/data"
+        else
+          @layer.save
+          redirect "/layer/#{l}/data"
+        end
+      end
+    end
+  end
+  
+  post '/layer/:layer_id/periodic' do |l|
+    if Owner.validSession(session[:auth_key])
+      @layer = Layer[l]
+      if(@layer && (@oid == @layer.owner_id) or @oid==0)
+        @layer.import_url = params['update_url']
+        @layer.import_period = params['period']
+        if !@layer.valid? or @layer.import_config.nil?
+          @categories = @layer.cat_select
+          redirect "/layer/#{l}/data"
+        else
+          @layer.save
+          redirect "/layer/#{l}/data"
+        end
+      end
+    end
+  end
+
+
   get '/layer/:layer_id/edit' do |l|
     if Owner.validSession(session[:auth_key])
       @layer = Layer[l]
@@ -261,6 +325,19 @@ class CSDK_CMS < Sinatra::Base
   
   get '/prefixes' do
     if Owner.validSession(session[:auth_key])
+      if params[:prefix] and params[:name] and params[:uri]
+        if params[:prefix][-1] != ':'
+          params[:prefix] = params[:prefix] + ':'
+        end
+        pr = LDPrefix.new( {
+          :prefix => params[:prefix],
+          :name => params[:name],
+          :url => params[:uri],
+          :owner_id => @oid
+        })
+        pr.save
+      end
+      
       @prefixes = LDPrefix.order(:name).all
       erb :prefixz, :layout => false
     else
@@ -268,7 +345,13 @@ class CSDK_CMS < Sinatra::Base
     end
   end
   
-  
+  delete '/prefix/:pr' do |p|
+    if Owner.validSession(session[:auth_key])
+      LDPrefix.where({:owner_id=>@oid, :prefix=>p}).delete
+    end
+    @prefixes = LDPrefix.order(:name).all
+    erb :prefixz, :layout => false
+  end
   
   delete '/layer/:layer_id' do |l|
 
@@ -429,67 +512,6 @@ class CSDK_CMS < Sinatra::Base
     end
   end
   
-  post '/layer/:layer_id/ldprops' do |l|
-    if Owner.validSession(session[:auth_key])
-      @layer = Layer[l]
-      if(@layer && (@oid == @layer.owner_id) or @oid==0)
-        request.body.rewind 
-        data = JSON.parse(request.body.read, {:symbolize_names => true})
-        
-        @layer.update(:rdf_type_uri=>data[:type])
-        data = data[:props]
-
-        data.each_key do |k|
-          dk = data[k]
-          dk[:unit] = "csdk:unit#{dk[:unit]}" if dk[:unit] != '' and dk[:unit] !~ /^csdk:unit/
-          p = LayerProperty.where(:layer_id => l, :key => k.to_s).first
-          p = LayerProperty.new({:layer_id => l, :key => k.to_s}) if p.nil?
-          p.type  = dk[:type]
-          p.unit  = p.type =~ /^xsd:(integer|float)/ ? dk[:unit] : ''
-          p.lang  = dk[:lang]
-          p.descr = dk[:descr]
-          p.eqprop = dk[:eqprop]
-          if !p.save
-            return [422,{},"error saving property data."]
-          end
-        end
-      end
-    end
-  end
-  
-  post '/layer/:layer_id/webservice' do |l|
-    if Owner.validSession(session[:auth_key])
-      @layer = Layer[l]
-      if(@layer && (@oid == @layer.owner_id) or @oid==0)
-        @layer.webservice = params['wsurl']
-        @layer.update_rate = params['update_rate']
-        if !@layer.valid? 
-          @categories = @layer.cat_select
-          redirect "/layer/#{l}/data"
-        else
-          @layer.save
-          redirect "/layer/#{l}/data"
-        end
-      end
-    end
-  end
-  
-  post '/layer/:layer_id/periodic' do |l|
-    if Owner.validSession(session[:auth_key])
-      @layer = Layer[l]
-      if(@layer && (@oid == @layer.owner_id) or @oid==0)
-        @layer.import_url = params['update_url']
-        @layer.import_period = params['period']
-        if !@layer.valid? or @layer.import_config.nil?
-          @categories = @layer.cat_select
-          redirect "/layer/#{l}/data"
-        else
-          @layer.save
-          redirect "/layer/#{l}/data"
-        end
-      end
-    end
-  end
   
   post '/layer/:layer_id/loadcsv' do |l|
     

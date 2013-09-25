@@ -182,13 +182,6 @@ class Node < Sequel::Model
       }
     end
     
-    if h[:node_data]
-      t,d =  NodeDatum.turtelize(h[:cdk_id], h[:node_data], params) 
-      triples += t if t
-      triples += d if d
-    end
-    
-
     if params.has_key? "geom"
       if h[:member_geometries] and h[:node_type] != 3
         triples << "\t geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(h[:member_geometries]) )  + "\" ;"
@@ -196,6 +189,13 @@ class Node < Sequel::Model
         triples << "\t geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(h[:geom]) )  + "\" ;"
       end
     end
+
+    if h[:node_data]
+      t,d =  NodeDatum.turtelize(h[:cdk_id], h[:node_data], params) 
+      triples += t if t
+      triples += d if d
+    end
+    
 
     @@noderesults += triples
     @@noderesults[-1][-1]='.' if @@noderesults[-1] and @@noderesults[-1][-1] == ';'

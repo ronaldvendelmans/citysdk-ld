@@ -275,6 +275,28 @@
       $("#relationlang").hide()
     }
  }
+ 
+ 
+ delPrefix = function(s) {
+   $.ajax({
+     url: '/prefix/' + s,
+     type: 'delete',
+     success: function(data){
+       $('#prefix').html(data);
+     }
+   });  
+ }
+ 
+ addPrefix = function() {
+   var url = '/prefixes?prefix=' 
+   url = url + $("#prefix_pfx").val();
+   url = url + '&name=';
+   url = url + $("#prefix_nme").val();
+   url = url + '&uri=';
+   url = url + encodeURIComponent($("#prefix_uri").val());
+   
+   $('#prefix').load(url);
+ }
   
   selectFieldTags = function(layer,fieldselect) {
     if ( availableTags[layer] != null ) {

@@ -8,9 +8,9 @@
 
 
   <!-- <h4><span class="codecomment" style="top:-10px">Map the layer and properties to meaningful linked data uri's. </span></h4> -->
-  <table class="proptable" title="Add rdf:type relations (comma sep) defining the objects this layer describes. ">
+  <table class="proptable" title="Add rdf:type relation defining the objects this layer describes. ">
     <td class="sel_lab">type of object:</td>
-    <td class="sel_uri"><input class='layer' type="text" id="layer_type" value="" placeholder="<URI> dbpedia, freebase, etc" onchange=""/> </td>
+    <td class="sel_uri"><input class='layer' type="text" id="layer_type" value="<%= @lType %>" placeholder="<URI> dbpedia, freebase, etc" onchange=""/> </td>
     <td class="sel_sel"></td>
   </table>
 

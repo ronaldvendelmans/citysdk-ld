@@ -96,6 +96,7 @@ class NodeDatum < Sequel::Model
     datas = []
     layer_id = nd[:layer_id]
     name = Layer.textFromId(layer_id)
+    layer = Layer.where(:id=>layer_id).first
     subj = base_uri + name
 
     # datas << "<#{subj}>"
@@ -106,6 +107,15 @@ class NodeDatum < Sequel::Model
 
     else
 
+      if layer.rdf_type_uri and layer.rdf_type_uri != ''
+        if layer.rdf_type_uri =~ /^http:/
+          triples << "\t a <#{layer.rdf_type_uri}> ;"
+        else
+          @@prefixes << $1 if layer.rdf_type_uri =~ /^([a-z]+\:)/
+          triples << "\t a  #{layer.rdf_type_uri} ;"
+        end
+      end
+    
       if Layer.isWebservice?(layer_id) and !params.has_key?('skip_webservice')
         nd[:data] = WebService.load(layer_id, cdk_id, nd[:data])
       end
