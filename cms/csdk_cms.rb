@@ -82,12 +82,10 @@ class CSDK_CMS < Sinatra::Base
     erb :layers, :layout => @nolayout ? false : true
   end
   
-  
   get '/layers' do
     getLayers
     erb :layers, :layout => @nolayout ? false : true
   end
-
 
   get '/login' do
     if session?
@@ -97,10 +95,21 @@ class CSDK_CMS < Sinatra::Base
     end
   end
   
-  get '/get_layer_keys/:layer' do |l|
-    l = Layer.where(:name=>l).first
+  get '/get_layer_keys/:layer' do |ln|
+    l = Layer.where(:name=>ln).first
     if(l)
-      return Sequel::Model.db.fetch("select keys_for_layer(#{l.id})").all.to_json
+      keys = Sequel::Model.db.fetch("select keys_for_layer(#{l.id})").all
+      api = CitySDK::API.new(@apiServer)
+      ml = api.get("/nodes?layer=#{ln}&per_page=1")
+      if ml[:status] == 'success' and  ml[:results][0]
+        h = ml[:results][0][:layers][ln.to_sym][:data]
+        h.each_key do |k|
+          puts k
+          keys[0][:keys_for_layer] << k
+        end
+      end
+      keys[0][:keys_for_layer].uniq!
+      return keys.to_json
     else
       return '{}'
     end

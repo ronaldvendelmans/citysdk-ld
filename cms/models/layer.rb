@@ -43,6 +43,7 @@ class Layer < Sequel::Model
   
   def self.languageSelect() 
     '<select style="border 0px;" id="relation_lang">
+      <option value="">n/a</option>
       <option value="@ca">català</option>
       <option value="@de">deutsch</option>
       <option value="@el">ελληνικά</option>
