@@ -138,6 +138,9 @@ class NodeDatum < Sequel::Model
         lp += "\n\t :definedOnLayer <layer/#{Layer.textFromId(layer_id)}> ;"
         lp += "\n\t rdfs:subPropertyOf :layerProperty ;"
         lp += "\n\t owl:equivalentProperty #{eqpr} ;" if eqpr 
+        
+        @@prefixes << $1 if eqpr and (eqpr =~ /^([a-z]+\:)/)
+        
         if desc and desc =~ /\n/
           lp += "\n\t rdfs:description \"\"\"#{desc}\"\"\" ;"
         elsif desc
@@ -150,6 +153,17 @@ class NodeDatum < Sequel::Model
         s  = "\t #{prop} \"#{v}\""
         s += "^^#{type}" if type and type !~ /^xsd:string/
         s += "#{lang}" if lang and type == 'xsd:string'
+
+
+        if type =~ /xsd:anyURI/i
+          s  = "\t #{prop} <#{v}>"
+        else
+          s  = "\t #{prop} \"#{v}\""
+          s += "^^#{type}" if type and type !~ /^xsd:string/
+          s += "#{lang}" if lang and type == 'xsd:string'
+        end      
+
+
         datas << s + " ;"
 
       end
@@ -186,6 +200,9 @@ class NodeDatum < Sequel::Model
       lang = type = unit = desc = eqpr = nil
     end
     
+    @@prefixes << $1 if eqpr and (eqpr =~ /^([a-z]+\:)/)
+    @@prefixes << $1 if type and (type =~ /^([a-z]+\:)/)
+
     @@prefixes << 'xsd:'
     @@prefixes << 'rdfs:'
     
@@ -222,9 +239,14 @@ class NodeDatum < Sequel::Model
     # ret << "<#{cdk_id}> a :#{@@node_types[h[:node_type]].capitalize} ;"
     ret << "<#{cdk_id}> a :Node ;"
 
-    s  = "\t #{prop} \"#{nd[:data][field]}\""
-    s += "^^#{type}" if type and type !~ /^xsd:string/
-    s += "#{lang}" if lang and type == 'xsd:string'
+    if type =~ /xsd:anyURI/i
+      s  = "\t #{prop} <#{nd[:data][field]}>"
+    else
+      s  = "\t #{prop} \"#{nd[:data][field]}\""
+      s += "^^#{type}" if type and type !~ /^xsd:string/
+      s += "#{lang}" if lang and type == 'xsd:string'
+    end      
+    
     ret << s + " ."
 
     return ret

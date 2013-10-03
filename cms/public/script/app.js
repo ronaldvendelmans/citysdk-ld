@@ -314,7 +314,8 @@
       type: 'get',
       success: function(data){
         obj = $.parseJSON(data)
-        availableTags[layer] = obj[0]["keys_for_layer"]
+        availableTags[layer] = obj
+        // availableTags[layer] = obj[0]["keys_for_layer"]
         return selectFieldTags(layer,fieldselect)
       }
     });  

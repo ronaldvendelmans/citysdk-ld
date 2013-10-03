@@ -105,11 +105,10 @@ class CSDK_CMS < Sinatra::Base
         h = ml[:results][0][:layers][ln.to_sym][:data]
         h.each_key do |k|
           puts k
-          keys[0][:keys_for_layer] << k
+          keys[0][:keys_for_layer] << k.to_s
         end
       end
-      keys[0][:keys_for_layer].uniq!
-      return keys.to_json
+      return keys[0][:keys_for_layer].uniq.to_json
     else
       return '{}'
     end
