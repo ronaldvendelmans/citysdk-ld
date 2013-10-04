@@ -69,7 +69,6 @@ end
 def update(code)
   ep = Endpoint.where(:code => code).first
   if ep and ep.type == 'csdk_mobility'
-    puts JSON.pretty_generate(ep)
     page = 0
     begin
       api = CitySDK::API.new(ep.api.gsub('http://',''))
