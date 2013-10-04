@@ -6,7 +6,7 @@ Sequel.migration do
 
 		# TODO: rename node_type to node_type_id
     create_table :nodes do
-      bigint :id, :primary_key => true
+      column :id, 'serial', :primary_key => true
 		  String :cdk_id, :null => false
 		  String :name
       column :members, 'bigint[]'
@@ -40,22 +40,22 @@ Sequel.migration do
     end
 
 		create_table :node_types do
-			primary_key :id
+      column :id, 'serial', :primary_key => true
 			String :name, :null => false
     end
 
 		create_table :modalities do
-			primary_key :id
+      column :id, 'serial', :primary_key => true
       String :name, :null => false
     end
 
 		create_table :categories do
-      column :id, 'serial'
+      column :id, 'serial', :primary_key => true
 			String :name, :null => false
     end
 
     create_table :node_data do
-      bigint :id, :primary_key => true
+      column :id, 'serial', :primary_key => true
       bigint :node_id, :null => false
       integer :layer_id, :null => false
       column :data, 'hstore'
@@ -67,12 +67,12 @@ Sequel.migration do
     end
     
     create_table :node_data_types do
-      primary_key :id
+      column :id, 'serial', :primary_key => true
       String :name, :null => false
     end
 
     create_table :owners do      
-      primary_key :id
+      column :id, 'serial', :primary_key => true
       String :name, :null => false
       String :email, :null => false
       String :www
@@ -87,7 +87,7 @@ Sequel.migration do
     end
 
     create_table :layers do      
-      primary_key :id
+      column :id, 'serial', :primary_key => true
       String :name, :null => false
       String :title
       String :description
