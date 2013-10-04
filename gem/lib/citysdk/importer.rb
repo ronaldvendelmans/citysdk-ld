@@ -116,6 +116,8 @@ module CitySDK
       # elsif @params[:hasaddress] == 'maybe'
       #   failed = addToAddress(dryrun)
       end
+      
+      # TODO: add possibility to add node to postal code
 
       if failed == []
         result[:updated] += @filereader.content.length
