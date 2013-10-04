@@ -71,15 +71,22 @@ def update(code)
   if ep and ep.type == 'csdk_mobility'
     puts JSON.pretty_generate(ep)
     page = 0
-    api = CitySDK::API.new(ep.api.gsub('http://',''))
     begin
-      page = page + 1
-      layers = api.get("/layers?geom&page=#{page}")
-      break if layers[:status] != 'success'
-      layers[:results].each do |l|
-        update_layer(ep.id,l)
-      end
-    end while(layers[:next_page].to_i != -1)
+      api = CitySDK::API.new(ep.api.gsub('http://',''))
+      # TODO: rescue on connection error
+      # TODO: if api not nil (and no error)
+      # delete all layers for this endpoint
+      begin
+        page = page + 1
+        layers = api.get("/layers?geom&page=#{page}")
+        break if layers[:status] != 'success'
+        layers[:results].each do |l|
+          update_layer(ep.id,l)
+        end
+      end while(layers[:next_page].to_i != -1)
+    rescue => e
+      puts e.message
+    end
   end
 end
 
