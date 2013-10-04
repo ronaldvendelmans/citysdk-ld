@@ -53,7 +53,7 @@ class CSDK_CAT < Sinatra::Base
     eps = Endpoint.all
     eps.each do |e|
       a = e.to_hash
-      a[:api] = 'http://' + e[:api]
+      a[:api] = e[:api]
       a[:maintainer] = a.delete(:email)
       a.delete(:id)
       h << a
