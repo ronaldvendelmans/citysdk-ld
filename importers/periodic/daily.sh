@@ -15,6 +15,8 @@ do
     fi
 done
 
+/usr/bin/curl http://cat.citysdk.eu/update
+
 rm /var/www/csdk_cms/shared/filetmp/*
 
 
