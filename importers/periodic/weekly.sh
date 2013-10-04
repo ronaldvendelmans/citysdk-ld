@@ -15,4 +15,6 @@ do
     fi
 done
 
-cd ../importers/gtfs && $ruby update_feeds.rb >> "$log"
+cd /var/www/citysdk/shared/importers/gtfs && $ruby update_feeds.rb >> "$log"
+
+
