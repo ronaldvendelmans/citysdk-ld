@@ -57,12 +57,14 @@ WAAG.Globe = function Globe(container) {
   };	
   var projector, raycaster;
   var mouseRefs;
+  var matMouseRefs=new THREE.MeshNormalMaterial();	
 
   var globeInited=false;
 	
   // solution for Firefox
   var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel" //FF doesn't recognize mousewheel as of FF3.x
-  var zValue=0.5;
+  var zValue=0.1;
+  var mouseOffsets=[];
 
 
 function init () {
@@ -141,14 +143,37 @@ function init () {
 	scene.add(mouseRefs); 
 	for (var j=0; j<4; j++){
 		
-		var pGeo = new THREE.Geometry();
+		var offset=0.0005;
+		var pOrg=getWorldPosition(llNl.lat, llNl.lng, globeRadius, "GLOBE");
 		
+		var p1=getWorldPosition(llNl.lat+offset, llNl.lng-offset, globeRadius, "GLOBE");
+		p1.x=pOrg.x-p1.x;
+		p1.y=pOrg.y-p1.y;
+		p1.z=pOrg.z-p1.z;
+		
+		var p2=getWorldPosition(llNl.lat-offset, llNl.lng-offset, globeRadius, "GLOBE");
+		p2.x=pOrg.x-p2.x;
+		p2.y=pOrg.y-p2.y;
+		p2.z=pOrg.z-p2.z;
+		
+		var p3=getWorldPosition(llNl.lat+offset, llNl.lng+offset, globeRadius, "GLOBE");
+		p3.x=pOrg.x-p3.x;
+		p3.y=pOrg.y-p3.y;
+		p3.z=pOrg.z-p3.z;
+		
+		var p4=getWorldPosition(llNl.lat-offset, llNl.lng+offset, globeRadius, "GLOBE");
+		p4.x=pOrg.x-p4.x;
+		p4.y=pOrg.y-p4.y;
+		p4.z=pOrg.z-p4.z;
+		
+		var pGeo = new THREE.Geometry();
+		var mergedGeo=new THREE.Geometry();
 		var layerLive;
 		var trips;
-		if(j==0){layerLive="ptTrams"; trips=250}
-		if(j==1){layerLive="ptBuses"; trips=1000} 
-		if(j==2){layerLive="ptFerrys"; trips=10} 
-		if(j==3){layerLive="ptSubways"; trips=50}  
+		if(j==0){layerLive="ptTrams"; trips=250; mouseOffsets.push( p1 );  }
+		if(j==1){layerLive="ptBuses"; trips=1000; mouseOffsets.push( p2 );} 
+		if(j==2){layerLive="ptFerrys"; trips=10; mouseOffsets.push( p3 );} 
+		if(j==3){layerLive="ptSubways"; trips=50; mouseOffsets.push( p4 );}  
 		var fGeo=new THREE.Geometry();
 		fGeo.dynamic=true;	
 		
@@ -158,19 +183,15 @@ function init () {
 				vec3=createVector3(pos, v, 1, 0xff0000, false);
 				vec3.ll=false;
 				pGeo.vertices.push( vec3 );
-				if(v==0){
-					var mouseRef = new THREE.Mesh(  new THREE.PlaneGeometry( 0.05, 0.05, 1, 1 ));
-					mouseRef.visible=false;
-					mouseRefs.add(mouseRef);
-				    //scene.add(mouseRef);
-					poolPtLive[layerLive].mouseRefs.push(mouseRef);	
-					
-				}
+				
 			}
 
 		}
+		var dataLayer={layer:layerLive}
+		addParticlesDynamic(pGeo, pGeo, dataLayer);
+
+
 		
-		addParticlesDynamic(pGeo, pGeo, layerLive);
 
 	}
 	
@@ -291,19 +312,20 @@ function init () {
 
 		}
 		if(dataLayer.properties.dotSize>0){
-			addParticlesDynamic(dataLayer.geoRepository.pGeo2D, dataLayer.geoRepository.pGeo3D, dataLayer.layer);
+			addParticlesDynamic(dataLayer.geoRepository.pGeo2D, dataLayer.geoRepository.pGeo3D, dataLayer);
 			console.log("adding dots geo from repo");
 
 		}
 		if(dataLayer.properties.shape){
 			mergeShapes(dataLayer, true);
-			console.log("adding shape geo from repo");
+			console.log("adding shape geo from repo "+dataLayer.layer);
 		}
 		
 	}
 var geoRepository=[];	
 var stackIndex=0;
 addData = function (data, dataLayer){
+	dataLayer.data=data;
 	//$("#feedback").text("adding layer : "+layer+""); 	
 	//console.log("stacked geo ="+properties.stacked);
 	var dotSize=dataLayer.properties.dotSize;
@@ -368,6 +390,8 @@ addData = function (data, dataLayer){
 	
 	var pos, pos2D, pos3D, posInvisible;
 	var vec2D, vec3D;
+	
+	
 	data.forEach(function (d, p_i)
     {
 	
@@ -375,16 +399,17 @@ addData = function (data, dataLayer){
 		
 	if(d.geom.type=="Point" || d.geom.type=="MultiPoint"){
 			
+		
 		if(d.geom.type=="MultiPoint"){	
 			
 			coordinates.forEach(function (c, p_index)
 			{
 				
 				pos2D=getWorldPosition(c[1], c[0], 0, "MERCATOR");
-				vec2D=createVector3(pos2D, c, dotSize, 0xffffff);
+				vec2D=createVector3(pos2D, c, dotSize, 0xffffff, p_i);
 				
 				pos3D=getWorldPosition(c[1], c[0], globeRadius, "GLOBE"); 
-				vec3D=createVector3(pos3D, c, dotSize, 0xffffff);
+				vec3D=createVector3(pos3D, c, dotSize, 0xffffff, p_i);
 								
 				
 				if(d.layer_id=="divv"){
@@ -404,16 +429,21 @@ addData = function (data, dataLayer){
 			
 		}else{
 			
+			
 			pos2D=getWorldPosition(d.geom.coordinates[1], d.geom.coordinates[0], 0, "MERCATOR"); 
-			vec2D=createVector3(pos2D, d.geom.coordinates, dotSize, 0xffffff);
+			vec2D=createVector3(pos2D, d.geom.coordinates, dotSize, 0xffffff, p_i);
 			
 			pos3D=getWorldPosition(d.geom.coordinates[1], d.geom.coordinates[0], globeRadius, "GLOBE"); 
-			vec3D=createVector3(pos3D, d.geom.coordinates, dotSize, 0xffffff);
+			vec3D=createVector3(pos3D, d.geom.coordinates, dotSize, 0xffffff, p_i);
 			
 			pGeo2D.vertices.push( vec2D );
 			pGeo3D.vertices.push( vec3D );
-	
+						
+			
+			$("#feedback").text("adding  :"+d.cdk_id+" --> datapoints :"+pGeo3D.vertices.length);
+			
 		}
+		
 
 	}else if (d.geom.type=="MultiLineString" || d.geom.type=="LineString"){
 		
@@ -422,10 +452,10 @@ addData = function (data, dataLayer){
 			coordinates.forEach(function (c, p_index)
 			{
 				pos2D=getWorldPosition(c[1], c[0], 0, "MERCATOR");
-				vec2D=createVector3(pos2D, c, dotSize, 0xffffff);
+				vec2D=createVector3(pos2D, c, dotSize, 0xffffff, p_i);
 				
 				pos3D=getWorldPosition(c[1], c[0], globeRadius, "GLOBE"); 
-				vec3D=createVector3(pos3D, c, dotSize, 0xffffff);
+				vec3D=createVector3(pos3D, c, dotSize, 0xffffff, p_i);
 				posInvisible=getWorldPosition(c[1], c[0], globeRadius-zValue, "GLOBE");
 				
 				lGeo2D=addLineVertices(p_index, d.geom.coordinates.length-1, lGeo2D, pos2D, "2D");
@@ -468,8 +498,8 @@ addData = function (data, dataLayer){
 					lGeo2D=addLineVertices(p_indexC, d.geom.coordinates[p_index].length-1, lGeo2D, pos2D, "2D");
 					lGeo3D=addLineVertices(p_indexC, d.geom.coordinates[p_index].length-1, lGeo3D, pos3D, posInvisible);	
 					
-					vec2D=createVector3(pos2D, c, dotSize, 0xffffff);
-					vec3D=createVector3(pos3D, c, dotSize, 0xffffff);
+					vec2D=createVector3(pos2D, c, dotSize, 0xffffff, p_i);
+					vec3D=createVector3(pos3D, c, dotSize, 0xffffff, p_i);
 										
 					if(d.layer=="divv.traffic"){
 						//console.log("travel time ="+d.cdk_id+" = "+d.layers["divv.traffic"].data.traveltime+" --> "+d.layers["divv.traffi"].data.traveltime_freeflow);
@@ -516,17 +546,17 @@ addData = function (data, dataLayer){
 					lGeo2D=addLineVertices(p_indexV, d.geom.coordinates[p_index][p_indexC].length-1, lGeo2D, pos2D, "2D");
 					lGeo3D=addLineVertices(p_indexV, d.geom.coordinates[p_index][p_indexC].length-1, lGeo3D, pos2D, posInvisible);
 					
-					vec3D=createVector3(pos2D, k, dotSize, 0xffffff);
-					vec3D=createVector3(pos3D, k, dotSize, 0xffffff); 
+					vec3D=createVector3(pos2D, k, dotSize, 0xffffff, p_i);
+					vec3D=createVector3(pos3D, k, dotSize, 0xffffff, p_i); 
 					
 					pGeo2D.vertices.push( vec2D );
 					pGeo3D.vertices.push( vec3D );
 					
-					pos2D=getWorldPosition(k[1], k[0], 0, "MERCATOR");
-					pos3D=getWorldPosition(k[1], k[0], globeRadius, "GLOBE");
+					//pos2D=getWorldPosition(k[1], k[0], 0, "MERCATOR");
+					//pos3D=getWorldPosition(k[1], k[0], globeRadius, "GLOBE");
 					
 					sGeo2D.vertices.push( pos2D );
-					
+					sGeo2D.vertices.z=-1;
 
 					
        	         });
@@ -542,7 +572,6 @@ addData = function (data, dataLayer){
 
 							mesh.material.opacity=0.1+(Math.random()*0.25);
 							mesh.alphaOrg=mesh.material.opacity;
-							//mesh.data=d;
 							mesh.name=dataLayer.layer+"_shape";
 							mesh.dynamic=true;
 							//console.log("adding mesh "+mesh.name);
@@ -567,7 +596,7 @@ addData = function (data, dataLayer){
 									var ll2D = getLatLong(meshMerged.geometry.vertices[i], globeRadius, "MERCATOR")
 									var ll=[ll2D.lat, ll2D.lng]
 									mergedGeo.vertices[i].ll=ll;
-									var pos3D=getWorldPosition(ll[0], ll[1], globeRadius, projection);
+									var pos3D=getWorldPosition(ll[0], ll[1], globeRadius-1, projection);
 																										
 									meshMerged.geometry.vertices[i].x=pos3D.x;
 									meshMerged.geometry.vertices[i].y=pos3D.y;
@@ -590,14 +619,14 @@ addData = function (data, dataLayer){
 					lGeo2D=addLineVertices(p_indexC, d.geom.coordinates[p_index].length-1, lGeo2D, pos2D, "2D");
 					lGeo3D=addLineVertices(p_indexC, d.geom.coordinates[p_index].length-1, lGeo3D, pos3D, posInvisible);
 
-					vec2D=createVector3(pos2D, v, dotSize, 0xffffff);						
-					vec3D=createVector3(pos3D, v, dotSize, 0xffffff);
+					vec2D=createVector3(pos2D, v, dotSize, 0xffffff, p_i);						
+					vec3D=createVector3(pos3D, v, dotSize, 0xffffff, p_i);
 
 					pGeo2D.vertices.push( vec2D );
 					pGeo3D.vertices.push( vec3D );
 					
 					//pos2D=getWorldPosition(k[1], k[0], globeRadius, "MERCATOR");
-					sGeo2D.vertices.push( pos2D );
+					//sGeo2D.vertices.push( pos2D );
           	   }
 
               });
@@ -607,6 +636,8 @@ addData = function (data, dataLayer){
 				
 
 	});
+	
+	
 	
 	if(dataLayer.properties.stacked && (dataLayer.properties.stackIndex<dataLayer.properties.stackAmount)){
 		
@@ -654,30 +685,30 @@ addData = function (data, dataLayer){
 	}
 
 	if(dotSize>0){ 
-		var add=addParticlesDynamic(pGeo2D, pGeo3D, dataLayer.layer);
+		var add=addParticlesDynamic(pGeo2D, pGeo3D, dataLayer);
+		//var mouseHits=createMouseHitObjects(pGeo2D, pGeo3D, dataLayer);
 	}
 	
 	if(dataLayer.properties.stacked && dataLayer.properties.shape){
 		//console.log("stack index ="+shapes2D.stackIndex);
 		if(dataLayer.properties.stackIndex==dataLayer.properties.stackAmount){
 			mergeShapes(dataLayer, false);
-			if(dataLayer.layer=="cbs_nl"){
-				//setD3GraphCBS(dataLayer.geoRepository.mergedGeoStack);
-			}
+			// if(dataLayer.layer=="cbs_nl"){
+			// 				setD3GraphCBS(dataLayer.geoRepository.mergedGeoStack);
+			// 			}
 			
 		}
 	
 	}else if(dataLayer.properties.stacked==false && dataLayer.properties.shape){
-		mergeShapes(dataLayer.layer, false);
+		//mergeShapes(dataLayer, false);
 		
 	}
 
 
 }
 
-
 function mergeShapes(dataLayer, merged){
-		
+				
 		for (var i=0; i<scene.children.length; i++){
 			if(scene.children[i].name==dataLayer.layer+"_stack_loader"){
 				scene.remove(scene.children[i]);
@@ -723,7 +754,7 @@ function mergeShapes(dataLayer, merged){
 					pos2D.y=mesh.geometry.vertices[i].y;
 					pos2D.z=mesh.geometry.vertices[i].z;
 					
-					pos3D=getWorldPosition(ll[0], ll[1], globeRadius, "GLOBE");
+					pos3D=getWorldPosition(ll[0], ll[1], globeRadius-1, "GLOBE");
 					mesh.geometry.vertices[i].pos2D=pos2D;
 					mesh.geometry.vertices[i].pos3D=pos3D;
 				
@@ -732,7 +763,7 @@ function mergeShapes(dataLayer, merged){
 					ll = getLatLong(mesh.geometry.vertices[i], worldRadius, "GLOBE");
 					ll=[ll.lat, ll.lng];
 					pos2D=getWorldPosition(ll[0], ll[1], globeRadius, "MERCATOR");
-					pos2D.z=0;					
+					pos2D.z=-1;					
 					
 					pos3D.x=mesh.geometry.vertices[i].x;
 					pos3D.y=mesh.geometry.vertices[i].y;
@@ -749,6 +780,7 @@ function mergeShapes(dataLayer, merged){
 			
 		
 		}else{
+			
 			mesh=dataLayer.geoRepository.sGeo;
 			for(var i=0; i<mesh.geometry.vertices.length; i++){
 				if(projection=="GLOBE"){
@@ -771,6 +803,13 @@ function mergeShapes(dataLayer, merged){
 		object3D.name=dataLayer.layer;
 		object3D.add(mesh);
 		scene.add(object3D);
+		
+		var cloneGeo=mesh.geometry;
+		var mouseRef = new THREE.Mesh(cloneGeo);
+		mouseRef.name=dataLayer.layer;
+		mouseRef.visible=false;
+		mouseRefs.add(mouseRef);
+
 		console.log("adding shapes merged");
 		$( "#progressbar" ).progressbar({
 	      value: 0
@@ -807,6 +846,7 @@ function addLineVertices(v_index, v_last, lGeo, pos, posInvisible){
 }
 
 function addLines(geo2D, geo3D, layer){
+	
 	var lGeo;
 	if(projection=="GLOBE"){
 		lGeo=geo3D;
@@ -826,7 +866,8 @@ function addLines(geo2D, geo3D, layer){
 	
 }
 
-function addParticlesDynamic(geo2D, geo3D, layer){
+function addParticlesDynamic(geo2D, geo3D, dataLayer){
+	var layer=dataLayer.layer;
 	var pGeo;
 	if(projection=="GLOBE"){
 		pGeo=geo3D;
@@ -902,7 +943,9 @@ function addParticlesDynamic(geo2D, geo3D, layer){
 	if(layer=="ptTrams" || layer=="ptBuses" || layer=="ptFerrys" || layer=="ptSubways"){
 	
 		poolPtLive[layer].ps=ps;
-		$("#feedback").html("");
+		//$("#feedback").html("");
+	}else if(dataLayer.data && layer!="mouse_info"){
+		createMouseHitObjects(geo2D, geo3D, dataLayer);
 	}
 
 	//console.log("adding ps:"+layer);
@@ -913,26 +956,49 @@ function addParticlesDynamic(geo2D, geo3D, layer){
 	
 }
 
+function createMouseHitObjects(geo2D, geo3D, dataLayer){
+	
+	if(dataLayer.layer=="nl_ptstops")return;
+	
+	console.log("creating moushits");
+	var geo;
+	if(projection=="GLOBE"){
+		geo=geo3D;
+	}else{
+		geo=geo2D;
+	}
+	
+	var mergedGeo = new THREE.Geometry();
 
-// function addParticlesStatic(dataLayer){
-// 		
-// 	var ps = new THREE.ParticleSystem( pGeo, pMaterial );
-// 	ps.dynamic=true;
-// 	ps.dataLayer=dataLayer;
-// 	ps.name=layer+"_dots";
-// 	scene.add( ps );
-// 	
-// 	if(layer.slice(0,3)=="nl_"){
-// 		ps.name="nl_ptstops_dots";
-// 		//console.log("renaming nl layer");
-// 	};
-// 
-// 
-// 	var add=true;
-// 	return add; 
-// 
-// 	
-//   }
+	var shapeGeo = new THREE.PlaneGeometry( 0.1, 0.1, 1, 1 )
+	
+	for (var i=0; i<geo.vertices.length; i++){
+		var mesh = new THREE.Mesh( shapeGeo);
+		mesh.position.x=geo.vertices[i].x;
+		mesh.position.y=geo.vertices[i].y;
+		mesh.position.z=geo.vertices[i].z;
+		mesh.lookAt(camera.position);
+		//mesh.doubleSided=true;
+		var fIndex=mergedGeo.faces.length;
+		mesh.dynamic=true;
+		THREE.GeometryUtils.merge(mergedGeo, mesh);
+		for(var f=fIndex; f<mergedGeo.faces.length; f++){
+			mergedGeo.faces[f].data=dataLayer.data[geo.vertices[i].dataIndex];
+
+		}
+		
+	}
+	
+	mergedGeo.computeFaceNormals();
+	var mouseOverMesh = new THREE.Mesh( mergedGeo);
+	//var mouseOverMesh = new THREE.Mesh( mergedGeo, matMouseRefs);
+	mouseOverMesh.visible=false;
+	mouseOverMesh.name=dataLayer.layer;
+
+	mouseRefs.add(mouseOverMesh);
+
+}
+
 
   function zoom(delta) {
 	var zoom;
@@ -1095,6 +1161,12 @@ function addParticlesDynamic(geo2D, geo3D, layer){
 		
 	}
 	
+	while (mouseRefs.children.length)
+	{
+		mouseRefs.remove(mouseRefs.children[0]);		
+	}
+	
+	
 	firstTweenDone=false;
 	for(var i=0; i<psWorld.geometry.vertices.length; i++){
 					
@@ -1160,28 +1232,37 @@ function effectsUpdate(){
 			poolPtLive[key].ps.material.attributes.size.needsUpdate = true;
 			poolPtLive[key].ps.geometry.verticesNeedUpdate = true;
 			
+			for(var j=0; j<mouseRefs.children.length; j++){
+				if(mouseRefs.children[j].name==key){
+					mouseRefs.children[j].geometry.verticesNeedUpdate = true;
+				}
+			}
+
+			
 		}
 	};
 
 	for(var i=0; i<scene.children.length; i++){
-				if(scene.children[i].name=="trafic_flow_adam" || scene.children[i].name=="trafic_flow_adam_recorded"){
-					if(scene.children[i] instanceof THREE.ParticleSystem){
-						for (var j=0; j<scene.children[i].geometry.vertices.length; j++){
-							var pointSize=scene.children[i].geometry.vertices[j].pointSize;
-							
-							scene.children[i].material.attributes.size.value[j]=scene.children[i].geometry.vertices[j].pointSize + ((-pointSize/4)+(Math.random()*(pointSize/2)));
-							//scene.children[i].material.attributes.size.value[j]=(Math.random()*10);
-						}
-						scene.children[i].material.attributes.size.needsUpdate = true;
-						
-					}
 		
+		 if(scene.children[i].name=="trafic_flow_adam" || scene.children[i].name=="trafic_flow_adam_recorded"){
+			if(scene.children[i] instanceof THREE.ParticleSystem){
+				for (var j=0; j<scene.children[i].geometry.vertices.length; j++){
+					var pointSize=scene.children[i].geometry.vertices[j].pointSize;
+					scene.children[i].material.attributes.size.value[j]=scene.children[i].geometry.vertices[j].pointSize + ((-pointSize/4)+(Math.random()*(pointSize/2)));
 				}
-		
+				scene.children[i].material.attributes.size.needsUpdate = true;
+				
 			}
+
+		}
+
+	}
 	
 	
 }
+
+
+
 
 function livePositionUpdate()
 {
@@ -1352,7 +1433,9 @@ function setPositionsPt(mainIndex, lineIndex, actualTrips, tnow, modalitie, line
 							var fade=Math.round(ptDotFade*scale);
 						
 							var verticesIndex=(lineTrips*fade)+fade;
+														
 							
+						
 							if(verticesIndex>=poolPtLive[modalitie].ps.geometry.vertices.length){
 								//console.log("more vertices needed for :"+modalitie);
 								return lineTrips;
@@ -1361,7 +1444,9 @@ function setPositionsPt(mainIndex, lineIndex, actualTrips, tnow, modalitie, line
 							var posPrev =lineData.geom.coordinates[t][projection];
 							var posNext =lineData.geom.coordinates[t+1][projection];
 							
-														
+							var vIndex=(lineTrips-1)*4;
+												
+							
 							for	(var f=0; f<fade; f++){
 								
 								var posX =posNext.x-((p/scale)*(posNext.x-posPrev.x));
@@ -1378,23 +1463,72 @@ function setPositionsPt(mainIndex, lineIndex, actualTrips, tnow, modalitie, line
 
 								
 								p+=(tmax*(0.025*tmin))/scale;
-																
+
+								//console.log("linetrips ="+lineTrips);								
 								if(f==0){
-									poolPtLive[modalitie].mouseRefs[lineTrips].position.set(posX, posY, posZ);
-									poolPtLive[modalitie].mouseRefs[lineTrips].lookAt(camera.position);
+									var mouseRef=false;
+									for(var m=0; m<mouseRefs.children.length; m++){
+										if(mouseRefs.children[m].name==modalitie){
+											mouseRef=mouseRefs.children[m];
+											break;
+										}
+
+									}
+									if(mouseRef==false){
+										mouseRef = new THREE.Mesh(new THREE.PlaneGeometry( 0.1, 0.1, 1, 1 ));
+										mouseRef.name=modalitie;
+										mouseRef.visible=false;
+										mouseRef.dynamic=true;
+										mouseRefs.add(mouseRef);
+
+									}
 									
-									poolPtLive[modalitie].mouseRefs[lineTrips].layer="ptlive";
-									poolPtLive[modalitie].mouseRefs[lineTrips].additionalGeo=true;									
-									poolPtLive[modalitie].mouseRefs[lineTrips].name=lineData.name;
-									poolPtLive[modalitie].mouseRefs[lineTrips].timeleft=ta;
+									if(mouseRef.geometry.faces.length<lineTrips){
+										
+										var mergedGeo =new THREE.Geometry();
+										THREE.GeometryUtils.merge(mergedGeo, mouseRef);
+										mouseRefs.remove(mouseRef);	
+										
+										for (var faces=mouseRef.geometry.faces.length; faces<lineTrips; faces++){
+											var mesh = new THREE.Mesh(new THREE.PlaneGeometry( 0.1, 0.1, 1, 1 ));
+											mesh.lookAt(camera.position);
+											THREE.GeometryUtils.merge(mergedGeo, mesh);		 
+											
+										}
+										
+										var mouseRefNew = new THREE.Mesh( mergedGeo, matMouseRefs);
+										//var mouseRefNew = new THREE.Mesh( mergedGeo);
+										mouseRefNew.visible=false;
+										mouseRefNew.name=modalitie;
+										mouseRefNew.dynamic=true;
+										
+										mouseRefs.add(mouseRefNew);
+										mouseRef=mouseRefNew;
+										
+									}
+									
+									mouseRef.geometry.faces[lineTrips-1].layer="ptlive";
+									mouseRef.geometry.faces[lineTrips-1].additionalGeo=true;									
+									mouseRef.geometry.faces[lineTrips-1].name=lineData.name;
+									mouseRef.geometry.faces[lineTrips-1].timeleft=ta;
+									//mouseRefs.children[m].lookAt(camera.position);
 									
 									if(lineData.ptstops){
-										poolPtLive[modalitie].mouseRefs[lineTrips].laststop=lineData.ptstops[lineData.ptstops.length-1].name;
-										poolPtLive[modalitie].mouseRefs[lineTrips].nextstop=lineData.ptstops[t+1].name;
-
-										poolPtLive[modalitie].mouseRefs[lineTrips].delay=delay;
-										poolPtLive[modalitie].mouseRefs[lineTrips].geom=lineData.geom;
+								
+										mouseRef.geometry.faces[lineTrips-1].laststop=lineData.ptstops[lineData.ptstops.length-1].name;
+										mouseRef.geometry.faces[lineTrips-1].nextstop=lineData.ptstops[t+1].name;
+										mouseRef.geometry.faces[lineTrips-1].delay=delay;
+										mouseRef.geometry.faces[lineTrips-1].geom=lineData.geom;
 										//poolPtLive[modalitie].mouseRefs[lineTrips].visible=true;
+									}
+
+									var vI=0;
+									while(vI<4){												
+										mouseRef.geometry.vertices[vIndex+vI].x=posX+mouseOffsets[vI].x;
+										mouseRef.geometry.vertices[vIndex+vI].y=posY+mouseOffsets[vI].y;
+										mouseRef.geometry.vertices[vIndex+vI].z=posZ+mouseOffsets[vI].z;
+										
+										vI++;
 									}
 
 								}
@@ -1418,39 +1552,22 @@ function setPositionsPt(mainIndex, lineIndex, actualTrips, tnow, modalitie, line
 	    //return;
 		if( orbit )return;
 		if(layerStack.length==0)return;
+		if(action!="mouseOver")return
 
 		
 		var intersectObjects;
 		var intersects;
 		var meshFace=false;
 		var onStage=false;
-		
-		if(action=="mouseOver" && layerStack.length>0){
-			//console.log("cbs search ="+layerStack[0].layer.search("testje"));
-			
-			if(layerStack[0].layer.search("pt_live")>1){
-				intersectObjects=mouseRefs;
-				onStage=true;
-			}else if(layerStack[0].layer.search("cbs_")>=0){
-				meshFace=true;
-					for(var i=0; i<scene.children.length; i++){
-						if(scene.children[i] instanceof THREE.Object3D){	
-							if(layerStack[0].layer==scene.children[i].name ){
-								intersectObjects=scene.children[i];
-								onStage=true;
-								break;
-							}
 
-						}
-					}
-				}
-				
-		}else{
-			
-			return;
+		meshFace=true;
+		for(var i=0; i<scene.children.length; i++){
+			if(scene.children[i].name=="mouseRefs" ){
+				intersectObjects=scene.children[i];
+				onStage=true;
+			}
 		}
 
-		
 		if(onStage==false) {
 			tooltip.hide()
 			return;
@@ -1470,13 +1587,13 @@ function setPositionsPt(mainIndex, lineIndex, actualTrips, tnow, modalitie, line
 
 					INTERSECTED = intersects[ 0 ].face;
  					if(action=="mouseOver"){
-						intersects[0].face.textje = "wat een gepruts";
+						
 						intersects[0].face.color = new THREE.Color(0xf2b640);
 						if(intersectObjects){
 							// for(var i=0; i<intersectObjects.children.length; i++){
-							// 									//objectLayer.children[i].material.opacity=objectLayer.children[i].alphaOrg;
-							// 									intersectObjects.children[i].material.opacity=0;
-							// 							}
+							// 		objectLayer.children[i].material.opacity=objectLayer.children[i].alphaOrg;
+							// 		intersectObjects.children[i].material.opacity=0;
+							// }
 
 						}
 						setMouseOver(INTERSECTED);
@@ -1485,28 +1602,7 @@ function setPositionsPt(mainIndex, lineIndex, actualTrips, tnow, modalitie, line
 
 				}
 					
-			}else{
-				if ( INTERSECTED != intersects[ 0 ].object ) {
-
-					INTERSECTED = intersects[ 0 ].object;
-					if(action=="focus"){
-						// var targetFocus=intersects[ 0 ].point;
-						// 
-						// 					var dist = getDistance(camera.position, projection)-globeRadius;
-						// 					distanceTarget = dist-(dist*0.75);
-						// 					if(distanceTarget < 1 )distanceTarget=1;
-						// 					target=getLatLong(targetFocus, globeRadius, projection);
-						// 					target.lng-=1.75;
-						// 					target.lat+=0.1;
-						INTERSECTED=null;
-
-
-					}else if(action=="mouseOver"){
-						setMouseOver(INTERSECTED);
-					}
-				}
-	
-			}	
+			}
 
 		} else {
 			//if(INTERSECTED)INTERSECTED.visible=false;
@@ -1526,13 +1622,13 @@ function setPositionsPt(mainIndex, lineIndex, actualTrips, tnow, modalitie, line
   }
 
   function setMouseOver(intersected){
-		
+
 		var ttText;
 		if(intersected.layer=="ptlive"){
 			var delay;
 			//console.log(scene.children);
 			if(intersected.delay==false){
-				delay="<br>delay: <span style=color:"+fontBlue+">sceduled time (no realtime data)</span>"
+				delay="<br>delay: <span style=color:"+fontBlue+">scheduled time (no realtime data)</span>"
 
 			}else{
 				if(intersected.delay<0){
@@ -1559,17 +1655,26 @@ function setPositionsPt(mainIndex, lineIndex, actualTrips, tnow, modalitie, line
 			}
 			
 			
-		}else {
+		}else if(intersected.layer=="cbs"){
 
 			//ttText=intersected.textje;
 			// intersected.material.opacity=0.9;
-			intersected.visible=true;
-			ttText="<span style=color:"+fontBlue+">Statistics C.B.S.</span><br>";			
-			var data = intersected.data.layers.cbs.data;
+			//intersected.visible=true;
+			 
+			
+			ttText="<span style=color:"+fontBlue+">"+intersected.data.layer+"</span><br>";			
+			//var data = intersected.data.layers.cbs.data;
+			var data = intersected.data;
+			
+			// var nest = d3.nest()
+			//     .key(function(d) { console.log(d); })
+			// 	.entries(data);
 						
 			var count=0;
 			var index;
 			for(var index in data) {
+				//if() instanceof			
+				//console.log(data[index])
 				if(count%2 == 0){
 					ttText+="<span style=color:"+fontBlue+">"+index+"</span> : "+data[index]+"<br>"
 				}else{
@@ -1579,6 +1684,13 @@ function setPositionsPt(mainIndex, lineIndex, actualTrips, tnow, modalitie, line
 
 			}
 	
+		}else{
+		  var data = intersected.data;
+		  ttText="<span style=color:"+fontBlue+">"+intersected.data.layer+"</span><br>";
+		  ttText+="<span style=color:"+fontBlue+">name</span> : "+data.name+"<br>";
+		  ttText+="<span style=color:"+fontBlue+">cdk_id</span> : "+data.cdk_id+"<br>"
+		  
+		  
 		}
 		tooltip.show(ttText);
 	}
@@ -1611,7 +1723,6 @@ function setPositionsPt(mainIndex, lineIndex, actualTrips, tnow, modalitie, line
 	var newLiveLayer=target.layer.search("pt_live");
 	if(newLiveLayer>1){
 		for(i=0; i<layerStack.length; i++){
-		
 			var liveLayer=layerStack[i].layer.search("pt_live");
 			if(liveLayer>0){
 				subsLive.tram=true;
@@ -1659,6 +1770,16 @@ function setPositionsPt(mainIndex, lineIndex, actualTrips, tnow, modalitie, line
 		i++;
 	 }
 	
+	while (i<mouseRefs.children.length)
+		{
+		  	if(mouseRefs.children[i].name==target.layer && target.visible==false){
+				mouseRefs.remove(mouseRefs.children[i]);
+				i--;
+			}
+	
+		i++;
+	}
+	
 	
 
   }
@@ -1685,12 +1806,6 @@ var subsLive={tram:true, bus:true, ferry:true, subway:true};
 
 	};
 
-	
-	// if(subLayer=="lines"){
-	// 	 	subLayer=layer+"_lines";
-	// 	}else if(subLayer=="stops"){
-	// 	 	subLayer=layer+"_dots";
-	// 	}
 		
 	for(i=0; i<scene.children.length; i++){
 			if(scene.children[i].name==layer){
@@ -1707,8 +1822,6 @@ var subsLive={tram:true, bus:true, ferry:true, subway:true};
 
 			}
 	}
-
-	//console.log("toggle sub layer :"+subLayer+" visible="+visible);
 	
   }	
 

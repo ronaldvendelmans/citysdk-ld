@@ -147,12 +147,13 @@ function parseTime(time){
 }
 
 //createVector3(pos, ll, dotSize, 0xffffff);
-function createVector3(pos, ll, dotSize, color){
+function createVector3(pos, ll, dotSize, color, dataIndex){
 	
 	var vec3=pos;
 	vec3.ll=ll;
 	vec3.color=color;
 	vec3.pointSize=dotSize;
+	vec3.dataIndex=dataIndex;
 	return vec3;
 	
 }
