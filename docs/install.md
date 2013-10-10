@@ -75,7 +75,7 @@ Other distros should work without much modification.
 
 Once you have the server configured, first order of busniness is to create the 'citysdk' database, and fill the OpenStreetMap layer.
 Create database 'citysdk'.
-In this database, execute 'create extension postgis; create extension hstore;' 
+In this database, execute 'create extension postgis; create extension hstore; create extension pg_trgm;'
 
 OSM planet files are downloadable from several locations; [http://download.geofabrik.de/](http://download.geofabrik.de/) is an excellent source.
 
