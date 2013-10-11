@@ -11,13 +11,13 @@ Sequel.migration do
     # Since the two node_id sequences are incremented simultaneously,
     # the node_data's node_id will link to the correct id.
     sequences = <<-SQL
-      DROP SEQUENCE IF EXISTS nodes1_id_seq; 
+      DROP SEQUENCE IF EXISTS nodes1_id_seq CASCADE;
       CREATE SEQUENCE nodes1_id_seq START 1;   
     
-      DROP SEQUENCE IF EXISTS nodes2_id_seq; 
+      DROP SEQUENCE IF EXISTS nodes2_id_seq CASCADE;
       CREATE SEQUENCE nodes2_id_seq START 1;
     
-      DROP SEQUENCE IF EXISTS node_data_id_seq;
+      DROP SEQUENCE IF EXISTS node_data_id_seq CASCADE;
       CREATE SEQUENCE node_data_id_seq START 1;
     SQL
     
@@ -164,5 +164,14 @@ Sequel.migration do
   end
 
   down do
-    
+    sequences = <<-SQL
+      DROP SEQUENCE IF EXISTS nodes1_id_seq CASCADE;
+      DROP SEQUENCE IF EXISTS nodes2_id_seq CASCADE;
+      DROP SEQUENCE IF EXISTS node_data_id_seq CASCADE;
+    SQL
+
+    run sequences
+
+    DB[:nodes].truncate
+    DB[:node_data].truncate
   end end

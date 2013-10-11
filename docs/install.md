@@ -111,6 +111,7 @@ To seed the database (more information is available as comments in the various s
 * ruby ./run_migrations.rb
 
 These commands will take considerable time; hours, most likely, so be patient.
+(You can undo the migrations and try again with `ruby ./run_migrations.rb 0`)
 
 After the migrations have run, you'll need to add a password to the admin account: 
 
