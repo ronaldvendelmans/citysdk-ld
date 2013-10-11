@@ -115,8 +115,9 @@ Sequel.migration do
   down do
     DB[:modalities].truncate
     DB[:node_types].truncate
+    DB[:categories].truncate
     DB[:node_data_types].truncate
-    DB[:sources].truncate
+    DB[:ldprefix].truncate
     DB[:layers].truncate
     DB[:owners].truncate
   end
