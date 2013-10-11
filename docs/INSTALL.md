@@ -104,10 +104,10 @@ To seed the database (more information is available as comments in the various s
 
 * `cd db`
 * `./import_osm.sh` (after correcting the file name to import, and db credentials)
-* `ruby ./run_migrations.rb`
+* `./run_migrations.rb`
 
 These commands will take considerable time; hours, most likely, so be patient.
-(You can undo the migrations and try again with `ruby ./run_migrations.rb 0`)
+(You can undo the migrations and try again with `./run_migrations.rb 0`)
 
 After the migrations have run, you'll need to add a password to the admin account: 
 
