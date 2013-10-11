@@ -12,4 +12,4 @@ else
     command = "sequel -m migrations #{database}"
 end
 
-system command
+print `#{command}`
