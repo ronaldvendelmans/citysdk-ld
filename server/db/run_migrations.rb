@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby
+#!/usr/bin/env ruby
 
 require 'json'
 
@@ -12,4 +12,4 @@ else
     command = "sequel -m migrations #{database}"
 end
 
-system command
+print `#{command}`
