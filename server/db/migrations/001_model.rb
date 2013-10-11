@@ -5,7 +5,7 @@ Sequel.migration do
     $stderr.puts("Creating tables...")
 
 		# TODO: rename node_type to node_type_id
-    create_table :nodes do
+    create_table! :nodes do
       column :id, 'serial', :primary_key => true
 		  String :cdk_id, :null => false
 		  String :name
@@ -19,7 +19,7 @@ Sequel.migration do
 			column :geom, 'geometry'
 		end
 
-		create_table :ldprefix do
+		create_table! :ldprefix do
 			String :name, :null => false
 			String :prefix, :null => false
 			String :url, :null => false
@@ -29,7 +29,7 @@ Sequel.migration do
       ALTER TABLE ldprefix ADD CONSTRAINT constraint_prefix_unique UNIQUE(prefix);
     SQL
 
-		create_table :ldprops do
+		create_table! :ldprops do
       integer :layer_id, :null => false     
 			String :key, :null => false
 			String :type
@@ -39,22 +39,22 @@ Sequel.migration do
 			String :descr
     end
 
-		create_table :node_types do
+		create_table! :node_types do
       column :id, 'serial', :primary_key => true
 			String :name, :null => false
     end
 
-		create_table :modalities do
+		create_table! :modalities do
       column :id, 'serial', :primary_key => true
       String :name, :null => false
     end
 
-		create_table :categories do
+		create_table! :categories do
       column :id, 'serial', :primary_key => true
 			String :name, :null => false
     end
 
-    create_table :node_data do
+    create_table! :node_data do
       column :id, 'serial', :primary_key => true
       bigint :node_id, :null => false
       integer :layer_id, :null => false
@@ -66,12 +66,12 @@ Sequel.migration do
       timestamptz :updated_at, :null => false, :default => :now.sql_function
     end
     
-    create_table :node_data_types do
+    create_table! :node_data_types do
       column :id, 'serial', :primary_key => true
       String :name, :null => false
     end
 
-    create_table :owners do      
+    create_table! :owners do
       column :id, 'serial', :primary_key => true
       String :name, :null => false
       String :email, :null => false
@@ -86,7 +86,7 @@ Sequel.migration do
       timestamptz :created_at, :null => false, :default => :now.sql_function
     end
 
-    create_table :layers do      
+    create_table! :layers do
       column :id, 'serial', :primary_key => true
       String :name, :null => false
       String :title
@@ -127,13 +127,15 @@ Sequel.migration do
 	end
 	
 	down do
-		drop_table(:nodes)
-		drop_table(:node_types)
-		drop_table(:modalities)
-		drop_table(:node_data)
-		drop_table(:node_data_types)
-		drop_table(:layers)
-		drop_table(:sets)
-		drop_table(:sources)
+		drop_table?(:nodes, :cascade=>true)
+		drop_table?(:ldprefix, :cascade=>true)
+		drop_table?(:ldprops, :cascade=>true)
+		drop_table?(:node_types, :cascade=>true)
+		drop_table?(:modalities, :cascade=>true)
+		drop_table?(:categories, :cascade=>true)
+		drop_table?(:node_data, :cascade=>true)
+		drop_table?(:node_data_types, :cascade=>true)
+		drop_table?(:owners, :cascade=>true)
+		drop_table?(:layers, :cascade=>true)
 	end
 end
