@@ -1,3 +1,4 @@
+#!/bin/bash
 # Import OSM file into citysdk database
 # OSM file used here: netherlands-latest.osm.bz2
 osm2pgsql --slim -j -d citysdk -l -C6000 -U postgres <file>

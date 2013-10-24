@@ -5,8 +5,6 @@ Sequel.migration do
     $stderr.puts("Add indexes...")
     $stderr.puts("\tNode indexes...")
 
-    run "create extension pg_trgm;"
-
   	# node indexes
     $stderr.puts("\t\tNode index id...")
       run "CREATE INDEX ON nodes USING btree (id);"
