@@ -26,6 +26,8 @@ class Layer < Sequel::Model
   
   
   
+  # TODO: better solution: keep layer hashes in memcached
+  # prevents that local layer hashes get out of sync. 
   @@layerIdHash = {};
   @@layerTextHash = {};
 
@@ -225,39 +227,48 @@ class Layer < Sequel::Model
     @@LayerUpdateRate[id] || 3000
   end
 
-
   ##########################################################################################
   # Initialize layers hash:
   ##########################################################################################
   
   def self.getLayerHashes
-    @@layerIdHash = {};
-    @@layerTextHash = {};
-    @@layerIsRealtime = {};
-    @@layerIsWebservice = {};
-    @@layerWebserviceUrl = {};
-    @@LayerValidity = {};
-  	@@LayerUpdateRate = {};
+
+    new_layerIdHash = {}
+    new_layerTextHash = {}
+    new_layerIsRealtime = {}
+    new_layerIsWebservice = {}
+    new_layerWebserviceUrl = {}
+    new_LayerValidity = {}
+    new_LayerUpdateRate = {}
 
     Layer.all.each do |l|
       id = l[:id]
       
-      @@layerIdHash[l[:name]] = id
-      @@layerTextHash[id] = l[:name]
+      new_layerIdHash[l[:name]] = id
+      new_layerTextHash[id] = l[:name]
       
-      @@layerIsRealtime[id] = l[:realtime]      
-      @@LayerValidity[id] = l[:validity]
-    	@@LayerUpdateRate[id] = l[:update_rate]
+      new_layerIsRealtime[id] = l[:realtime]      
+      new_LayerValidity[id] = l[:validity]
+    	new_LayerUpdateRate[id] = l[:update_rate]
       
       webservice = l[:webservice]
       #TODO find generic way 
       if webservice and webservice.length > 0
-        @@layerIsWebservice[id] = (l.name != 'ns')
-        @@layerWebserviceUrl[id] = l[:webservice]
+        new_layerIsWebservice[id] = (l.name != 'ns')
+        new_layerWebserviceUrl[id] = l[:webservice]
       else
-        @@layerIsWebservice[id] = false
+        new_layerIsWebservice[id] = false
       end
-    end
+    end    
+    
+    @@layerIdHash = new_layerIdHash
+    @@layerTextHash = new_layerTextHash
+    @@layerIsRealtime = new_layerIsRealtime
+    @@layerIsWebservice = new_layerIsWebservice
+    @@layerWebserviceUrl = new_layerWebserviceUrl
+    @@LayerValidity = new_LayerValidity
+  	@@LayerUpdateRate = new_LayerUpdateRate
+    
   end  
   
 end

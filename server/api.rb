@@ -46,16 +46,25 @@ end
 class CitySDK_API < Sinatra::Base
   
   CDK_BASE_URI = "http://rdf.citysdk.eu/"
-  
-  
+    
   set :protection, :except => [:json_csrf]
 
   Sequel.extension :pg_hstore_ops
   Sequel.extension :pg_array_ops
 
   Sequel::Model.plugin :json_serializer 
-  Sequel::Model.db.extension(:pagination) 
+  Sequel::Model.db.extension(:pagination)
   
+  # nginx spawns multiple instances of API
+  # Layer hashes need to be reloaded when new layers are created,
+  # but layes hashes are updated only in API instance which creates new layer, 
+  # and in the instance where '/reload__' is executed.
+  # By running Layer.getLayerHashes every 5 min., this problem is fixed.
+  # TODO: better solution: keep layer hashes in memcached
+  scheduler = Rufus::Scheduler.new
+  scheduler.every '5m' do
+    Layer.getLayerHashes
+  end  
   
   before do 
     # puts "REQ = #{JSON.pretty_generate(request.env)}"
