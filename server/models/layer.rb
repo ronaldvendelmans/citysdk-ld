@@ -30,14 +30,30 @@ class Layer < Sequel::Model
   # end
   
   KEY_LAYER_NAMES = "layer_names"
+  KEY_LAYERS_AVAILABLE = "layers_available"
   def self.memcache_key(id)
     "layer!!#{id}"
   end
-    
+  
   def self.get_layer(id)
+    self.ensure_layer_cache
     key = self.memcache_key(id)
     CitySDK_API.memcache_get(key)
   end
+
+  def self.get_layer_names
+    self.ensure_layer_cache
+    CitySDK_API.memcache_get(KEY_LAYER_NAMES)
+  end
+  
+  def self.ensure_layer_cache
+    if not CitySDK_API.memcache_get(KEY_LAYERS_AVAILABLE)
+      self.getLayerHashes
+    end
+  end
+  
+  
+  
     
   def self.get_validity(id) 
     layer = self.get_layer(id)    
@@ -179,17 +195,22 @@ class Layer < Sequel::Model
     when Array
       return p.map do |name| self.idFromText(name) end.flatten.uniq
     when String 
-      layer_names = CitySDK_API.memcache_get(KEY_LAYER_NAMES)       
-      if p.include? "*"
-        # wildcards can only be used once, on the end of layer specifier after "." separator
-        if p.length >= 3 and p.scan("*").size == 1 and p.scan(".*").size == 1 and p[-2,2] == ".*"
-          prefix = p[0..(p.index("*") - 1)]                  
-          return layer_names.select{|k,v| k.start_with? prefix}.values
+      layer_names = self.get_layer_names
+      if layer_names
+        if p.include? "*"
+          # wildcards can only be used once, on the end of layer specifier after "." separator
+          if p.length >= 3 and p.scan("*").size == 1 and p.scan(".*").size == 1 and p[-2,2] == ".*"
+            prefix = p[0..(p.index("*") - 1)]                  
+            return layer_names.select{|k,v| k.start_with? prefix}.values
+          else
+            CitySDK_API.do_abort(422,"You can only use wildcards in layer names directly after a name separator (e.g. osm.*)")
+          end
         else
-          CitySDK_API.do_abort(422,"You can only use wildcards in layer names directly after a name separator (e.g. osm.*)")
+          return layer_names[p]
         end
       else
-        return layer_names[p]
+        # No layer names available, something went wrong
+        CitySDK_API.do_abort(500,"Layer cache unavailable")
       end
     end
   end
@@ -249,6 +270,7 @@ class Layer < Sequel::Model
     end
     
     CitySDK_API.memcache_set(KEY_LAYER_NAMES, names, 0)
+    CitySDK_API.memcache_set(KEY_LAYERS_AVAILABLE, true, 0)
   end  
   
 end
