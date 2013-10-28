@@ -95,7 +95,7 @@ class NodeDatum < Sequel::Model
   def self.turtelize_one(nd,triples,base_uri,params,cdk_id)
     datas = []
     layer_id = nd[:layer_id]
-    name = Layer.textFromId(layer_id)
+    name = Layer.nameFromId(layer_id)
     layer = Layer.where(:id=>layer_id).first
     subj = base_uri + name
 
@@ -135,7 +135,7 @@ class NodeDatum < Sequel::Model
         prop = "<#{name}/#{k.to_s}>"
       
         lp  = "#{prop}"
-        lp += "\n\t :definedOnLayer <layer/#{Layer.textFromId(layer_id)}> ;"
+        lp += "\n\t :definedOnLayer <layer/#{Layer.nameFromId(layer_id)}> ;"
         lp += "\n\t rdfs:subPropertyOf :layerProperty ;"
         lp += "\n\t owl:equivalentProperty #{eqpr} ;" if eqpr 
         
@@ -186,7 +186,7 @@ class NodeDatum < Sequel::Model
       nd[:data] = WebService.load(nd[:layer_id], cdk_id, nd[:data])
     end
     
-    name = Layer.textFromId(nd[:layer_id])
+    name = Layer.nameFromId(nd[:layer_id])
     prop = "<#{name}/#{field}>"
 
     res = LayerProperty.where({:layer_id => nd[:layer_id], :key => field }).first
@@ -220,7 +220,7 @@ class NodeDatum < Sequel::Model
     
 
     lp  = "#{prop}"
-    lp += "\n\t :definedOnLayer <layer/#{Layer.textFromId(nd[:layer_id])}> ;"
+    lp += "\n\t :definedOnLayer <layer/#{Layer.nameFromId(nd[:layer_id])}> ;"
     lp += "\n\t rdfs:subPropertyOf :layerProperty ;"
     lp += "\n\t owl:equivalentProperty #{eqpr} ;" if eqpr 
     
@@ -270,7 +270,7 @@ class NodeDatum < Sequel::Model
 
       layer_id = nd[:layer_id]
       
-      name = Layer.textFromId(layer_id)
+      name = Layer.nameFromId(layer_id)
       
       nd.delete(:validity)
       # rt,vl = Layer.get_validity(layer_id)

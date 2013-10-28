@@ -24,31 +24,27 @@ class Layer < Sequel::Model
     
   end
   
-  
-  
-  # TODO: better solution: keep layer hashes in memcached
-  # prevents that local layer hashes get out of sync. 
-  @@layerIdHash = {};
-  @@layerTextHash = {};
-
-  # TODO: lelijk! maak functies of hoe dan ook!
-  @@layerIsRealtime = {};
-  @@layerIsWebservice = {};
-  @@layerWebserviceUrl = {};
-
-  @@LayerValidity = {};
-	@@LayerUpdateRate = {};
-  
   # def validate
   #   super
   #   validates_presence [:body, :latitude, :longitude]
   # end
+  
+  KEY_LAYER_NAMES = "layer_names"
+  def self.memcache_key(id)
+    "layer!!#{id}"
+  end
+    
+  def self.get_layer(id)
+    key = self.memcache_key(id)
+    CitySDK_API.memcache_get(key)
+  end
     
   def self.get_validity(id) 
-    if @@layerIsRealtime[id]
-      return true, @@LayerUpdateRate[id]
+    layer = self.get_layer(id)    
+    if layer[:realtime]
+      return true, layer[:update_rate]
     else
-      return false, @@LayerValidity[id]
+      return false, layer[:validity]
     end
   end
   
@@ -182,41 +178,50 @@ class Layer < Sequel::Model
     case p
     when Array
       return p.map do |name| self.idFromText(name) end.flatten.uniq
-    when String        
+    when String 
+      layer_names = CitySDK_API.memcache_get(KEY_LAYER_NAMES)       
       if p.include? "*"
         # wildcards can only be used once, on the end of layer specifier after "." separator
         if p.length >= 3 and p.scan("*").size == 1 and p.scan(".*").size == 1 and p[-2,2] == ".*"
-          prefix = p[0..(p.index("*") - 1)]
-          return @@layerIdHash.select{|k,v| k.start_with? prefix}.values
+          prefix = p[0..(p.index("*") - 1)]                  
+          return layer_names.select{|k,v| k.start_with? prefix}.values
         else
           CitySDK_API.do_abort(422,"You can only use wildcards in layer names directly after a name separator (e.g. osm.*)")
         end
       else
-        return @@layerIdHash[p]
+        return layer_names[p]
       end
     end
   end
  
-  def self.textFromId(id)
-    @@layerTextHash[id]
+  def self.nameFromId(id)
+    layer = self.get_layer(id)
+    layer[:name]
   end
 
   ##########################################################################################
   # Real-time/web service layers:
   ##########################################################################################
 
-  def self.isRealtime?(id)    
-    @@layerIsRealtime[id]
+  def self.isRealtime?(id)
+    layer = self.get_layer(id)
+    layer[:realtime]
   end
-
+  
   def self.isWebservice?(id)
-    @@layerIsWebservice[id]
+    layer = self.get_layer(id)
+    
+    webservice = layer[:webservice]    
+    if layer[:name] == 'ns'
+      webservice = false
+    end
+    
+    return (webservice and webservice.length > 0)
   end
 
   def self.getWebserviceUrl(id)
-    if @@layerWebserviceUrl.has_key? id
-      @@layerWebserviceUrl[id]
-    end
+    layer = self.get_layer(id)
+    l[:webservice]    
   end
 
   def self.getData(id, node_id, data)
@@ -224,7 +229,8 @@ class Layer < Sequel::Model
   end
   
   def self.getDataTimeout(id)
-    @@LayerUpdateRate[id] || 3000
+    layer = self.get_layer(id)
+    layer["update_rate"] || 3000
   end
 
   ##########################################################################################
@@ -232,43 +238,17 @@ class Layer < Sequel::Model
   ##########################################################################################
   
   def self.getLayerHashes
-
-    new_layerIdHash = {}
-    new_layerTextHash = {}
-    new_layerIsRealtime = {}
-    new_layerIsWebservice = {}
-    new_layerWebserviceUrl = {}
-    new_LayerValidity = {}
-    new_LayerUpdateRate = {}
-
-    Layer.all.each do |l|
+    names = {}
+    Layer.all.each do |l| 
       id = l[:id]
-      
-      new_layerIdHash[l[:name]] = id
-      new_layerTextHash[id] = l[:name]
-      
-      new_layerIsRealtime[id] = l[:realtime]      
-      new_LayerValidity[id] = l[:validity]
-    	new_LayerUpdateRate[id] = l[:update_rate]
-      
-      webservice = l[:webservice]
-      #TODO find generic way 
-      if webservice and webservice.length > 0
-        new_layerIsWebservice[id] = (l.name != 'ns')
-        new_layerWebserviceUrl[id] = l[:webservice]
-      else
-        new_layerIsWebservice[id] = false
-      end
-    end    
+      name = l[:name]      
+      # Save layer data in memcache without expiration 
+      key = self.memcache_key(id)
+      CitySDK_API.memcache_set(key, l.values, 0)      
+      names[name] = id
+    end
     
-    @@layerIdHash = new_layerIdHash
-    @@layerTextHash = new_layerTextHash
-    @@layerIsRealtime = new_layerIsRealtime
-    @@layerIsWebservice = new_layerIsWebservice
-    @@layerWebserviceUrl = new_layerWebserviceUrl
-    @@LayerValidity = new_LayerValidity
-  	@@LayerUpdateRate = new_LayerUpdateRate
-    
+    CitySDK_API.memcache_set(KEY_LAYER_NAMES, names, 0)
   end  
   
 end

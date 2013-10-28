@@ -120,7 +120,7 @@ class Node < Sequel::Model
     # call ../ptstops form members of route, f.i.
     h.delete(:members)
 
-    h[:layer] = Layer.textFromId(h[:layer_id])
+    h[:layer] = Layer.nameFromId(h[:layer_id])
     h[:name] = '' if h[:name].nil?
     if params.has_key? "geom"
       if h[:member_geometries] and h[:node_type] != 3
@@ -167,14 +167,14 @@ class Node < Sequel::Model
     
     if not @@layers.include?(h[:layer_id])
       @@layers << h[:layer_id]
-      triples << "<layer/#{Layer.textFromId(h[:layer_id])}> a :Layer ."
+      triples << "<layer/#{Layer.nameFromId(h[:layer_id])}> a :Layer ."
       triples << ""
     end
     
     triples << "<#{h[:cdk_id]}>"
     triples << "\t a :#{@@node_types[h[:node_type]].capitalize} ;"
     triples << "\t dc:title \"#{h[:name].gsub('"','\"')}\" ;" if h[:name] and h[:name] != ''
-    triples << "\t :createdOnLayer <layer/#{Layer.textFromId(h[:layer_id])}> ;"
+    triples << "\t :createdOnLayer <layer/#{Layer.nameFromId(h[:layer_id])}> ;"
     
     if h[:modalities]
       h[:modalities].each { |m| 
