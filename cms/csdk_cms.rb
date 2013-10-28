@@ -43,6 +43,7 @@ class CSDK_CMS < Sinatra::Base
 
   use Rack::MethodOverride
   register Sinatra::Session
+  set :session_expire, 60 * 60 * 24
   set :session_fail, '/login'
   set :session_secret, '09989dhlkjh7892%$#%2kljd'
   
