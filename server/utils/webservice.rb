@@ -6,7 +6,7 @@ class NodeDatum < Sequel::Model
     require 'uri'    
   
     def self.memcache_key(layer_id, cdk_id)
-      l = Layer.textFromId(layer_id)
+      l = Layer.nameFromId(layer_id)
       return "#{l}!!#{cdk_id}"
     end
     

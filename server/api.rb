@@ -46,16 +46,14 @@ end
 class CitySDK_API < Sinatra::Base
   
   CDK_BASE_URI = "http://rdf.citysdk.eu/"
-  
-  
+    
   set :protection, :except => [:json_csrf]
 
   Sequel.extension :pg_hstore_ops
   Sequel.extension :pg_array_ops
 
   Sequel::Model.plugin :json_serializer 
-  Sequel::Model.db.extension(:pagination) 
-  
+  Sequel::Model.db.extension(:pagination)
   
   before do 
     # puts "REQ = #{JSON.pretty_generate(request.env)}"
