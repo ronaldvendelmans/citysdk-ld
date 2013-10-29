@@ -60,30 +60,14 @@ var oensBcStdList;
      var dataLayer={
     			label:"main_geo_map",
     			layers:[
-    				{cdk_id:"admr.nl.nederland", subs:[], apiCall:"/regions?admr::admn_level=3&layer=cbs&geom", geom:"regions", layer:"main_map", label:"Nederland", localUrl:"data/cdk_cbs_nl.json"}, 
+    				{cdk_id:"admr.nl.nederland", subs:[], data:[], apiCall:"/regions?admr::admn_level=3&layer=cbs&geom", geom:"regions", layer:"main_map", label:"Nederland", localUrl:"data/cdk_cbs_nl.json"}, 
     			]
     		};
     //getApiData(dataLayer.layers[0]); 
     getLocalData(dataLayer.layers[0]);
+    dataLayers.push(dataLayer);  
     
-    dataLayer={
-       label:"divv",
-       layers:[
-       //http://api.citysdk.waag.org/nodes?layer=divv.traffic"
-         {cdk_id:"", subs:[], apiCall:"routes?layer=divv.traffic&geom", geom:"lines", layer:"divv_trafficflow", label:"Trafficflow", localUrl:"data/divv_traffic.json"},
-         {cdk_id:"", subs:[], apiCall:"nodes?layer=divv.taxi&geom", geom:"dots", layer:"divv_taxis", localUrl:"data/divv_taxies.json"},
-       ]
-     };
-   
-    
-  	//getApiData(dataLayer.layers[0]);
-  	//getApiData(dataLayer.layers[1]);
-  	
-  	getLocalData(dataLayer.layers[0]);
-  	getLocalData(dataLayer.layers[1]);
-  	//dataLayers.push(dataLayer);   
 
-	
 	  // topomap
   	// d3.json("data/nl_topo_props.json", function(error, results) {
   	//     console.log(results);
@@ -306,14 +290,63 @@ var oensBcStdList;
 
   };
   
+  getDivvData = function(cdk_id){
+
+    var dataLoaded=false;
+    
+    if(cdk_id=="admr.nl.amsterdam"){
+      for(var i=0; i<dataLayers.length; i++){
+            if(dataLayers[i].layer=="divv_trafficflow"){
+              geoMap.updateDivvTrafficMap=updateDivvTrafficMap(dataLayers[i]);
+              dataLoaded=true;
+            }else if(dataLayers[i].layer=="divv_taxis"){
+              geoMap.updateDivvMapTaxies=updateDivvMapTaxies(dataLayers[i]);
+              dataLoaded=true;
+            }       
+        };
+    }else{
+      for(var i=0; i<dataLayers.length; i++){
+            if(dataLayers[i].layer=="divv_trafficflow"){
+              var layer={data:[]};
+              geoMap.updateDivvTrafficMap=updateDivvTrafficMap(layer);
+            }else if(dataLayers[i].layer=="divv_taxis"){
+              var layer={data:[]};
+              geoMap.updateDivvTrafficMap=updateDivvTrafficMap(layer);
+            }       
+        };
+    };
+
+    if(dataLoaded || cdk_id!="admr.nl.amsterdam"){
+      
+      return;
+    }
+
+    var layer={cdk_id:"", subs:[], apiCall:"routes?layer=divv.traffic&geom", geom:"lines", layer:"divv_trafficflow", label:"Trafficflow", localUrl:"data/divv_traffic.json"};
+    getApiData(layer);
+    dataLayers.push(layer);
+    
+    layer={cdk_id:"", subs:[], apiCall:"nodes?layer=divv.taxi&geom", geom:"dots", layer:"divv_taxis", label:"Taxi queu", localUrl:"data/divv_taxies.json"};
+    getApiData(layer);
+    dataLayers.push(layer);
+    
+
+  };
+  
+  
+  
+  
+  
   setCbsNlMap = function(dataLayer){
     dataLayers.push(dataLayer);
     geoMap.updateDataSet(dataLayer);
   }
+  
+  
 
   this.setCbsNlMap=setCbsNlMap;
   this.initRepository=initRepository;
   this.getCbsData=getCbsData;
+  this.getDivvData=getDivvData;
 
   return this;
 

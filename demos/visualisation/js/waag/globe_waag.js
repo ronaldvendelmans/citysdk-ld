@@ -1623,6 +1623,7 @@ function setPositionsPt(mainIndex, lineIndex, actualTrips, tnow, modalitie, line
 
   function setMouseOver(intersected){
 
+    console.log("intersected layer ="+intersected);
 		var ttText;
 		if(intersected.layer=="ptlive"){
 			var delay;
@@ -1684,13 +1685,18 @@ function setPositionsPt(mainIndex, lineIndex, actualTrips, tnow, modalitie, line
 
 			}
 	
-		}else{
+		}  else if(intersected.data.layer=="divv.traffic"){
+  		  var data = intersected.data;
+  		  ttText="<span style=color:"+fontBlue+">"+intersected.data.layer+"</span><br>";
+  		  ttText+="<span style=color:"+fontBlue+">name</span> : "+data.name+"<br>";
+  		  ttText+="<span style=color:"+fontBlue+">velocity</span> : "+data.layers["divv.traffic"].data.velocity+" km/h<br>"
+
+  	} else {
 		  var data = intersected.data;
 		  ttText="<span style=color:"+fontBlue+">"+intersected.data.layer+"</span><br>";
 		  ttText+="<span style=color:"+fontBlue+">name</span> : "+data.name+"<br>";
 		  ttText+="<span style=color:"+fontBlue+">cdk_id</span> : "+data.cdk_id+"<br>"
-		  
-		  
+
 		}
 		tooltip.show(ttText);
 	}
