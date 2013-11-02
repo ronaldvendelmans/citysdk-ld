@@ -46,12 +46,14 @@ class CitySDK_API < Sinatra::Base
     
       elsif params[:cmd] == 'regions'
 
+        # TODO: hard-coded layer_id of admr = 2! 
         layers = [0,1,2]
         if params.has_key? 'layer'
           layers = Layer.idFromText(params['layer'].split(','))          
         end
        
         # TODO: also filter on node_data, name etc!
+        # TODO: hard-coded layer_id of admr = 2! 
         Node.serializeStart(params,req)
         res = Node.dataset
           .join_table(:inner, :nodes, Sequel.function(:ST_Intersects, :nodes__geom, :containing_node__geom), {:table_alias=>:containing_node})

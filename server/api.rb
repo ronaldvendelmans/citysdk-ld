@@ -105,6 +105,7 @@ class CitySDK_API < Sinatra::Base
   
   def path_regions
     begin 
+      # TODO: hard-coded layer_id of admr = 2! 
       pgn = Node.dataset.where(:nodes__layer_id=>2)
         .geo_bounds(params)
         .name_search(params)
