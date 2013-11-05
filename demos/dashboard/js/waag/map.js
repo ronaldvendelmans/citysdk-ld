@@ -1,12 +1,11 @@
 var WAAG = WAAG || {};
 var fontBlue="#80BFFF";
-
+var wMap=1024;
+var hMap=768;
 WAAG.GeoMap = function GeoMap(container) {
-	
-	var wMap = 1024;
-	var hMap = 768;
+
 	var mapScale=200000;
-	var projection, path, svg, map, regionMap, lineMap, dotMap, customLabelMap, barChart;
+	var svg, projection, path, map, regionMap, lineMap, dotMap, customLabelMap, barChart, streamGraph, circlePack;
 	var centered, zoom;
 	var nodeTextCloud;
 	var defs, filter, feMerge;
@@ -62,7 +61,7 @@ WAAG.GeoMap = function GeoMap(container) {
 		    .attr("width", wMap)
 		    .attr("height", hMap)
 		    .style("fill", "white")
-		    .call(zoom);
+		    .call(zoom);   
 		    		    
 		map = svg.append("g")
 		   .attr("id", "map");
@@ -102,13 +101,15 @@ WAAG.GeoMap = function GeoMap(container) {
 	  regionMap.append("g")
 		  .attr("id", "cbs")
 		  .attr("class", "Oranges"); //colorBrewer
-				   
-   		   
+				   	   
    	lineMap=map.append("g")
-		   .attr("id", "lineMap");   
-		   
+		   .attr("id", "divv_trafficflow")
+		   .attr("transform", "translate("+ -1000 +",0)")
+		      
 		dotMap=map.append("g")
-		   .attr("id", "dotMap");
+		   .attr("id", "divv_taxis")
+		   .attr("transform", "translate("+ -1000 +",0)")
+		   .attr("class", "Oranges"); //colorBrewer  
 		   
 		customLabelMap=map.append("g")
    		  .attr("id", "customLabelMap");
@@ -122,7 +123,9 @@ WAAG.GeoMap = function GeoMap(container) {
 		 
 		barChart.append("g")
 		  .attr("id", "legenda")
-		  .attr("class", "Oranges"); //colorBrewer	
+		  .attr("class", "Oranges"); //colorBrewer
+		  
+  	
 		
     // var d = d3.select(container)
     //       .append("div")
@@ -136,7 +139,7 @@ WAAG.GeoMap = function GeoMap(container) {
         
      });
      
-
+    graphsD3.init(svg);  
 
 		repository.initRepository();
 
@@ -161,7 +164,10 @@ WAAG.GeoMap = function GeoMap(container) {
         }
 
         // set data values for visualisation    
-        d.subData=d.layers.cbs.data;          
+        if(dataLayer.layer=="cbs" || dataLayer.layer=="main_map"){
+          d.subData=d.layers.cbs.data;  
+        }
+                
 
 
     	});
@@ -176,8 +182,16 @@ WAAG.GeoMap = function GeoMap(container) {
     	}
     	
 
-	  if(dataLayer.layer=="main_map"){
+	  if(dataLayer.layer=="main_map" && dataLayer.label=="Nederland"){
+	    console.log("creating main map");
+	    
 	    createMainMap(dataLayer);
+	  }else if(dataLayer.layer=="divv_trafficflow"){
+	      updateDivvTrafficMap(dataLayer);
+	      console.log("adding layer divv trafficflow");
+    }else if(dataLayer.layer=="divv_taxis"){
+        updateDivvMapTaxies(dataLayer);
+	      console.log("adding layer divv taxis");    
 	  }else{
 	    activeDataLayer=dataLayer;
 	    updateDataSet(dataLayer);
@@ -202,11 +216,11 @@ WAAG.GeoMap = function GeoMap(container) {
     			  .attr("d", path)
     			  //.style("fill", "#fff")
     			  //.style("stroke", "none")
+    			  .style("opacity", 0.1)
     			  .style("stroke-width", 0.5+"px")
     			  .on("mouseover", function(d){
-    			    d3.select(this).attr("class", "q1-9")  
-      				//d3.select(this).style("fill", colorFill );
-      				d3.select(this).style("stroke-width", 1+"px" );
+    			    d3.select(this).attr("class", "q1-9").style("opacity", 0.25).style("stroke-width", 1+"px" )  
+
       				var tipsy = $(this).tipsy({ 
       						gravity: 'w', 
       						html: true,
@@ -220,17 +234,18 @@ WAAG.GeoMap = function GeoMap(container) {
 
       			})
       			.on("mouseout", function(d){
-      			  d3.select(this).attr("class", "q-white")
-      			  //d3.select(this).style("fill", "#fff" );
-      			  d3.select(this).style("stroke-width", 0.5+"px" );
+      			  d3.select(this).attr("class", "q-white").style("opacity", 0.1).style("stroke-width", 0.5+"px" );
+
       			})
     			  .on("click", function(d){
     			    var level=5;
     			    if(d.cdk_id=="admr.nl.amsterdam"){
     			      level=5;
-    			    }
+    			      
+    			    };
     			    console.log("get new data "+d.cdk_id+" --> "+d.name+" --> level "+level);
     			    repository.getCbsData(d.cdk_id, d.name, level);
+    			    repository.getDivvData(d.cdk_id);
     			        			    
       			})
       	
@@ -252,7 +267,7 @@ WAAG.GeoMap = function GeoMap(container) {
     	    newLayer.legenda["q"+i].min=0;
     	       
     	}
-      activeDataLayer=dataLayer;
+      activeDataLayer=newLayer;
       repository.setCbsNlMap(newLayer);
         
   };
@@ -280,6 +295,7 @@ WAAG.GeoMap = function GeoMap(container) {
 
     updateRegionsMap(dataLayer);
     updateBarChart(dataLayer);
+    updateCirclePack(dataLayer);
     
   }
   
@@ -328,8 +344,14 @@ WAAG.GeoMap = function GeoMap(container) {
             //console.log("data stored :"+d);
             if(dataLayer.cdk_id=="admr.nl.nederland"){
               repository.getCbsData(d.cdk_id, d.name, 5);
+              
+              // if(d.name=="Amsterdam"){
+              //                 repository.getDivvData(d.cdk_id);
+              //               }
+              
+              console.log("d.name ="+d.name);
             } 
-   			    
+   			    repository.getDivvData(d.cdk_id);
    			        			    
      			})
       
@@ -388,9 +410,7 @@ WAAG.GeoMap = function GeoMap(container) {
   
 	var mTop=40, mBottom=20, mLeft=20, mRight=40, barWidth=240, legendaWidth=10;
 	function updateBarChart(dataLayer){
-	  
-  	//var data=dataLayer.data;
-  	
+	  	
   	//reset leganda values
     for(var i in dataLayer.legenda) {
        dataLayer.legenda[i]=0;
@@ -497,6 +517,144 @@ WAAG.GeoMap = function GeoMap(container) {
  
 
 	}
+	
+	updateDivvTrafficMap = function(dataLayer){
+
+  	var data=dataLayer.data;
+  	
+  	data.forEach(function(d){
+	     var g= d.layers["divv.traffic"];
+	    
+	     var tt=parseInt(g.data.traveltime);
+	     var tt_ff=parseInt(g.data.traveltime_freeflow);
+
+       //d.visData=parseInt(g.data.traveltime_freeflow);
+       d.visData=tt/tt_ff;
+       
+       //console.log("trafel perc ="+d.visData);
+       if(d.visData<0 || isNaN(d.visData) || d.visData=="Infinity"){
+            d.visData=0.1;
+        }
+        
+        d.visLabel=g.data.velocity;
+    });
+    
+    var max =  d3.max(data, function(d) {return d.visData; });
+	  
+	  var color = d3.scale.linear()
+            .domain([1, max])
+            .range(['black', 'red']);
+    
+  	
+  	var visTraffic=d3.select("#"+dataLayer.layer);
+  	
+    var vis=visTraffic.selectAll("path").data(data, function(d, i){return d.cdk_id});
+
+		vis.enter().append("path")
+  			  .attr("id", function(d, i){return d.cdk_id})
+  			  .attr("d", path)
+  			  .style("fill-opacity", 1)
+  			  .style("stroke-width", function(d){return 0})
+  			  .style("stroke", function(d) { return color(d.visData)})
+  			.on("mouseover", function(d){ 
+  				var tipsy = $(this).tipsy({ 
+  						gravity: 'w', 
+  						html: true,
+  						trigger: 'hover', 
+  				        title: function() {
+  				          var string=d.name+"<br> value: "+d.visLabel+" km/u";
+  				          return string; 
+  				        }
+  					});
+  					$(this).trigger("mouseover");
+
+  			})
+  			.on("mouseout", function(d){ 
+  				
+  			});
+  			
+  	    vis.transition()
+            .duration(500)
+            .style("stroke-width", function(d){return d.visData})
+
+         vis.exit().transition()
+            .duration(250)
+            .style("stroke-width", function(d){return 0})
+            .remove();		  
+
+	}
+	
+	
+	
+	updateDivvMapTaxies = function(dataLayer){
+    
+	  var data=dataLayer.data;
+	  data.forEach(function(d){
+	     var g = d.layers["divv.taxi"];
+	    
+       d.visData=parseInt(Math.random()*parseInt(g.data.aantal));
+       
+       if(d.visData<0 || isNaN(d.visData) ){
+            d.visData=1;
+        }
+ 
+    });
+
+
+    var max =  d3.max(data, function(d) { return d.visData; });
+    
+    console.log("max ="+max);
+    var colorScale = d3.scale.linear().domain([0,max]).range(['white', 'blue']);
+    var quantizeBrewer = d3.scale.quantile().domain([0, max]).range(d3.range(9));
+    var scalingGeo = d3.scale.linear().domain([0, max]).range(d3.range(100));
+
+  	var visTaxies=d3.select("#"+dataLayer.layer);
+    var vis=visTaxies.selectAll("path").data(data, function(d, i){return d.cdk_id});
+
+  	
+		vis.enter().append("path")
+  			  .attr("id", function(d, i){return d.cdk_id})
+  			  .attr("d", function(d){
+                        path.pointRadius(d.visData);
+                        return path(d);
+                      })
+  			  .style("fill-opacity", 1)
+  			  .style("stroke-width", 0.1+"px")
+  			  .attr("class", function(d) { return "q" + quantizeBrewer([d.visData]) + "-9"; }) //colorBrewer
+  			.on("mouseover", function(d){ 
+  				var tipsy = $(this).tipsy({ 
+  						gravity: 'w', 
+  						html: true,
+  						trigger: 'hover', 
+  				        title: function() {
+  				          var string=d.name+"<br> value: "+d.visData;
+  				          return string; 
+  				        }
+  					});
+  					$(this).trigger("mouseover");
+
+  			})
+  			.on("mouseout", function(d){ 
+  				
+  			})
+  			.on("click", function(){updateDivvMapTaxies(dataLayer)});
+  			
+  			vis.attr("class", function(d) { return "q" + quantizeBrewer([d.visData]) + "-9"; }) //colorBrewer
+  	    vis.transition()
+            .duration(500)
+            .attr("d", function(d){
+                          path.pointRadius(d.visData);
+                          return path(d);
+                        })
+
+         vis.exit().transition()
+            .duration(250)
+            .attr("d", 0)
+            .remove();		
+  			
+
+	}
+	
 		
 	function arrangeZindex(){
 	  var vis;
@@ -532,8 +690,44 @@ WAAG.GeoMap = function GeoMap(container) {
   setActiveLayer = function(_activeLayer){
     //console.log("setting active layer "+_activeLayer);
     activeLayer=_activeLayer;
+    console.log("activeDataLayer ="+activeDataLayer.layer);
     updateDataSet(activeDataLayer);
   }
+  
+  function updateCirclePack(dataLayer){
+      
+    //console.log(d);
+    // var w=wMap;
+    // var h=hMap;
+    // var data=dataLayer.data;
+    // var dataPack={children:data};
+    // 
+    // var pack = d3.layout.pack()
+    //   .size([w, h])
+    //   .value(function(d) { return d.subData[activeLayer] })
+    // 
+    // 
+    // var node = circlePack.datum(dataPack).selectAll(".node")
+    //     .data(pack.nodes)
+    //     .enter().append("g")
+    //     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })  
+    //     .attr("id", "circle_pack");
+    //     node.append("circle")
+    //           .attr("r", function(d) { return d.r; })
+    //           .style("fill-opacity", 0.1);
+    //           
+    //     // node.append("title")
+    //     //      .text(function(d) { return d.name+"/n"+d.value});
+    // 
+    //     node.append("circle")
+    //         .attr("r", function(d) { return d.r; }) 
+    //         .style("fill-opacity", 0.5)
+    //         .style("fill", function(d) { return color(d.subData[activeLayer])})
+    //         //.attr("class", function(d) { return "q" + quantize([d.value]) + "-9"; })           
+
+
+	  
+	}
   
   
 
@@ -543,7 +737,8 @@ WAAG.GeoMap = function GeoMap(container) {
   this.updateDataSet=updateDataSet;
   this.setActiveLayer=setActiveLayer;
   this.updateGeoScaling=updateGeoScaling;
-  
+  this.updateDivvTrafficMap=updateDivvTrafficMap;
+  this.updateDivvMapTaxies=updateDivvMapTaxies;
   return this;   
 
 };

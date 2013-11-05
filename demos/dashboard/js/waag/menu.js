@@ -110,10 +110,10 @@ WAAG.Menu = function Menu(container) {
     updateListIcons = function(activeLayer){
       var id="#listview_cbs";
       var list = d3.select(id);
-      
+      console.log("active layer ="+activeLayer)
       //update list       
        list.selectAll("li")
-         .data(cbsLayers)
+         .data(cbsLayers.data)
          .attr("data-icon", function(d){ 
                 if(d.value==activeLayer){
                    d.checked=true;
@@ -124,6 +124,8 @@ WAAG.Menu = function Menu(container) {
                    return "star";
                  }  
              })
+            
+             
     }
 
   	d3.selectAll("#selector").on("change", function() {

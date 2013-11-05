@@ -23,6 +23,7 @@
 	  <script type="text/javascript" src="js/waag/map.js"></script>
 	  <script type="text/javascript" src="js/waag/repository.js"></script>
 		<script type="text/javascript" src="js/waag/menu.js"></script>
+		<script type="text/javascript" src="js/waag/graphsD3.js"></script>
 	  <script type="text/javascript" src="js/waag/processing.js"></script>
 		<script type="text/javascript" src="js/jquery/jquery.tipsy.js"></script>		
 		
@@ -67,11 +68,10 @@
 									<br><br>
 									<hr>
 								  <div data-role="collapsible"  data-mini="false" data-theme="a" data-content-theme="a">
-									  <h4>Nederland CBS statistieken</h4>
+									  <h4>CBS statistieken</h4>
 								    <ul data-role="listview" data-mini="true" id="listview_cbs"></ul>
 									</div>									
-										<hr>
-										<h4>Map Colors<h4>
+
 								</div>
 						</div>
 	        </div><!--/nav_name-->
@@ -85,7 +85,7 @@
  
         <div data-role="content">
 						
-            <div id="map_container"></div>
+            <div id="svg_container"></div>
 						<div id="legenda-header">Loading data sets .....</div>
 						<div id="menu_btn">
 								<a href="#menu-panel" style="margin-top:-10px;" data-role="button" data-icon="gear" data-iconpos="notext" data-theme="c" data-inline="true">Gear</a>
@@ -96,20 +96,24 @@
     </div><!-- /page -->
 	  <script type="text/javascript">
 
-			var geoMaps, repository, menu;
+			var geoMap, repository, menu, graphsD3;
 			$(document).bind("ready", function() {
 				console.log("kick off visualisations");
 				window.addEventListener('resize', onWindowResize, false);
 
+				graphsD3 = new WAAG.GraphsD3();
+				
 				repository = new WAAG.Repository();
 				
 				var menuContainer = document.getElementById('menu_container');
 				menu = new WAAG.Menu(menuContainer);
 				
-				var mapContainer = document.getElementById('map_container');
+				var mapContainer = document.getElementById('svg_container');
 				geoMap = new WAAG.GeoMap(mapContainer);
+
+
+				graphsD3 = new WAAG.GraphsD3();
 								
-				
 				window.addEventListener('resize', onWindowResize, false);
 
 			});

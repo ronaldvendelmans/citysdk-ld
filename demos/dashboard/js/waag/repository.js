@@ -60,27 +60,29 @@ var oensBcStdList;
      var dataLayer={
     			label:"main_geo_map",
     			layers:[
-    				{cdk_id:"admr.nl.nederland", subs:[], apiCall:"/regions?admr::admn_level=3&geom", geom:"regions", layer:"main_map", label:"Nederland"}, 
+    				{cdk_id:"admr.nl.nederland", subs:[], data:[], apiCall:"/regions?admr::admn_level=3&layer=cbs&geom", geom:"regions", layer:"main_map", label:"Nederland", localUrl:"data/cdk_cbs_nl.json"}, 
     			]
     		};
     //getApiData(dataLayer.layers[0]); 
-    getLocalData(dataLayer.layers[0]);   
+    getLocalData(dataLayer.layers[0]);
+    dataLayers.push(dataLayer);  
+    
 
-	
 	  // topomap
   	// d3.json("data/nl_topo_props.json", function(error, results) {
   	//     console.log(results);
   	//     map.setTopoMap(results)
   	//   });
   	
-    // getLianderData();
-    // var geo = "http://maps.google.com/maps/geo?q=1019";
-    //     console.log()
-  }
+     //getLianderData();
+
+  };
   
   function getLocalData(dataLayer){
   		//addloadDataQueue("data/cdk_cities_nl.json", 1, dataLayer);	
-  		addloadDataQueue("data/cdk_cbs_nl.json", 1, dataLayer);	
+  		addloadDataQueue(dataLayer.localUrl, 1, dataLayer);	
+
+  		
   }
 
 
@@ -118,8 +120,7 @@ var oensBcStdList;
   		});
 
   }
-
-
+  
   function loadDataQueue(){
   	while(load_queue.length)
   	{
@@ -185,37 +186,30 @@ var oensBcStdList;
 
   };
   
-  
-  
-  function getOensDataSets(dataLayer){
+  function getOensDataSets(dataLayer, layer){
     
     if(oensBcStdList.length>0){
         dataLayer.data.forEach(function(d){
           d.layers.oens={id:"none", std:"none", layers:{}};
-          
-           
+                     
           for(var i=0; i<oensBcStdList.length; i++){
             if(oensBcStdList[i].oens_name.toLowerCase()==d.name.toLowerCase()){
               d.layers.oens.id=oensBcStdList[i].oens_id;
             };
           } ; 
 
-        // var i=0;
-        //         while(i<oensBcStdList.length)
-        //        {
-        //          if(oensBcStdList[i].oens_name.toLowerCase()==d.name.toLowerCase()){
-        //             d.oens={id:oensBcStdList[i].oens_id, data:{} };
-        //             oensBcStdList.splice(i, 1);
-        //           }else{
-        //             i++;
-        //           }
-        // 
-        //        }
 
       });
     }
     //reset oenslist
-    oensBcStdList=[]
+    oensBcStdList=[];
+    getOensBevolking(dataLayer, layer);
+
+  };
+  
+  function getOensBevolking(dataLayer, layer){
+    var bevolking=false;
+    var prognose=false;
     
     d3.csv("data/oens/csv/2013_stadsdelen_01_bevolking_2009-2013.csv", function(d) {
         return d;       
@@ -227,33 +221,58 @@ var oensBcStdList;
             var bc=bcstd.slice(0,index);
             for(var j=0; j<dataLayer.data.length; j++){
               if(dataLayer.data[j].layers.oens.id==bc){
-                dataLayer.data[j].layers.oens.layers["bevolking_2009-2013"]=data[i];
+                dataLayer.data[j].layers.oens.layers["bevolking_2035"]=data[i];
               }
             };
-         }
-         geoMap.preProcesData(dataLayer);       
+         }         
+         getOensBevolkingPrognose(dataLayer, layer);
+      
     });
-
   };
+  
+  function getOensBevolkingPrognose(dataLayer, layer){
+    d3.csv("data/oens/csv/2013_stadsdelen_01_bevolking_prognose.csv", function(d) {
+        
+        return d;
+               
+       }, function(error,data) {
+
+         for(var i=0; i<data.length; i++){
+                     var bcstd= data[i]["bc/std"];
+                     var index = bcstd.search(" ");
+                     var bc=bcstd.slice(0,index);
+                     for(var j=0; j<dataLayer.data.length; j++){
+                       if(dataLayer.data[j].layers.oens.id==bc){
+                         //console.log(data[i]["2015"]);
+                         dataLayer.data[j].layers.oens.layers["bevolking_2035"]["2015"]=data[i]["2015"];
+                         dataLayer.data[j].layers.oens.layers["bevolking_2035"]["2020"]=data[i]["2020"];
+                         dataLayer.data[j].layers.oens.layers["bevolking_2035"]["2025"]=data[i]["2025"];
+                         dataLayer.data[j].layers.oens.layers["bevolking_2035"]["2030"]=data[i]["2030"];
+                         dataLayer.data[j].layers.oens.layers["bevolking_2035"]["2035"]=data[i]["2035"];
+                         
+                         //2015,2020,2025,2030,2035
+                       }
+                     };
+                  }
+        geoMap.preProcesData(dataLayer);          
+        graphsD3.setStreamGraph(dataLayer);
+        
+                
+    });
+    
+  }
     
   function getLianderData(){
-  //   d3.tsv("data/LianderKV01012013.csv", function(d) {
-  //       
-  //       //console.log(d["WOONPLAATS"]);
-  //       return d ;       
-  //      }, function(error, data) {
-  //        console.log("liander length :"+data.length);
-  //        //geoMap.preProcesData(dataLayer);
-  //        
-  //   });
-  //   
-  //   
-  // };
-  // 
-  // var lianderData={
-  //   name:"Liander",
-  //   children:[]
-  //   }; 
+    d3.tsv("data/LianderKV01012013.csv", function(d) {
+          //console.log(d["WOONPLAATS"]);
+          return d ;       
+         }, function(error, data) {
+           console.log("liander length :"+data.length);
+           //geoMap.preProcesData(dataLayer);
+           
+      });
+
+
   }
   
   getCbsData = function(cdk_id, label, level){
@@ -271,14 +290,63 @@ var oensBcStdList;
 
   };
   
+  getDivvData = function(cdk_id){
+
+    var dataLoaded=false;
+    
+    if(cdk_id=="admr.nl.amsterdam"){
+      for(var i=0; i<dataLayers.length; i++){
+            if(dataLayers[i].layer=="divv_trafficflow"){
+              geoMap.updateDivvTrafficMap=updateDivvTrafficMap(dataLayers[i]);
+              dataLoaded=true;
+            }else if(dataLayers[i].layer=="divv_taxis"){
+              geoMap.updateDivvMapTaxies=updateDivvMapTaxies(dataLayers[i]);
+              dataLoaded=true;
+            }       
+        };
+    }else{
+      for(var i=0; i<dataLayers.length; i++){
+            if(dataLayers[i].layer=="divv_trafficflow"){
+              var layer={data:[]};
+              geoMap.updateDivvTrafficMap=updateDivvTrafficMap(layer);
+            }else if(dataLayers[i].layer=="divv_taxis"){
+              var layer={data:[]};
+              geoMap.updateDivvTrafficMap=updateDivvTrafficMap(layer);
+            }       
+        };
+    };
+
+    if(dataLoaded || cdk_id!="admr.nl.amsterdam"){
+      
+      return;
+    }
+
+    var layer={cdk_id:"", subs:[], apiCall:"routes?layer=divv.traffic&geom", geom:"lines", layer:"divv_trafficflow", label:"Trafficflow", localUrl:"data/divv_traffic.json"};
+    getApiData(layer);
+    dataLayers.push(layer);
+    
+    layer={cdk_id:"", subs:[], apiCall:"nodes?layer=divv.taxi&geom", geom:"dots", layer:"divv_taxis", label:"Taxi queu", localUrl:"data/divv_taxies.json"};
+    getApiData(layer);
+    dataLayers.push(layer);
+    
+
+  };
+  
+  
+  
+  
+  
   setCbsNlMap = function(dataLayer){
     dataLayers.push(dataLayer);
     geoMap.updateDataSet(dataLayer);
   }
+  
+  
 
   this.setCbsNlMap=setCbsNlMap;
   this.initRepository=initRepository;
   this.getCbsData=getCbsData;
+  this.getDivvData=getDivvData;
 
   return this;
 
