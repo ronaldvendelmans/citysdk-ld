@@ -242,7 +242,7 @@ class Layer < Sequel::Model
 
   def self.getWebserviceUrl(id)
     layer = self.get_layer(id)
-    l[:webservice]    
+    layer[:webservice]    
   end
 
   def self.getData(id, node_id, data)
