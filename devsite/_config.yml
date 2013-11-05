@@ -1,0 +1,2 @@
+exclude: [config.json]
+gems: [jsonconfig, jsonball]

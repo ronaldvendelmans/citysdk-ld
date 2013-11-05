@@ -1,3 +1,8 @@
+---
+layout: default
+title: FAQ
+---
+
 # Data & other APIs
 
 ##### What is the CitySDK Linked Open Data Distribution API?

@@ -1,3 +1,8 @@
+---
+layout: default
+title: API - write
+---
+
 ##PUT/POST/DELETE Interface
               
 ####Authentication
@@ -111,7 +116,7 @@ By default, the node is kept when removing data. Afterwards, the `<cdk_id>` and 
       <td class='desc'>
         Write and/or update multiple nodes on layer <code>&lt;layer&gt;</code>.
       </td>
-    </td>
+    </tr>
   </table>
 </div>                                   
 

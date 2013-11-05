@@ -1,3 +1,9 @@
+---
+layout: default
+title: API - match
+---
+
+
 ## Match API
 
 The Match API enables you to link objects your own data with existing nodes in CitySDK Mobility. The API will match objects on name, location and key-value data and return the `cdk_id` of the CitySDK nodes it finds. You need a valid CitySDK user account to use the Match API.

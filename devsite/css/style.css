@@ -12,7 +12,7 @@ body {
 header {
   margin: 0;
   padding: 0;
-  background-image: url('img/header.png');
+  background-image: url('../img/header.png');
   background-repeat: repeat-x;
   height: 148px;
 }
@@ -32,7 +32,7 @@ header h1 {
 footer {
   margin: 0;
   padding: 30px 0;
-  background-image: url('img/footer.png');
+  background-image: url('../img/footer.png');
   background-repeat: repeat-x;
   height: 40px;
 }
@@ -268,7 +268,7 @@ article pre code {
 }
 
 .col_33 ul {
-  list-style-image: url(img/bullet.png); 
+  list-style-image: url(../img/bullet.png); 
 }
 
 .example li a:hover {color: #000000;}
@@ -331,7 +331,7 @@ table#about tr td:last-child img {
 table#about tr td.number {
   width: 35px;
   padding: 0;
-  background-image: url('img/line-eee.png');
+  background-image: url('../img/line-eee.png');
   background-repeat: repeat-y;
   background-position: center; 
 }

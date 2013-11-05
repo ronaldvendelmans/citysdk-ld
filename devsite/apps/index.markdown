@@ -1,5 +1,9 @@
-##Apps using CitySDK
+---
+layout: default
+title: Apps
+---
 
+##Apps using CitySDK
 
 - [Open Data Globe](http://dev.citysdk.waag.org/visualisation/) &ndash; the dynamics of European cities are made visible in the Open Data Globe, based on available data sets in CitySDK.
 
@@ -18,3 +22,8 @@ In development:
 - City Dashboard &ndash; the City Dashboard gives a live view on current state of your city. Combining several datasets, it offers in sight into crucial issues as economic status, travel times, use of public space and so on.
 
 
+https://github.com/2coolmonkeys/citymarker
+
+http://www.gotakeahike.nl/
+http://www.trazeapp.com/
+https://github.com/maggix/citysdk-client-ios

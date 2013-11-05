@@ -1,3 +1,8 @@
+---
+layout: default
+title: API - read
+---
+
 ## GET Interface
               
 #### Read access to nodes
@@ -104,7 +109,7 @@ in a single request, where this makes sense.
        <code>?&lt;layer&gt;::&lt;key&gt;[=&lt;val&gt;]</code>
       </td>
       <td class='desc'>
-        Returns nodes with specified key-value pairs on specified layers. When <code>=&lt;val&gt;</code> is ommitted, returns nodes with any value present for that key. For example: <code>?osm::tourism=museum</code> returns all nodes with museums on the osm layer, where <code>?osm::tourism</code> returns any osm node with the tag 'tourism'. You can specify multiple key-value pair filters in a single <code>GET</code> request. By default, only nodes are returned which satisfy <strong>all</strong> specified key-value pair filters (AND), but you can change this behaviour by setting URL parameter <code>?data_op=or</code>. Then, all nodes are returned which satisfy <strong>any</strong> of the specified filters. For example, <code>?osm::tourism=museum|zoo&osm::amenity=theatre&data_op=or</code> will return all OSM nodes that are either a museum, a zoo or a theatre.
+        Returns nodes with specified key-value pairs on specified layers. When <code>=&lt;val&gt;</code> is ommitted, returns nodes with any value present for that key. For example: <code>?osm::tourism=museum</code> returns all nodes with museums on the osm layer, where <code>?osm::tourism</code> returns any osm node with the tag 'tourism'. You can specify multiple key-value pair filters in a single <code>GET</code> request. By default, only nodes are returned which satisfy <strong>all</strong> specified key-value pair filters (AND), but you can change this behaviour by setting URL parameter <code>?data_op=or</code>. Then, all nodes are returned which satisfy <strong>any</strong> of the specified filters. For example, <code>?osm::tourism=museum|zoo&amp;osm::amenity=theatre&amp;data_op=or</code> will return all OSM nodes that are either a museum, a zoo or a theatre.
       </td>
     </tr>
 

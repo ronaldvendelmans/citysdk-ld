@@ -1,10 +1,15 @@
+---
+layout: default
+title: Map
+---
+
  <div id="maincontent" class="full-width-content">
    <div class="container">
      <div id="input">           
        <table>   
          <tr>
            <td class="minimize server">
-             <%= @config[:ep_api_url] %>/
+             <!-- <%= @config[:ep_api_url] %> -->
            </td>
            <td class="fill">
              <input id="url" type="text" />
@@ -32,17 +37,17 @@
         <div id="latlong_large" class="latlong hidden">
           Map center:
           <table>
-            <tr><td><img src="img/latlong/latlong.png" /></td><td class="cntrLatLon"></td></tr>
+            <tr><td><img src="/img/latlong/latlong.png" /></td><td class="cntrLatLon"></td></tr>
             <tr><td>WKT</td><td class="cntrWkt"></td></tr>
-            <tr><td><img src="img/latlong/postgres.png" /></td><td class="cntrPostGis"></td></tr>
-            <tr><td><img src="img/latlong/citysdk.png" /></td><td class="cntrCdk"></td></tr>                              
+            <tr><td><img src="/img/latlong/postgres.png" /></td><td class="cntrPostGis"></td></tr>
+            <tr><td><img src="/img/latlong/citysdk.png" /></td><td class="cntrCdk"></td></tr>                              
           </table>
           Bounding box:
           <table>
-            <tr><td><img src="img/latlong/latlong.png" /></td><td class="bbLatLon"></td></tr>
+            <tr><td><img src="/img/latlong/latlong.png" /></td><td class="bbLatLon"></td></tr>
             <tr><td>WKT</td><td class="bbWkt"></td></tr>
-            <tr><td><img src="img/latlong/postgres.png" /></td><td class="bbPostGis"></td></tr>
-            <tr><td><img src="img/latlong/citysdk.png" /></td><td class="bbCdk"></td></tr>
+            <tr><td><img src="/img/latlong/postgres.png" /></td><td class="bbPostGis"></td></tr>
+            <tr><td><img src="/img/latlong/citysdk.png" /></td><td class="bbCdk"></td></tr>
           </table>            
           <button id="hideLatLong" type="button" class="button_down"></button>
         </div>          
@@ -56,9 +61,9 @@
     
     // var tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     //var tileUrl = 'http://test-api.citysdk.waag.org:8888/v2/citysdk/{z}/{x}/{y}.png';
-    var server  = "<%= @config[:ep_api_url] %>".split('http://')[1] + '/';
-    var tileUrl = "<%= @config[:ep_tileserver_url] %>" + '/{z}/{x}/{y}.png';
-    var curr_location = "<%= @config[:ep_mapxyz] %>".split(',');
+    var server  = ""; //"<%= @config[:ep_api_url] %>".split('http://')[1] + '/';
+    var tileUrl = ""; //"<%= @config[:ep_tileserver_url] %>" + '/{z}/{x}/{y}.png';
+    var curr_location = ""; //"<%= @config[:ep_mapxyz] %>".split(',');
     var http = 'http://';
 
     var spinnerOpts = {

@@ -1,0 +1,19 @@
+{% include header.html %}
+<div id="maincontent" class="full-width-content">      
+  <div class="container">
+    <div class="info">
+      <article class="hero clearfix">        
+          <div class="col_66">
+            {{content}}
+          </div>
+          <div class="col_33">
+            {% capture info_content %}
+              {% include info.markdown %}
+            {% endcapture %}
+            {{ info_content | markdownify }}
+          </div>
+      </article>
+    </div>
+  </div>
+</div>
+{% include footer.html %}

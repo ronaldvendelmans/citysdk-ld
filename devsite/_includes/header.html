@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>{{ page.title }} | CitySDK Linked Open Data Distribution API</title>
+    <meta charset="utf-8">
+    <meta name="viewport"content="width=device-width,initial-scale=1">
+    <link href="/img/favicon.ico" rel="shortcut icon" type=image/x-icon>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/jquery-1.9.1.min.js"></script>
+    <script src="/js/highlight.min.js"></script>
+    <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->    
+
+    <link rel="stylesheet" href="/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="/css/map.css">
+    <script src="/js/spin.min.js"></script>
+    <script src="/leaflet/leaflet.js"></script>
+
+
+    {% jsonconfig config from config.json %}
+    {% jsonball foo from data { "a": "hondje" } %}
+    
+    <script src="/js/jquery-migrate-1.2.1.min.js"></script>
+  	<script type="text/javascript">
+      $(document).ready(function () {
+        hljs.initHighlightingOnLoad();
+        $("a.ep_cms_url").attr("href", "<%= config[:ep_cms_url] %>");
+  		});
+      // Dynamic endpoint URL, used on data page
+      var epApiUrl = "<%= config[:ep_api_url] %>";
+  	</script>
+  </head>
+  <body>	
+    <header>
+      <div class="container">
+        <h1>CitySDK Linked Open Data Distribution API - {{ config.db_host }} {{foo.a}}</h1>
+        <div class="logo">
+          <img src="/img/citysdk.png" />
+        </div>
+        <nav>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li>
+              <ul>
+                <li><a href="/about">About</a></li>
+                <li><a href="/faq">FAQ</a></li>
+              </ul>
+            </li>
+            <li><a href="/apps">Apps</a></li>
+            <li><a href="/data">Data</a></li>
+            <li><a href="/api">API</a></li>
+            <li>
+              <ul>                
+                <li><a href="/api/read">Read</a></li>
+                <li><a href="/api/write">Write</a></li>
+                <li><a href="/api/match">Match</a></li>
+              </ul>
+            </li>
+            <li><a href="/map">Map viewer</a></li>
+          </ul>
+        </nav>
+      </div>
+  	</header>

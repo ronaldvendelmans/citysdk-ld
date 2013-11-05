@@ -1,3 +1,8 @@
+---
+layout: default
+title: Data
+---
+
 ## Data available via CitySDK
 
 The following data is currently available via CitySDK. You can use the <a class="ep_cms_url">CMS</a> if you want more detailed information, or if you want to add or update data.
