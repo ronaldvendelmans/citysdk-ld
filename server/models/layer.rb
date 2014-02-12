@@ -251,7 +251,7 @@ class Layer < Sequel::Model
   
   def self.getDataTimeout(id)
     layer = self.get_layer(id)
-    layer["update_rate"] || 3000
+    layer[:update_rate] || 3000
   end
 
   ##########################################################################################
