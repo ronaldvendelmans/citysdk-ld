@@ -121,7 +121,7 @@ class CitySDK_API < Sinatra::Base
     throw(:halt, [code, {'Content-Type' => 'application/json'}, {:status => 'fail', :message  => message}.to_json])
   end  
 
-  def self.geRequestFormat(params, req)
+  def self.request_format(params, req)
     case req.env['HTTP_ACCEPT']
       # accept header takes precedence
     when 'application/json'

@@ -60,7 +60,7 @@ class CitySDK_API < Sinatra::Base
     # puts "REQ = #{JSON.pretty_generate(request.env)}"
     # @do_cache = (request.env['REQUEST_METHOD'] == 'GET')
     # @cache_time = 300
-    params[:request_format] = CitySDK_API.geRequestFormat(params, request)
+    params[:request_format] = CitySDK_API.request_format(params, request)
   end
   
   after do
