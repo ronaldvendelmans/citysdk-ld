@@ -56,14 +56,13 @@ class Node < Sequel::Model
       @@layers = []
     end
   end
-  
-  
+    
   def self.prefixes
     prfs = ["@base <#{::CitySDK_API::CDK_BASE_URI}#{::CitySDK_API::Config[:ep_code]}/> ."]
     prfs << "@prefix : <#{::CitySDK_API::CDK_BASE_URI}> ."
     @@prefixes.each do |p|
       
-      puts p
+      
       
       prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
     end
