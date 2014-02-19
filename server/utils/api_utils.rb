@@ -142,6 +142,7 @@ class CitySDK_API < Sinatra::Base
   end
 
   def self.nodes_results(dataset, params, req)
+    Serializer.serialize :geojson, :nodes, dataset.nodes(params), [], []
     res = 0
     Node.serializeStart(params, req)
     dataset.nodes(params).each { |h| Node.serialize(h,params); res += 1 }
