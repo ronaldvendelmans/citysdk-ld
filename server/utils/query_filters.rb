@@ -198,11 +198,11 @@ module Sequel
           columns = (Node.dataset.columns - [:geom]).map { |column| "nodes__#{column}".to_sym }
           return self.select{columns}.eager_graph(:node_data).where(where)
         else
-          columns = (Node.dataset.columns - [:geom]).map { |column| "nodes__#{column}".to_sym }          
-          return self.select{columns}.eager_graph(:node_data).where(where)
+          # TODO: result has two columns geom (but this is OK!)
+          return self.eager_graph(:node_data).where(where)
             .add_graph_aliases(:geom=>[
               :nodes, :geom, 
-              Sequel.function(:ST_AsGeoJSON, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom)).as(:geom)
+              Sequel.function(:ST_AsGeoJSON, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom))
             ])
         end
       else 
