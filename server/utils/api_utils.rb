@@ -173,3 +173,13 @@ class CitySDK_API < Sinatra::Base
 
 end
 
+##########################################################################################
+# Additional functions
+##########################################################################################
+
+class String
+  def round_coordinates(precision)
+    self.gsub(/(\d+)\.(\d{#{precision}})\d+/, '\1.\2')
+  end
+end
+
