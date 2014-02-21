@@ -48,6 +48,7 @@ module Serializer
       CitySDK_API.do_abort(401,"Serialization error - start not implemented")
     end
     
+    # end function returns string with serialization result 
     def self.end
       CitySDK_API.do_abort(401,"Serialization error - end not implemented")
     end

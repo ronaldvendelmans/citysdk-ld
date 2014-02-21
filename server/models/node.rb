@@ -61,9 +61,6 @@ class Node < Sequel::Model
     prfs = ["@base <#{::CitySDK_API::CDK_BASE_URI}#{::CitySDK_API::Config[:ep_code]}/> ."]
     prfs << "@prefix : <#{::CitySDK_API::CDK_BASE_URI}> ."
     @@prefixes.each do |p|
-      
-      
-      
       prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
     end
     prfs << ""
