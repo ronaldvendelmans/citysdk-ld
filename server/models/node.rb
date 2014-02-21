@@ -118,14 +118,8 @@ class Node < Sequel::Model
 
     h[:layer] = Layer.nameFromId(h[:layer_id])
     h[:name] = '' if h[:name].nil?
-    if params.has_key? "geom"
-      if h[:member_geometries] and h[:node_type] != 3
-        h[:geom] = RGeo::GeoJSON.encode(CitySDK_API.rgeo_factory.parse_wkb(h[:member_geometries])) if h[:member_geometries]
-      elsif h[:geom]
-        h[:geom] = RGeo::GeoJSON.encode(CitySDK_API.rgeo_factory.parse_wkb(h[:geom])) if h[:geom]
-      end
-    else
-      h.delete(:geom)
+    if h[:geom]
+      h[:geom] = JSON.parse(h[:geom].round_coordinates(6))
     end
     
     if h[:modalities]
@@ -134,8 +128,7 @@ class Node < Sequel::Model
       h.delete(:modalities)
     end
 
-    h.delete(:related) if h[:related].nil?
-    h.delete(:member_geometries)    
+    h.delete(:related) if h[:related].nil?    
     #h.delete(:modalities) if (h[:modalities] == [] or h[:modalities].nil?)
     h[:node_type] = @@node_types[h[:node_type]]
     h.delete(:layer_id)
@@ -144,9 +137,6 @@ class Node < Sequel::Model
     h.delete(:created_at)
     h.delete(:updated_at)
 
-    if h.has_key? :collect_member_geometries
-      h.delete(:collect_member_geometries)
-    end
     @@noderesults << h
     h
   end
@@ -176,14 +166,10 @@ class Node < Sequel::Model
       h[:modalities].each { |m| 
         triples << "\t :hasTransportmodality :transportModality_#{Modality.NameFromId(m)} ;"
       }
-    end
+    end    
     
-    if params.has_key? "geom"
-      if h[:member_geometries] and h[:node_type] != 3
-        triples << "\t geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(h[:member_geometries]) )  + "\" ;"
-      elsif h[:geom]
-        triples << "\t geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(h[:geom]) )  + "\" ;"
-      end
+    if h[:geom]
+      triples << "\t geos:hasGeometry \"" + h[:geom].round_coordinates(6) + "\" ;"
     end
 
     if h[:node_data]

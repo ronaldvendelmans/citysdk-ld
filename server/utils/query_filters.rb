@@ -102,13 +102,16 @@ module Sequel
     LAYER_AND_SEPARATOR = ","
     def node_layers(params)      
       
-      if params['layer'] == "*"
+      geom_function = :ST_AsGeoJSON
+            
+      if params['layer'] == "*"        
+
         # Return ALL data (on ALL layers) for node
-        if not params.has_key? "geom"
+        if not geom_function
           columns = (Node.dataset.columns - [:geom]).map { |column| "nodes__#{column}".to_sym }
           return self.select{columns}
-        else
-          return self.select_append(Sequel.function(:collect_member_geometries, :members).as(:member_geometries))
+        else          
+          return self.select_append(Sequel.function(:ST_AsGeoJSON, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom)).as(:geom))
         end        
       elsif params.has_key? 'layer' or params.has_key? "nodedata_layer_ids"
         # don't select nodes without any data on the specified layers
@@ -191,25 +194,27 @@ module Sequel
         end
 
         # Only retrieve geometry from database if requested
-        if not params.has_key? "geom"
+        if not geom_function
           columns = (Node.dataset.columns - [:geom]).map { |column| "nodes__#{column}".to_sym }
           return self.select{columns}.eager_graph(:node_data).where(where)
         else
-          return self.eager_graph(:node_data).where(where)
-            .add_graph_aliases(:member_geometries=>[
-              :nodes, :member_geometries, 
-              Sequel.function(:collect_member_geometries, :members) 
+          columns = (Node.dataset.columns - [:geom]).map { |column| "nodes__#{column}".to_sym }          
+          return self.select{columns}.eager_graph(:node_data).where(where)
+            .add_graph_aliases(:geom=>[
+              :nodes, :geom, 
+              Sequel.function(:ST_AsGeoJSON, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom)).as(:geom)
             ])
         end
       else 
         # if no layer specified, return NO layer info at all!!
         
         # Only retrieve geometry from database if requested
-        if not params.has_key? "geom"
+        if not geom_function
           columns = (Node.dataset.columns - [:geom]).map { |column| "nodes__#{column}".to_sym }
           return self.select{columns}
-        else
-          self.select_append(Sequel.function(:collect_member_geometries, :members).as(:member_geometries))
+        else          
+          columns = (Node.dataset.columns - [:geom]).map { |column| "nodes__#{column}".to_sym }
+          return self.select{columns}.select_append(Sequel.function(:ST_AsGeoJSON, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom)).as(:geom))
         end
       end
     end
