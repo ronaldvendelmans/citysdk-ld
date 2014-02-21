@@ -60,6 +60,10 @@ class CitySDK_API < Sinatra::Base
     # puts "REQ = #{JSON.pretty_generate(request.env)}"
     # @do_cache = (request.env['REQUEST_METHOD'] == 'GET')
     # @cache_time = 300
+
+    # TODO: use symbols as keys in params?
+    #params.inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}.inspect
+    
     params[:request_format] = CitySDK_API.request_format(params, request)
   end
   
