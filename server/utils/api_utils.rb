@@ -142,11 +142,12 @@ class CitySDK_API < Sinatra::Base
   end
 
   def self.nodes_results(dataset, params, req)
-    puts Serializer.serialize :geojson, :nodes, dataset.nodes(params), [], []
-    res = 0
-    Node.serializeStart(params, req)
-    dataset.nodes(params).each { |h| Node.serialize(h,params); res += 1 }
-    Node.serializeEnd(params, req, pagination_results(params, dataset.get_pagination_data(params), res))
+    #res = 0
+    #Node.serializeStart(params, req)
+    #dataset.nodes(params).each { |h| Node.serialize(h,params); res += 1 }
+    #Node.serializeEnd(params, req, pagination_results(params, dataset.get_pagination_data(params), res))
+    
+    Serializer.serialize :geojson, :nodes, dataset.nodes(params).each { |h| Node.make_hash(h, params) }, [], []    
   end
 
   def self.pagination_results(params, pagination_data, res_length)

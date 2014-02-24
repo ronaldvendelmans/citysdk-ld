@@ -25,7 +25,7 @@ configure do | sinatraApp |
     
   sinatraApp.database = "postgres://#{CitySDK_API::Config[:db_user]}:#{CitySDK_API::Config[:db_pass]}@#{CitySDK_API::Config[:db_host]}/#{CitySDK_API::Config[:db_name]}"
   
-  sinatraApp.database.logger = Logger.new(STDOUT)
+  #sinatraApp.database.logger = Logger.new(STDOUT)
   
   sinatraApp.database.extension :pg_array
   sinatraApp.database.extension :pg_range

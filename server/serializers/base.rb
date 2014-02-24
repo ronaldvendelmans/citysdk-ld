@@ -23,10 +23,10 @@ module Serializer
     
     def self.serialize(type, objects, layers, meta)
       # TODO: is this ok? and safe?
-      @@type = type
-      @@objects = objects
-      @@layers = layers
-      @@meta = meta
+      @type = type
+      @objects = objects
+      @layers = layers
+      @meta = meta
       
       self.start 
       case type

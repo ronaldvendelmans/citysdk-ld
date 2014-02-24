@@ -67,6 +67,7 @@ class CitySDK_API < Sinatra::Base
   end
 
   get '/layers/?' do
+    #TODO: make two params sets: one for URL parameters, one for internal parameters
     params['count'] = ''
     pgn = Layer.dataset
       .name_search(params)

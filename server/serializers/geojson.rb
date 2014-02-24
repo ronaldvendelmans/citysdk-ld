@@ -14,7 +14,26 @@ class GeoJSONSerializer < Serializer::Base
   end
   
   def self.nodes
-    puts @@objects.first.inspect
+    @objects.each do |node|
+      # layers = {}
+      # node[:layers].each do |name, layer|
+      #   layers[name] = {
+      #     data: layer
+      #   }
+      #   #puts layer.inspect
+      #   #layers[node_datum[:laye]] = node_datum[:data]
+      # end
+      @geojson[:features] << {
+        type: "Feature",
+        properties: {            
+          cdk_id: node[:cdk_id],
+          name: node[:name],
+          layer: node[:layer],
+          layers: node[:layers]
+        },
+        geometry: node[:geom]
+      }
+    end    
   end
 
   # def status

@@ -264,7 +264,7 @@ class NodeDatum < Sequel::Model
   end
 
  
-  def self.serialize(cdk_id, h, params)    
+  def self.make_hash(cdk_id, h, params)    
     newh = {}
     h.each do |nd|
 
