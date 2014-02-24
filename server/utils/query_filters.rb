@@ -111,7 +111,7 @@ module Sequel
           columns = (Node.dataset.columns - [:geom]).map { |column| "nodes__#{column}".to_sym }
           return self.select{columns}
         else          
-          return self.select_append(Sequel.function(:ST_AsGeoJSON, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom)).as(:geom))
+          return self.select_append(Sequel.function(geom_function, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom)).as(:geom))
         end        
       elsif params.has_key? 'layer' or params.has_key? "nodedata_layer_ids"
         # don't select nodes without any data on the specified layers
@@ -198,11 +198,12 @@ module Sequel
           columns = (Node.dataset.columns - [:geom]).map { |column| "nodes__#{column}".to_sym }
           return self.select{columns}.eager_graph(:node_data).where(where)
         else
-          # TODO: result has two columns geom (but this is OK!)
+          # TODO: result has two columns named geom, one WKB and one serialized 
+          # (but this seems to be OK!)
           return self.eager_graph(:node_data).where(where)
             .add_graph_aliases(:geom=>[
               :nodes, :geom, 
-              Sequel.function(:ST_AsGeoJSON, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom))
+              Sequel.function(geom_function, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom))
             ])
         end
       else 
@@ -214,7 +215,7 @@ module Sequel
           return self.select{columns}
         else          
           columns = (Node.dataset.columns - [:geom]).map { |column| "nodes__#{column}".to_sym }
-          return self.select{columns}.select_append(Sequel.function(:ST_AsGeoJSON, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom)).as(:geom))
+          return self.select{columns}.select_append(Sequel.function(geom_function, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom)).as(:geom))
         end
       end
     end
