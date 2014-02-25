@@ -85,6 +85,7 @@ class Layer < Sequel::Model
   end
   
   
+  # TODO: gebruik http://www.w3.org/TR/vocab-dcat/
   def turtelize(params)    
     @@prefixes << 'rdf:'
     @@prefixes << 'rdfs:'
@@ -176,8 +177,6 @@ class Layer < Sequel::Model
     
     if realtime 
       h[:update_rate] = update_rate
-    # else
-    #   h[:validity] = [validity.begin, validity.end] if validity
     end
     
     if !bbox.nil? and params.has_key? 'geom'
