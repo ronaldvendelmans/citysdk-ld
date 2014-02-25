@@ -4,14 +4,23 @@ module Sequel
 
 	  def serialize(type, params)
 	    case type
-      when :nodes
+      when :node, :nodes
         nodes = nodes(params).each { |h| Node.make_hash(h, params) }
-        meta = pagination_results(params, get_pagination_data(params), nodes.length)
 
-        # TODO: add to meta
-        #  "status": "success",
-        #  "url": "http://api.citysdk.waag.org/bag.vbo.363010000817561",
-        Serializer.serialize params[:request_format], type, nodes, [], meta
+        if type == :node and nodes.length == 0
+          CitySDK_API.do_abort(422,"Node not found: '#{params[:node]}'")
+        end
+
+        meta = {
+          status: "succes",
+          url: params[:url]
+        }
+        meta.merge! pagination_results(params, get_pagination_data(params), nodes.length)         
+        
+        Serializer.serialize params[:request_format], :nodes, nodes, [], meta
+      when :layer, :layers
+      when :message
+      when :status
       end
 	  end
 
