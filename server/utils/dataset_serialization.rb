@@ -2,11 +2,15 @@ module Sequel
   
   class Dataset
 
-	  def serialize(type, dataset, params)
+	  def serialize(type, params)
 	    case type
       when :nodes
-        nodes = dataset.nodes(params).each { |h| Node.make_hash(h, params) }
-        meta = pagination_results(params, dataset.get_pagination_data(params), nodes.length)
+        nodes = nodes(params).each { |h| Node.make_hash(h, params) }
+        meta = pagination_results(params, get_pagination_data(params), nodes.length)
+
+        # TODO: add to meta
+        #  "status": "success",
+        #  "url": "http://api.citysdk.waag.org/bag.vbo.363010000817561",
         Serializer.serialize params[:request_format], type, nodes, [], meta
       end
 	  end

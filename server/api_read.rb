@@ -216,7 +216,7 @@ class CitySDK_API < Sinatra::Base
             .do_paginate(params)
         end      
     
-      dataset.serialize(:nodes, dataset, params)
+      dataset.serialize(:nodes, params)
     rescue Exception => e
       CitySDK_API.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
     end
