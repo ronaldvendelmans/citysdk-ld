@@ -39,7 +39,7 @@ module Serializer
     end
     
     #########################################################################
-    # Serializer-specific functions - overridden in separete serializers
+    # Serializer-specific functions - overridden in separate serializers
     #########################################################################
     
     # Serialization start and end
