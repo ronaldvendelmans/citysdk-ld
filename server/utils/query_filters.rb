@@ -183,7 +183,6 @@ module Sequel
             # return dataset
 
             Sequel::Model.db << "SET enable_mergejoin TO false;"
-            # database << "SET enable_mergejoin TO false;"
             where = Sequel.expr(:node_data__layer_id => layer_ids)          
           end
         else
