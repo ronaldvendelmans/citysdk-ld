@@ -77,6 +77,14 @@ class CitySDK_API < Sinatra::Base
     pgn.each { |l| l.serialize(params,request); res += 1 }
     Node.serializeEnd(params, request, CitySDK_API::pagination_results(params, pgn.get_pagination_data(params), res))
   end
+  
+  get '/layer/:name/?' do |name|
+    layer_id = Layer.idFromText(name)
+    CitySDK_API.do_abort(422,"Unknown layer or invalid layer spec: #{name}") if layer_id.nil? or layer_id.is_a? Array
+    Node.serializeStart(params,request)
+    Layer[layer_id].serialize(params,request)
+    Node.serializeEnd(params, request)
+  end
 
   get '/nodes/?' do
     path_cdk_nodes
@@ -92,14 +100,6 @@ class CitySDK_API < Sinatra::Base
 
   get '/ptlines/?' do
     path_cdk_nodes(3)
-  end
-
-  get '/layer/:name/?' do |name|
-    layer_id = Layer.idFromText(name)
-    CitySDK_API.do_abort(422,"Unknown layer or invalid layer spec: #{name}") if layer_id.nil? or layer_id.is_a? Array
-    Node.serializeStart(params,request)
-    Layer[layer_id].serialize(params,request)
-    Node.serializeEnd(params, request)
   end
 
   get '/:within/nodes/?' do
