@@ -1,17 +1,17 @@
 
 module Serializer
   
-  def self.serialize(format, type, objects, layers, meta)
+  def self.serialize(format, type, data, layers, meta)
     # TODO: 'register/plug-in' pattern, also register mimetype/format
     case format
     when :turtle
-      TurtleSerializer.serialize type, objects, layers, meta
+      TurtleSerializer.serialize type, data, layers, meta
     when :json
-      JSONSerializer.serialize type, objects, layers, meta
+      JSONSerializer.serialize type, data, layers, meta
     when :geojson
-      GeoJSONSerializer.serialize type, objects, layers, meta
+      GeoJSONSerializer.serialize type, data, layers, meta
     when :jsonld
-      JSONldSerializer.serialize type, objects, layers, meta
+      JSONldSerializer.serialize type, data, layers, meta
     end
   end
   
@@ -21,19 +21,25 @@ module Serializer
     # Base seralization function
     #########################################################################
     
-    def self.serialize(type, objects, layers, meta)
+    def self.serialize(type, data, layers, meta)
       # TODO: is this ok? and safe?
       @type = type
-      @objects = objects
+      @data = data
       @layers = layers
       @meta = meta
       
       self.start 
+      
+      # TODO: add owners, layer semantics, node data, individual key/value
       case type
       when :nodes
         self.nodes
       when :layers
         self.layers
+      when :message
+        self.message
+      when :status
+        self.status
       end
       self.end
     end
