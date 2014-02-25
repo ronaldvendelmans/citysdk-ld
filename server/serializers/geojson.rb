@@ -4,7 +4,7 @@ class GeoJSONSerializer < Serializer::Base
   def self.start
     @geojson = {
       type: "FeatureCollection",
-      meta: {},
+      meta: @meta,
       features: []
     }
   end
@@ -15,14 +15,6 @@ class GeoJSONSerializer < Serializer::Base
   
   def self.nodes
     @objects.each do |node|
-      # layers = {}
-      # node[:layers].each do |name, layer|
-      #   layers[name] = {
-      #     data: layer
-      #   }
-      #   #puts layer.inspect
-      #   #layers[node_datum[:laye]] = node_datum[:data]
-      # end
       @geojson[:features] << {
         type: "Feature",
         properties: {            
@@ -37,10 +29,8 @@ class GeoJSONSerializer < Serializer::Base
   end
 
   # def status
-  # end
-  # 
-
-  # 
+  # end 
+  #
   # def nodedatum
   # end
   # 
@@ -49,6 +39,5 @@ class GeoJSONSerializer < Serializer::Base
   # 
   # def message
   # end
-  # 
 
 end
