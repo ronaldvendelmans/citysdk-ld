@@ -154,39 +154,6 @@ class CitySDK_API < Sinatra::Base
     end
   end
 
-  def self.nodes_results(dataset, params, req)
-    #res = 0
-    #Node.serializeStart(params, req)
-    #dataset.nodes(params).each { |h| Node.serialize(h,params); res += 1 }
-    #Node.serializeEnd(params, req, pagination_results(params, dataset.get_pagination_data(params), res))
-    
-    nodes = dataset.nodes(params).each { |h| Node.make_hash(h, params) }
-    meta = pagination_results(params, dataset.get_pagination_data(params), nodes.length)
-    Serializer.serialize :geojson, :nodes, nodes, [], meta  
-  end
-
-  def self.pagination_results(params, pagination_data, length)
-    if pagination_data
-      if length < pagination_data[:page_size] 
-        {
-          :pages => pagination_data[:current_page],
-          :per_page => pagination_data[:page_size],
-          :record_count => pagination_data[:page_size] * (pagination_data[:current_page] - 1) + length,
-          :next_page => -1, 
-        } 
-      else 
-        {
-          :pages => params.has_key?('count') ? pagination_data[:page_count] : 'not counted',
-          :per_page => pagination_data[:page_size],
-          :record_count => params.has_key?('count') ? pagination_data[:pagination_record_count] : 'not counted',
-          :next_page => pagination_data[:next_page] || -1, 
-        }
-      end
-    else # pagination_data == nil
-      {}
-    end
-  end 
-
 end
 
 ##########################################################################################
