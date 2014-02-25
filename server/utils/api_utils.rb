@@ -125,19 +125,32 @@ class CitySDK_API < Sinatra::Base
     case req.env['HTTP_ACCEPT']
       # accept header takes precedence
     when 'application/json'
-      return 'application/json'
+      return :cdkjson
     when 'text/turtle'
-      return 'text/turtle'
+      return :turtle
     else
-      case params[:format]
+      case params['format']
       when 'turtle', 'ttl'
-        return 'text/turtle'
+        return :turtle
       when 'json'
-        return 'application/json'
+        return :cdkjson
+      when 'geojson'
+        return :geojson
+      when 'jsonld'
+        return :jsonld
       else
         # json if nothing specified
-        return 'application/json'
+        return :cdkjson
       end
+    end
+  end
+  
+  def self.mime_type(format)
+    case format
+    when :cdkjson, :geojson, :jsonld
+      return 'application/json' 
+    when :turtle
+      return 'text/turtle'
     end
   end
 
@@ -147,23 +160,25 @@ class CitySDK_API < Sinatra::Base
     #dataset.nodes(params).each { |h| Node.serialize(h,params); res += 1 }
     #Node.serializeEnd(params, req, pagination_results(params, dataset.get_pagination_data(params), res))
     
-    Serializer.serialize :geojson, :nodes, dataset.nodes(params).each { |h| Node.make_hash(h, params) }, [], []    
+    nodes = dataset.nodes(params).each { |h| Node.make_hash(h, params) }
+    meta = pagination_results(params, dataset.get_pagination_data(params), nodes.length)
+    Serializer.serialize :geojson, :nodes, nodes, [], meta  
   end
 
-  def self.pagination_results(params, pagination_data, res_length)
+  def self.pagination_results(params, pagination_data, length)
     if pagination_data
-      if res_length < pagination_data[:page_size] 
+      if length < pagination_data[:page_size] 
         {
           :pages => pagination_data[:current_page],
           :per_page => pagination_data[:page_size],
-          :record_count => pagination_data[:page_size] * (pagination_data[:current_page] - 1) + res_length,
+          :record_count => pagination_data[:page_size] * (pagination_data[:current_page] - 1) + length,
           :next_page => -1, 
         } 
       else 
         {
-          :pages => params.has_key?('count') ? pagination_data[:page_count] : 'not counted.',
+          :pages => params.has_key?('count') ? pagination_data[:page_count] : 'not counted',
           :per_page => pagination_data[:page_size],
-          :record_count => params.has_key?('count') ? pagination_data[:pagination_record_count] : 'not counted.',
+          :record_count => params.has_key?('count') ? pagination_data[:pagination_record_count] : 'not counted',
           :next_page => pagination_data[:next_page] || -1, 
         }
       end

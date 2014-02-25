@@ -70,7 +70,7 @@ class CitySDK_API < Sinatra::Base
     # if @do_cache and (request.url =~ /http:\/\/.+?(\/.*$)/)
     #   @@memcache.set($1,response.body[0], @cache_time, :raw => true)
     # end
-    response.headers['Content-type'] = params[:request_format] + "; charset=utf-8"
+    response.headers['Content-type'] = CitySDK_API.mime_type(params[:request_format]) + "; charset=utf-8"
     response.headers['Access-Control-Allow-Origin'] = '*'
   end
 
