@@ -2,7 +2,7 @@
 module Serializer
   
   def self.serialize(format, type, objects, layers, meta)
-    # TODO: 'register/plug-in' pattern
+    # TODO: 'register/plug-in' pattern, also register mimetype/format
     case format
     when :turtle
       TurtleSerializer.serialize type, objects, layers, meta
@@ -55,10 +55,6 @@ module Serializer
     
     # Serialization functions per object type
     
-    def self.status
-      CitySDK_API.do_abort(401,"Serialization error - status not implemented")
-    end
-    
     def self.nodes
       CitySDK_API.do_abort(401,"Serialization error - nodes not implemented")
     end
@@ -69,6 +65,10 @@ module Serializer
     
     def self.message
       CitySDK_API.do_abort(401,"Serialization error - message not implemented")      
+    end
+
+    def self.status
+      CitySDK_API.do_abort(401,"Serialization error - status not implemented")
     end
     
   end
