@@ -1,39 +1,36 @@
 class CitySDK_API < Sinatra::Base
   
-  get '/' do
-    
+  get '/' do    
     kv8  = CitySDK_API::memcache_get('kv8daemon');
     divv = CitySDK_API::memcache_get('divvdaemon');
     @do_cache = false
     
-    case params[:request_format]
-    when 'text/turtle'
-      a = ["@base <#{CDK_BASE_URI}#{Config[:ep_code]}/> ."]
-      a << "@prefix : <#{CDK_BASE_URI}> ."
-      a << "@prefix foaf: <http://xmlns.com/foaf/0.1/> ."
-      a << "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> ."
-      a << ""
-      a << '_:ep'
-      a << ' a :CitysdkEndpoint ;'
-      a << " rdfs:description \"#{Config[:ep_description]}\" ;"
-      a << " :endpointCode \"#{Config[:ep_code]}\" ;"
-      a << " :apiUrl \"#{Config[:ep_api_url]}\" ;"
-      a << " :cmsUrl \"#{Config[:ep_cms_url]}\" ;"
-      a << " :infoUrl \"#{Config[:ep_info_url]}\" ;"
-      a << " foaf:mbox \"#{Config[:ep_maintainer_email]}\" ."
-      return a.join("\n")
-    when 'application/json'
-      return { :status => 'success', 
-        :url => request.url, 
-        "name" => "CitySDK Version 1.0",
-        "description" => "live testing; preliminary documentation @ http://dev.citysdk.waag.org",
-        "health" => {
-          "kv8" => kv8 ? "alive, #{kv8}" : "dead",
-          "divv" => divv ? "alive, last timestamp: #{divv}" : "dead",
-        }
-      }.to_json 
-    end
-
+    # TODO: refactor daemon system, let daemons register themselves
+    # TODO: get version from somewhere else!  
+    # TODO: get geometry from somewhere else!  
+    status = {
+      name: "citysdk-ld",
+      description: "CitySDK Linked Data API - documentation @ http://citysdk.waag.org",
+      version: "0.9",
+      config: Config,
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [
+            [3.284912,50.715591],
+            [3.284912,53.742213],
+            [7.327880,53.742213],
+            [7.327880,50.715591],
+            [3.284912,50.715591]
+          ]
+        ]
+      },
+      daemons: {
+        "kv8" => kv8 ? "alive, #{kv8}" : "dead",
+        "divv" => divv ? "alive, last timestamp: #{divv}" : "dead",
+      }
+    }    
+    Serializer.serialize params[:request_format], :status, status, [], {}
   end
 
   get '/get_session' do
@@ -183,11 +180,7 @@ class CitySDK_API < Sinatra::Base
     dataset = Node.where(:cdk_id=>params[:node])
       .node_layers(params)
     
-    # if 0 == dataset.length
-    #   CitySDK_API.do_abort(422,"Node not found: '#{params[:node]}'")
-    # end
-    puts dataset.inspect
-    dataset.serialize :node, dataset, params    
+    dataset.serialize :node, params    
   end
   
   # keep it dry
