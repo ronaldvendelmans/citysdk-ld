@@ -179,21 +179,64 @@ class CitySDK_API < Sinatra::Base
     
   end
 
-# http://0.0.0.0:3000/admr.nl.zwolle?p=cbs/aant_inw
   get '/:node/?' do
-    results = Node.where(:cdk_id=>params[:node])
+    dataset = Node.where(:cdk_id=>params[:node])
       .node_layers(params)
-      .nodes(params)
-    if 0 == results.length
-      CitySDK_API.do_abort(422,"Node not found: '#{params[:node]}'")
+    
+    # if 0 == dataset.length
+    #   CitySDK_API.do_abort(422,"Node not found: '#{params[:node]}'")
+    # end
+    puts dataset.inspect
+    dataset.serialize :node, dataset, params    
+  end
+  
+  # keep it dry
+  def path_cdk_nodes(node_type=nil)
+    begin
+      dataset = 
+        if node_type
+          params["node_type"] = node_type
+          Node.dataset
+            .where(:node_type=>node_type)
+            .geo_bounds(params)
+            .name_search(params)
+            .modality_search(params)
+            .route_members(params)
+            .nodedata(params)
+            .node_layers(params)
+            .do_paginate(params)
+        else
+          Node.dataset
+            .geo_bounds(params)
+            .name_search(params)
+            .modality_search(params)
+            .route_members(params)
+            .nodedata(params)
+            .node_layers(params)
+            .do_paginate(params)
+        end      
+    
+      dataset.serialize(:nodes, dataset, params)
+    rescue Exception => e
+      CitySDK_API.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
     end
-    Node.serializeStart(params, request)
-    if params[:p]
-      Node.processPredicate(results.first,params)      
-    else
-      results.map { |item| Node.serialize(item,params) }
+
+  end
+  
+  def path_regions
+    begin 
+      # TODO: hard-coded layer_id of admr = 2! 
+      pgn = Node.dataset.where(:nodes__layer_id=>2)
+        .geo_bounds(params)
+        .name_search(params)
+        .nodedata(params)
+        .node_layers(params)
+        .do_paginate(params)
+
+      CitySDK_API.nodes_results(pgn, params, request)
+    rescue Exception => e
+      CitySDK_API.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
     end
-    Node.serializeEnd(params, request)
   end
 
 end

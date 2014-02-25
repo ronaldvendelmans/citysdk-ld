@@ -64,6 +64,7 @@ class CitySDK_API < Sinatra::Base
     #params.inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}.inspect
     
     params[:request_format] = CitySDK_API.request_format(params, request)
+    params[:request_format] = :geojson
   end
   
   after do
@@ -72,55 +73,6 @@ class CitySDK_API < Sinatra::Base
     # end
     response.headers['Content-type'] = CitySDK_API.mime_type(params[:request_format]) + "; charset=utf-8"
     response.headers['Access-Control-Allow-Origin'] = '*'
-  end
-
-  # keep it dry
-  def path_cdk_nodes(node_type=nil)
-    begin
-      pgn = 
-        if node_type
-          params["node_type"] = node_type
-          Node.dataset
-            .where(:node_type=>node_type)
-            .geo_bounds(params)
-            .name_search(params)
-            .modality_search(params)
-            .route_members(params)
-            .nodedata(params)
-            .node_layers(params)
-            .do_paginate(params)
-        else
-          Node.dataset
-            .geo_bounds(params)
-            .name_search(params)
-            .modality_search(params)
-            .route_members(params)
-            .nodedata(params)
-            .node_layers(params)
-            .do_paginate(params)
-        end      
-      
-      CitySDK_API.nodes_results(pgn, params, request)
-    rescue Exception => e
-      CitySDK_API.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
-    end
-
-  end
-  
-  def path_regions
-    begin 
-      # TODO: hard-coded layer_id of admr = 2! 
-      pgn = Node.dataset.where(:nodes__layer_id=>2)
-        .geo_bounds(params)
-        .name_search(params)
-        .nodedata(params)
-        .node_layers(params)
-        .do_paginate(params)
-
-      CitySDK_API.nodes_results(pgn, params, request)
-    rescue Exception => e
-      CitySDK_API.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
-    end
   end
 
   ##########################################################################################
