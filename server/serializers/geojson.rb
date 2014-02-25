@@ -14,7 +14,7 @@ class GeoJSONSerializer < Serializer::Base
   end
   
   def self.nodes
-    @objects.each do |node|
+    @data.each do |node|
       feature = {
         type: "Feature",
         properties: {            
@@ -26,19 +26,27 @@ class GeoJSONSerializer < Serializer::Base
       }
       feature[:properties][:layers] = node[:layers] if node.has_key? :layers and node[:layers] 
       @geojson[:features] << feature
-    end    
+    end
   end
 
-  # def status
-  # end 
-  #
-  # def nodedatum
-  # end
-  # 
-  # def layer
-  # end
+  def self.layers
+    @data.each do |layer|
+      feature = {
+        type: "Feature",
+        properties: {        
+          name: layer[:name],
+        },
+        geometry: layer[:geom]
+      }
+      @geojson[:features] << feature
+    end
+  end
   # 
   # def message
   # end
+  
+  def self.status
+    @geojson[:features] << @data
+  end  
 
 end
