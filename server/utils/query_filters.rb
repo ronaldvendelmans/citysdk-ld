@@ -102,6 +102,7 @@ module Sequel
     LAYER_AND_SEPARATOR = ","
     def node_layers(params)      
       
+      # TODO: let serializer set geom_function
       geom_function = (params[:request_format] == :turtle) ? :ST_AsText : :ST_AsGeoJSON
             
       if params['layer'] == "*"        
@@ -110,7 +111,7 @@ module Sequel
         if not geom_function
           columns = (Node.dataset.columns - [:geom]).map { |column| "nodes__#{column}".to_sym }
           return self.select{columns}
-        else          
+        else 
           return self.select_append(Sequel.function(geom_function, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom)).as(:geom))
         end        
       elsif params.has_key? 'layer' or params.has_key? "nodedata_layer_ids"

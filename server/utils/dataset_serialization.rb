@@ -11,7 +11,7 @@ module Sequel
 	    case type
       when :node, :nodes
         nodes = nodes(params).each { |h| Node.make_hash(h, params) }
-
+              
         if type == :node and nodes.length == 0
           CitySDK_API.do_abort(422,"Node not found: '#{params[:node]}'")
         end
