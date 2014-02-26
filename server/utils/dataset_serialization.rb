@@ -3,6 +3,7 @@ module Sequel
   class Dataset
 
 	  def serialize(type, params)
+      # TODO: move to api.rb, add meta as parameter
       meta = {
         status: "succes",
         url: params[:url]
@@ -30,8 +31,6 @@ module Sequel
         meta.merge! pagination_results(params, get_pagination_data(params), layers.length)         
          
         Serializer.serialize params[:request_format], :layers, layers, [], meta        
-      when :message
-      when :status
       end
 	  end
 

@@ -111,7 +111,7 @@ module Sequel
           columns = (Node.dataset.columns - [:geom]).map { |column| "nodes__#{column}".to_sym }
           return self.select{columns}
         else          
-          return self.select{columns}.select_append(Sequel.function(geom_function, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom)).as(:geom))
+          return self.select_append(Sequel.function(geom_function, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom)).as(:geom))
         end        
       elsif params.has_key? 'layer' or params.has_key? "nodedata_layer_ids"
         # don't select nodes without any data on the specified layers

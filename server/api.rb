@@ -65,7 +65,6 @@ class CitySDK_API < Sinatra::Base
     #params.inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}.inspect
     params[:url] = request.url
     params[:request_format] = CitySDK_API.request_format(params, request)
-    params[:request_format] = :geojson
   end
   
   after do

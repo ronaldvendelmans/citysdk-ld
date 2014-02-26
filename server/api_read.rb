@@ -29,8 +29,14 @@ class CitySDK_API < Sinatra::Base
         "kv8" => kv8 ? "alive, #{kv8}" : "dead",
         "divv" => divv ? "alive, last timestamp: #{divv}" : "dead",
       }
-    }    
-    Serializer.serialize params[:request_format], :status, status, [], {}
+    }
+    
+    meta = {
+      status: "succes",
+      url: params[:url]
+    }
+    
+    Serializer.serialize params[:request_format], :status, status, [], meta
   end
 
   get '/get_session' do

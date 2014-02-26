@@ -2,7 +2,7 @@
 class GeoJSONSerializer < Serializer::Base
     
   def self.start
-    @geojson = {
+    @result = {
       type: "FeatureCollection",
       meta: @meta,
       features: []
@@ -10,7 +10,7 @@ class GeoJSONSerializer < Serializer::Base
   end
   
   def self.end
-    @geojson.to_json
+    @result.to_json
   end
   
   def self.nodes
@@ -20,18 +20,19 @@ class GeoJSONSerializer < Serializer::Base
         properties: {            
           cdk_id: node[:cdk_id],
           name: node[:name],
+          node_type: nil,
           layer: node[:layer]          
         },
         geometry: node[:geom] ? JSON.parse(node[:geom].round_coordinates(Serializer::PRECISION)) : {}
       }
       feature[:properties][:layers] = node[:layers] if node.has_key? :layers and node[:layers] 
-      @geojson[:features] << feature
+      @result[:features] << feature
     end
   end
 
   def self.layers    
     @data.each do |layer|
-      feature = {
+      @result[:features] << {
         type: "Feature",
         properties: {        
           name: layer[:name],
@@ -43,7 +44,6 @@ class GeoJSONSerializer < Serializer::Base
         },
         geometry: layer[:bbox] ? JSON.parse(layer[:bbox].round_coordinates(Serializer::PRECISION)) : {}
       }
-      @geojson[:features] << feature
     end
   end
   # 
@@ -51,7 +51,11 @@ class GeoJSONSerializer < Serializer::Base
   # end
   
   def self.status
-    @geojson[:features] << @data
+    @result[:features] << {
+      type: "Feature",
+      properties: @data,
+      geometry: @data[:geometry]
+    }
   end  
 
 end
