@@ -13,7 +13,7 @@ class CitySDK_API < Sinatra::Base
       id
     end
 
-    def self.getRealTime(key,stop_id,deptime)
+    def self.get_realtime(key,stop_id,deptime)
       rt = CitySDK_API.memcache_get("#{stop_id}!!#{key}!!#{deptime}")
       if rt
         return "#{rt} (#{deptime})"
@@ -21,7 +21,7 @@ class CitySDK_API < Sinatra::Base
       return deptime
     end
 
-    def self.nowForStop(stop, tz)
+    def self.now_for_stop(stop, tz)
       g = stop.getLayer('gtfs')
       if(g)
         h = {}
@@ -41,7 +41,7 @@ class CitySDK_API < Sinatra::Base
               :route_type =>  t[:route_type]
             }
           end
-          h[key][:times] << self.getRealTime(mckey,g[:data]['stop_id'],t[:departure])
+          h[key][:times] << self.get_realtime(mckey,g[:data]['stop_id'],t[:departure])
           h[key][:times].uniq!
 
           line = Node.where(:cdk_id=>key).first
@@ -81,7 +81,7 @@ class CitySDK_API < Sinatra::Base
       
     end
 
-    def self.scheduleForStop(stop)
+    def self.schedule_for_stop(stop)
 
       g = stop.getLayer('gtfs')
       if(g)
@@ -118,10 +118,9 @@ class CitySDK_API < Sinatra::Base
           :results => r
         }.to_json
       end
-    end
+    end    
     
-    
-    def self.scheduleForLine(line, day)
+    def self.schedule_for_line(line, day)
       g = line.getLayer('gtfs')
       if(g)
         h = {}
@@ -138,7 +137,7 @@ class CitySDK_API < Sinatra::Base
           key = "gtfs.stop.#{t[:stop_id].downcase.gsub(/\W/,'.')}"
           stops << key if !stops.include?(key)
           trips[t[:trip_id]] = [] if trips[t[:trip_id]].nil?
-          trips[t[:trip_id]] << [ key, self.getRealTime(mckey,t[:stop_id],t[:departure_time]) ]
+          trips[t[:trip_id]] << [ key, self.get_realtime(mckey,t[:stop_id],t[:departure_time]) ]
         end
         
         t = []
@@ -161,14 +160,13 @@ class CitySDK_API < Sinatra::Base
           :results => r
         }.to_json
       end
-    end
+    end    
     
-    
-    def self.processStop?(n,params)
+    def self.process_stop?(n,params)
       ['ptlines','schedule','now'].include?(params[:cmd])
     end
 
-    def self.processStop(stop,params,req)
+    def self.process_stop(stop,params)
       if params.has_key? 'cdk_id'
         if(stop)
           case params[:cmd]
@@ -176,7 +174,6 @@ class CitySDK_API < Sinatra::Base
             lines = Node.where("members @> '{ #{stop.id} }' ").eager_graph(:node_data).where(:node_id => :nodes__id)
             lines = lines.all.map { |a| a.values.merge(:node_data=>a.node_data.map{|al| al.values}) }
             
-            # TODO: gebruik  CitySDK_API.json_simple_results(res, req)
             return { 
               :status => 'success', 
               :pages => 1, 
@@ -185,10 +182,10 @@ class CitySDK_API < Sinatra::Base
               :results => lines.each {|l| Node.serialize(l,params)} 
             }.to_json
           when 'schedule'
-            return scheduleForStop(stop)
+            return schedule_for_stop(stop)
           when 'now'
             tzdiff = params['tz'] ? -60 * (Time.now.utc_offset/3600 + params['tz'].to_i) : 0
-            return nowForStop(stop,"#{tzdiff} minutes")
+            return now_for_stop(stop,"#{tzdiff} minutes")
           else
             CitySDK_API.do_abort(422,"Command #{params[:cmd]} not defined for ptstop.")
           end
@@ -198,15 +195,13 @@ class CitySDK_API < Sinatra::Base
       else
         CitySDK_API.do_abort(500,'Server error. ')
       end
-    end
-    
+    end    
 
-    def self.processLine?(n,params)
+    def self.process_line?(n,params)
       ['ptstops','schedule'].include?(params[:cmd])
-    end
-    
+    end    
 
-    def self.processLine(line,params,req)
+    def self.process_line(line,params)
       if params.has_key? 'cdk_id'
         if(line)
           case params[:cmd]
@@ -228,7 +223,7 @@ class CitySDK_API < Sinatra::Base
               :results => stops.each {|l| Node.serialize(l,params)}
             }.to_json
           when 'schedule'
-            return scheduleForLine(line,params[:day]||0)
+            return schedule_for_line(line,params[:day]||0)
           else
             CitySDK_API.do_abort(422,"Command #{params[:cmd]} not defined for ptline.")
           end
