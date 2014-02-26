@@ -3,7 +3,7 @@ class Node < Sequel::Model
   
   NODE_TYPES = ['node', 'route', 'ptstop', 'ptline'] 
 
-  def getLayer(n)
+  def get_layer(n)
     if n.is_a?(String)
       self.node_data.each do |nd|
         return nd if nd.layer.name == n
@@ -22,14 +22,14 @@ class Node < Sequel::Model
 
     h.delete(:members)
 
-    h[:layer] = Layer.nameFromId(h[:layer_id])
+    h[:layer] = Layer.name_from_id(h[:layer_id])
     h[:name] = '' if h[:name].nil?
     if h[:geom]
       h[:geom] = h[:geom]
     end
     
     if h[:modalities]
-      h[:modalities] = h[:modalities].map { |m| Modality.NameFromId(m) }
+      h[:modalities] = h[:modalities].map { |m| Modality.name_from_id(m) }
     else
       h.delete(:modalities)
     end

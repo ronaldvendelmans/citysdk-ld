@@ -45,7 +45,7 @@ class CitySDK_API < Sinatra::Base
         # TODO: hard-coded layer_id of admr = 2! 
         layers = [0,1,2]
         if params.has_key? 'layer'
-          layers = Layer.idFromText(params['layer'].split(','))          
+          layers = Layer.id_from_text(params['layer'].split(','))          
         end
        
         # TODO: also filter on node_data, name etc!

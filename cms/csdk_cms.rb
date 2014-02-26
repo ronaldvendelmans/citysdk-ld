@@ -64,7 +64,8 @@ class CSDK_CMS < Sinatra::Base
   after do
   end
   
-  def getLayers
+  # TODO: no camel casing! not here and not nowhere!!!!
+  def get_layers
     @layerSelect = Layer.selectTag()
     @selected = params[:category] || 'administrative'
     if @selected != 'all'
@@ -79,12 +80,12 @@ class CSDK_CMS < Sinatra::Base
   end
 
   get '/' do
-    getLayers
+    get_layers
     erb :layers, :layout => @nolayout ? false : true
   end
   
   get '/layers' do
-    getLayers
+    get_layers
     erb :layers, :layout => @nolayout ? false : true
   end
 
@@ -145,7 +146,7 @@ class CSDK_CMS < Sinatra::Base
   
   
   get '/owners' do 
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       if( @oid == 0)
         @owners = Owner.all
         erb :owners
@@ -160,7 +161,7 @@ class CSDK_CMS < Sinatra::Base
   end
 
   post '/profile/create' do 
-    if Owner.validSession(session[:auth_key]) and (@oid == 0)
+    if Owner.valid_session(session[:auth_key]) and (@oid == 0)
       @owner = Owner.new
       @owner.email = params['email']
       @owner.name = params['email'].split('@')[0]
@@ -181,7 +182,7 @@ class CSDK_CMS < Sinatra::Base
   end
 
   get '/profile/new' do 
-    if Owner.validSession(session[:auth_key]) and (@oid == 0)
+    if Owner.valid_session(session[:auth_key]) and (@oid == 0)
       @owner = Owner.new
     else
       CSDK_CMS.do_abort(401,"not authorized")
@@ -190,7 +191,7 @@ class CSDK_CMS < Sinatra::Base
   end
 
   get '/profile/:o_id' do |o|
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       if( @oid == 0 or (o.to_i == @oid))
         @owner = Owner[o]
         erb :edit_profile
@@ -203,7 +204,7 @@ class CSDK_CMS < Sinatra::Base
   end
   
   post '/profile/:o_id' do |o|
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       if( @oid == 0 or (o.to_i == @oid))
         @owner = Owner[o]
         @owner.email = params['email']
@@ -225,7 +226,7 @@ class CSDK_CMS < Sinatra::Base
   
   
   get '/layer/:layer_id/data' do |l|
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
         @period = @layer.period_select()
@@ -253,7 +254,7 @@ class CSDK_CMS < Sinatra::Base
   end
   
   post '/layer/:layer_id/ldprops' do |l|
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
         request.body.rewind 
@@ -281,7 +282,7 @@ class CSDK_CMS < Sinatra::Base
   end
   
   post '/layer/:layer_id/webservice' do |l|
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
         @layer.webservice = params['wsurl']
@@ -298,7 +299,7 @@ class CSDK_CMS < Sinatra::Base
   end
   
   post '/layer/:layer_id/periodic' do |l|
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
         @layer.import_url = params['update_url']
@@ -316,7 +317,7 @@ class CSDK_CMS < Sinatra::Base
 
 
   get '/layer/:layer_id/edit' do |l|
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
         @layer.data_sources = [] if @layer.data_sources.nil?
@@ -333,7 +334,7 @@ class CSDK_CMS < Sinatra::Base
   
   
   get '/prefixes' do
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       if params[:prefix] and params[:name] and params[:uri]
         if params[:prefix][-1] != ':'
           params[:prefix] = params[:prefix] + ':'
@@ -355,7 +356,7 @@ class CSDK_CMS < Sinatra::Base
   end
   
   delete '/prefix/:pr' do |p|
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       LDPrefix.where({:owner_id=>@oid, :prefix=>p}).delete
     end
     @prefixes = LDPrefix.order(:name).all
@@ -364,7 +365,7 @@ class CSDK_CMS < Sinatra::Base
   
   delete '/layer/:layer_id' do |l|
 
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
         url = "/layer/#{@layer.name}"
@@ -386,14 +387,14 @@ class CSDK_CMS < Sinatra::Base
         end
       end
     end
-    getLayers
+    get_layers
     redirect "/"
     # params[:nolayout] = true
     # redirect "/layer/#{@layer.id}/data?nolayout"
   end
 
   get '/layer/new' do
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       @owner = Owner[@oid]
       if @oid != 0 
         domains = @owner.domains.split(',')
@@ -420,7 +421,7 @@ class CSDK_CMS < Sinatra::Base
   end
   
   post '/layer/create' do
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       
       puts JSON.pretty_generate(params)
       
@@ -466,14 +467,14 @@ class CSDK_CMS < Sinatra::Base
         #   end
         # end
         @layer.save
-        getLayers
+        get_layers
         erb :layers
       end
     end
   end
   
   post '/layer/edit/:layer_id' do |l|
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
         @layer.description = params['description']
@@ -524,7 +525,7 @@ class CSDK_CMS < Sinatra::Base
   
   post '/layer/:layer_id/loadcsv' do |l|
     
-    if Owner.validSession(session[:auth_key])
+    if Owner.valid_session(session[:auth_key])
       @layer = Layer[l]
       if(@layer && (@oid == @layer.owner_id) or @oid==0)
         p = params['0'] || params['csv']

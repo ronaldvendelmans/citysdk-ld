@@ -49,7 +49,7 @@ class Layer < Sequel::Model
   
   def self.ensure_layer_cache
     if not CitySDK_API.memcache_get(KEY_LAYERS_AVAILABLE)
-      self.getLayerHashes
+      self.get_layer_hashes
     end
   end
   
@@ -164,13 +164,13 @@ class Layer < Sequel::Model
     l    
   end
 
-  def self.idFromText(p)
+  def self.id_from_text(p)
     # Accepts full layer names and layer names
     # with wildcards after dot layer separators:
     #    cbs.*
     case p
     when Array
-      return p.map do |name| self.idFromText(name) end.flatten.uniq
+      return p.map do |name| self.id_from_text(name) end.flatten.uniq
     when String 
       layer_names = self.get_layer_names
       if layer_names
@@ -192,7 +192,7 @@ class Layer < Sequel::Model
     end
   end
  
-  def self.nameFromId(id)
+  def self.name_from_id(id)
     layer = self.get_layer(id)
     layer[:name]
   end
@@ -201,12 +201,12 @@ class Layer < Sequel::Model
   # Real-time/web service layers:
   ##########################################################################################
 
-  def self.isRealtime?(id)
+  def self.is_realtime?(id)
     layer = self.get_layer(id)
     layer[:realtime]
   end
   
-  def self.isWebservice?(id)
+  def self.is_webservice?(id)
     layer = self.get_layer(id)
     
     webservice = layer[:webservice]    
@@ -217,16 +217,16 @@ class Layer < Sequel::Model
     return (webservice and webservice.length > 0)
   end
 
-  def self.getWebserviceUrl(id)
+  def self.get_webservice_url(id)
     layer = self.get_layer(id)
     layer[:webservice]    
   end
 
-  def self.getData(id, node_id, data)
+  def self.get_data(id, node_id, data)
     WebService.load(id, node_id, data)
   end
   
-  def self.getDataTimeout(id)
+  def self.get_data_timeout(id)
     layer = self.get_layer(id)
     layer[:update_rate] || 3000
   end
@@ -235,7 +235,7 @@ class Layer < Sequel::Model
   # Initialize layers hash:
   ##########################################################################################
   
-  def self.getLayerHashes
+  def self.get_layer_hashes
     names = {}
     Layer.all.each do |l| 
       layer = l.values
@@ -261,4 +261,4 @@ class Layer < Sequel::Model
   
 end
 
-Layer.getLayerHashes
+Layer.get_layer_hashes

@@ -36,7 +36,7 @@ class Owner < Sequel::Model
     self.save
   end
   
-  def self.validSession(s)
+  def self.valid_session(s)
     if(s)
       o = Owner.where(:auth_key => s).first
       return true if o
@@ -44,7 +44,7 @@ class Owner < Sequel::Model
     nil
   end
 
-  def self.validSessionForLayer(s,l)
+  def self.valid_session_for_layer(s,l)
     o = Owner.where(:session => s).first
     if(o and o.timeout and o.timeout > Time.now and Layer[l].owner_id == o.id )
       o.touch_session

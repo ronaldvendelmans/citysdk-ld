@@ -22,7 +22,7 @@ class CitySDK_API < Sinatra::Base
     end
 
     def self.now_for_stop(stop, tz)
-      g = stop.getLayer('gtfs')
+      g = stop.get_layer('gtfs')
       if(g)
         h = {}
         a = Sequel::Model.db.fetch("select * from stop_now('#{g[:data]['stop_id']}','#{tz}')").all
@@ -67,7 +67,7 @@ class CitySDK_API < Sinatra::Base
         }.to_json
       else
         # needs generic solution!!
-        g = stop.getLayer('ns')
+        g = stop.get_layer('ns')
         if(g)
           h = g.data
           h = NodeDatum::WebService.load(g.layer_id, stop.cdk_id, h)
@@ -83,7 +83,7 @@ class CitySDK_API < Sinatra::Base
 
     def self.schedule_for_stop(stop)
 
-      g = stop.getLayer('gtfs')
+      g = stop.get_layer('gtfs')
       if(g)
         h = {}
         t = Time.now
@@ -121,7 +121,7 @@ class CitySDK_API < Sinatra::Base
     end    
     
     def self.schedule_for_line(line, day)
-      g = line.getLayer('gtfs')
+      g = line.get_layer('gtfs')
       if(g)
         h = {}
 

@@ -14,7 +14,7 @@ class CitySDK_API < Sinatra::Base
 
   post '/util/match' do 
     
-    if not Owner.validSession(request.env['HTTP_X_AUTH'])
+    if not Owner.valid_session(request.env['HTTP_X_AUTH'])
       CitySDK_API.do_abort(401,"Not Authorized")
     end
     
@@ -199,10 +199,10 @@ class CitySDK_API < Sinatra::Base
     
     begin
     
-      layer_id = Layer.idFromText(layer)
+      layer_id = Layer.id_from_text(layer)
       CitySDK_API.do_abort(422,"Invalid layer spec: #{layer}") if layer_id.nil? or layer_id.is_a? Array
       
-      Owner.validateSessionForLayer(request.env['HTTP_X_AUTH'],layer_id)   
+      Owner.validate_session_for_layer(request.env['HTTP_X_AUTH'],layer_id)   
                 
       json = CitySDK_API.parse_request_json(request)
 
@@ -244,7 +244,7 @@ class CitySDK_API < Sinatra::Base
           CitySDK_API.do_abort(422, "'modalities' parameter must be an array.")
         end
 
-        node_modalities = create_params['modalities'].map{|modality| Modality.idFromText(modality)}        
+        node_modalities = create_params['modalities'].map{|modality| Modality.id_from_text(modality)}        
         node_modalities.each_with_index { |modality, index|
           CitySDK_API.do_abort(422,"Incorrect modality encountered in root modalities: \"#{create_params['modalities'][index]}\"") if modality.nil?
         }
@@ -358,7 +358,7 @@ class CitySDK_API < Sinatra::Base
             CitySDK_API.do_abort(422, "'modalities' parameter must be an array.")
           end
           
-          modalities = node["modalities"].map{|modality| Modality.idFromText(modality)}
+          modalities = node["modalities"].map{|modality| Modality.id_from_text(modality)}
           modalities.each_with_index { |modality, index|
             CitySDK_API.do_abort(422,"Incorrect modality encountered in object with cdk_id=#{cdk_id}: \"#{node["modalities"][index]}\"") if modality.nil?
           }
@@ -503,10 +503,10 @@ class CitySDK_API < Sinatra::Base
   # curl -X PUT -d '{"data": {"aap": "noot"}}' http://localhost:3000/admr.nl.amsterdam/cbs.plop
   put '/:cdk_id/:layer' do |cdk_id, layer|
 
-    layer_id = Layer.idFromText(layer)
+    layer_id = Layer.id_from_text(layer)
     CitySDK_API.do_abort(422,"Invalid layer spec: #{layer}") if layer_id.nil? or layer_id.is_a? Array
     
-    Owner.validateSessionForLayer(request.env['HTTP_X_AUTH'],layer_id)   
+    Owner.validate_session_for_layer(request.env['HTTP_X_AUTH'],layer_id)   
     
     node = Node.where(:cdk_id => cdk_id).first
     if(node)
@@ -518,7 +518,7 @@ class CitySDK_API < Sinatra::Base
         if(nd)
           if(json['modalities'])
             nd.modalities = [] if nd.modalities.nil?
-            nd.modalities << json['modalities'].map{ |m| Modality.idFromText(m)}
+            nd.modalities << json['modalities'].map{ |m| Modality.id_from_text(m)}
             nd.modalities.flatten!.uniq!
           end
           nd.data.merge!(json['data'])
@@ -529,7 +529,7 @@ class CitySDK_API < Sinatra::Base
             :node_id => node.id,
             :data => Sequel.hstore(json['data']),
             :node_data_type => 0,
-            :modalities => json['modalities'] ? Sequel.pg_array(json['modalities'].map{ |m| Modality.idFromText(m)} ) : []
+            :modalities => json['modalities'] ? Sequel.pg_array(json['modalities'].map{ |m| Modality.id_from_text(m)} ) : []
           }
           id = NodeDatum.insert h
         end
@@ -546,11 +546,11 @@ class CitySDK_API < Sinatra::Base
 
 
   put '/layer/:layer/status' do |layer|
-    Layer.getLayerHashes
+    Layer.get_layer_hashes
     
-    layer_id = Layer.idFromText(layer)
+    layer_id = Layer.id_from_text(layer)
     CitySDK_API.do_abort(422,"Invalid layer spec: #{layer}") if layer_id.nil? or layer_id.is_a? Array
-    Owner.validateSessionForLayer(request.env['HTTP_X_AUTH'],layer_id)   
+    Owner.validate_session_for_layer(request.env['HTTP_X_AUTH'],layer_id)   
     json = CitySDK_API.parse_request_json(request)
     if json['data']
       l = Layer[layer_id]
@@ -565,10 +565,10 @@ class CitySDK_API < Sinatra::Base
 
 
   put '/layer/:layer/config' do |layer|
-    Layer.getLayerHashes
-    layer_id = Layer.idFromText(layer)
+    Layer.get_layer_hashes
+    layer_id = Layer.id_from_text(layer)
     CitySDK_API.do_abort(422,"Invalid layer spec: #{layer}") if layer_id.nil? or layer_id.is_a? Array
-    Owner.validateSessionForLayer(request.env['HTTP_X_AUTH'],layer_id)   
+    Owner.validate_session_for_layer(request.env['HTTP_X_AUTH'],layer_id)   
     json = CitySDK_API.parse_request_json(request)
     if json['data']
       l = Layer[layer_id]
@@ -584,7 +584,7 @@ class CitySDK_API < Sinatra::Base
 
 
   put '/layers' do
-    Layer.getLayerHashes
+    Layer.get_layer_hashes
     
     json = CitySDK_API.parse_request_json(request)
     
@@ -594,7 +594,7 @@ class CitySDK_API < Sinatra::Base
         if l.valid?
           l.owner_id = Owner.get_id(request.env['HTTP_X_AUTH'])
           l.save
-          Layer.getLayerHashes
+          Layer.get_layer_hashes
         else
           CitySDK_API.do_abort(422,l.errors)
         end

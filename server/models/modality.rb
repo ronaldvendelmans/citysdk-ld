@@ -16,7 +16,7 @@ class Modality < Sequel::Model
     h
   end
   
-  def self.idFromText(p)
+  def self.id_from_text(p)
     case p
       when Array
         return p.map do |m| @@modalityIdHash[m] end
@@ -25,7 +25,7 @@ class Modality < Sequel::Model
     end
   end
  
-  def self.NameFromId(id)
+  def self.name_from_id(id)
     @@modalityNameHash[id] ||= Modality[id].name
   end
 
@@ -33,14 +33,14 @@ class Modality < Sequel::Model
   # Initialize Modalities hash:
   ##########################################################################################
 
-  def self.getModalityHashes
+  def self.get_modality_hashes
     Modality.all.each do |m|
       @@modalityIdHash[m[:name]] = m[:id]
     end
   end 
 end
 
-Modality.getModalityHashes
+Modality.get_modality_hashes
 
 
 

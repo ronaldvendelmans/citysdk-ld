@@ -25,7 +25,7 @@ class Owner < Sequel::Model
     o ? o.id : -1
   end
 
-  def self.validSession(s)
+  def self.valid_session(s)
     o = Owner.where(:session => s).first
     if(o and ((o.id == 0) or (o.timeout and o.timeout > Time.now)) ) 
       o.touch_session
@@ -42,7 +42,7 @@ class Owner < Sequel::Model
     end
   end
 
-  def self.validSessionForLayer(s,l)
+  def self.valid_session_for_layer(s,l)
     o = Owner.where(:session => s).first
     if(o and ((o.id == 0) or (o.timeout and o.timeout > Time.now and Layer[l].owner_id == o.id )))
       o.touch_session
@@ -51,7 +51,7 @@ class Owner < Sequel::Model
     nil
   end
   
-  def self.validateSessionForLayer(s,l)
+  def self.validate_session_for_layer(s,l)
     o = Owner.where(:session => s).first
     if(o and ((o.id == 0) or (o.timeout and o.timeout > Time.now and Layer[l].owner_id == o.id )))
       o.touch_session

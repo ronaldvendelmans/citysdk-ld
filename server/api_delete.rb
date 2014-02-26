@@ -2,11 +2,11 @@ class CitySDK_API < Sinatra::Base
   
   delete '/layer/:layer' do |layer|
     
-    Layer.getLayerHashes
+    Layer.get_layer_hashes
     
-    layer_id = Layer.idFromText(layer)
+    layer_id = Layer.id_from_text(layer)
     CitySDK_API.do_abort(422,"Invalid layer spec: #{layer}") if layer_id.nil? or layer_id.is_a? Array
-    Owner.validateSessionForLayer(request.env['HTTP_X_AUTH'],layer_id)   
+    Owner.validate_session_for_layer(request.env['HTTP_X_AUTH'],layer_id)   
 
     if(layer_id > 2)
       #delete node_data
@@ -21,7 +21,7 @@ class CitySDK_API < Sinatra::Base
 
       if( params['delete_layer'] == 'true' )
         Layer.where(:id => layer_id).delete
-        Layer.getLayerHashes
+        Layer.get_layer_hashes
       else
         Layer.where(:id => layer_id).update(:import_status => 'all cleared')
       end
@@ -35,9 +35,9 @@ class CitySDK_API < Sinatra::Base
 
 
   delete '/:cdk_id/:layer' do |cdk_id, layer|
-    layer_id = Layer.idFromText(layer)
+    layer_id = Layer.id_from_text(layer)
     CitySDK_API.do_abort(422,"Invalid layer spec: #{layer}") if layer_id.nil? or layer_id.is_a? Array
-    Owner.validateSessionForLayer(request.env['HTTP_X_AUTH'],layer_id)   
+    Owner.validate_session_for_layer(request.env['HTTP_X_AUTH'],layer_id)   
     node = Node.where(:cdk_id => cdk_id).first
     if(node)
       NodeDatum.where(:layer_id=>layer_id, :node_id => node.id).delete

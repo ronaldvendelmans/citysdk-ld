@@ -49,7 +49,7 @@ class CitySDK_API < Sinatra::Base
 
   get '/release_session' do
     @do_cache = false
-    if Owner.validSession(request.env['HTTP_X_AUTH'])
+    if Owner.valid_session(request.env['HTTP_X_AUTH'])
       Owner.release_session(request.env['HTTP_X_AUTH'])
       { :status => 'success' }.to_json
     else
@@ -65,7 +65,7 @@ class CitySDK_API < Sinatra::Base
   
   get '/layers/reload__' do
     @do_cache = false
-    Layer.getLayerHashes
+    Layer.get_layer_hashes
     { :status => 'success' }.to_json
   end
 
@@ -83,11 +83,11 @@ class CitySDK_API < Sinatra::Base
   end
   
   get '/layer/:name/?' do |name|
-    layer_id = Layer.idFromText(name)
+    layer_id = Layer.id_from_text(name)
 
-    Node.serializeStart(params,request)
-    Layer[layer_id].serialize(params,request)
-    Node.serializeEnd(params, request)
+
+    Layer[layer_id].serialize(params)
+
   end
 
   get '/nodes/?' do
@@ -125,7 +125,6 @@ class CitySDK_API < Sinatra::Base
   get '/:within/regions/?' do
     path_regions
   end
-
   
   get '/:cdk_id/select/:cmd/?' do
     n = Node.where(:cdk_id=>params[:cdk_id]).first    
@@ -136,20 +135,20 @@ class CitySDK_API < Sinatra::Base
     code = 0, h = {}
     case n.node_type
       when 0 # nodes
-        Nodes.processCommand(n,params,request)
+        Nodes.process_command(n,params)
       when 1 # routes        
-        Routes.processCommand(n,params,request)
+        Routes.process_command(n,params)
       when 2 # ptstops
-        if( Nodes.processCommand?(n,params) ) 
-          Nodes.processCommand(n,params,request)      
+        if( Nodes.process_command?(n,params) ) 
+          Nodes.process_command(n,params)      
         else
-          PublicTransport.processStop(n,params,request)
+          PublicTransport.processStop(n,params)
         end
       when 3 # ptlines
-        if( Routes.processCommand?(n,params) ) 
-          Routes.processCommand(n,params,request)    
+        if( Routes.process_command?(n,params) ) 
+          Routes.process_command(n,params)    
         else
-          PublicTransport.processLine(n,params,request)
+          PublicTransport.process_line(n,params)
         end
       else
         CitySDK_API.do_abort(422,"Unknown command for #{params[:cdk_id]} ")
@@ -164,7 +163,7 @@ class CitySDK_API < Sinatra::Base
       CitySDK_API.do_abort(422,"Layer not found: '#{params[:layer]}'")
     end
     n  = Node.where(:cdk_id=>params[:node]).first
-    nd = NodeDatum.where(:layer_id => Layer.idFromText(params[:layer])).where(:node_id => n.id).first
+    nd = NodeDatum.where(:layer_id => Layer.id_from_text(params[:layer])).where(:node_id => n.id).first
     
     case params[:request_format]
     when 'application/json'
@@ -173,7 +172,6 @@ class CitySDK_API < Sinatra::Base
         :results => [NodeDatum.serialize(params[:node],[nd.values],params)]
       }.to_json 
     when 'text/turtle'
-      Node.serializeStart(params,request)
       t,d = NodeDatum.turtelize(params[:node],[nd.values],params)
       [Node.prefixes.join("\n"),Node.layerProps(params).join("\n"),d.join("\n")].join("\n")
     end
@@ -230,7 +228,7 @@ class CitySDK_API < Sinatra::Base
         .node_layers(params)
         .do_paginate(params)
 
-      CitySDK_API.nodes_results(pgn, params, request)
+      CitySDK_API.nodes_results(pgn, params)
     rescue Exception => e
       CitySDK_API.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
     end

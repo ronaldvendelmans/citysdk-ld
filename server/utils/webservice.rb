@@ -6,7 +6,7 @@ class NodeDatum < Sequel::Model
     require 'uri'    
   
     def self.memcache_key(layer_id, cdk_id)
-      l = Layer.nameFromId(layer_id)
+      l = Layer.name_from_id(layer_id)
       return "#{l}!!#{cdk_id}"
     end
     
@@ -32,10 +32,10 @@ class NodeDatum < Sequel::Model
       if data        
         return data
       else
-        url = Layer.getWebserviceUrl(layer_id)
+        url = Layer.get_webservice_url(layer_id)
         data = load_from_ws(url,hstore)
         if(data)
-          CitySDK_API.memcache_set(key, data, Layer.getDataTimeout(layer_id) )
+          CitySDK_API.memcache_set(key, data, Layer.get_data_timeout(layer_id) )
           return data
         end
       end
