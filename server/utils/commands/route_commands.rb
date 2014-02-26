@@ -2,28 +2,28 @@ class CitySDK_API < Sinatra::Base
   
   module Routes
     
-    def self.processCommand?(n,params)
-      ['nodes','start_end','routes'].include?(params[:cmd])
+    def self.process_command?(n,params)
+      ['nodes','start_end','routes'].include? params[:cmd]
     end
     
-    def self.processCommand(n, params, req)
+    def self.process_command(n, params)
       cdk_id = params['cdk_id']
       if params[:cmd] == 'nodes'
-        pgn = Node.dataset
+        dataset = Node.dataset
           .where(:nodes__id => Sequel.function(:ANY, Sequel.function(:get_members, cdk_id)))
           .nodedata(params)
           .node_layers(params)
           .do_paginate(params)
           .order(Sequel.function(:idx, Sequel.function(:get_members, cdk_id), :nodes__id))
 
-        CitySDK_API.nodes_results(pgn, params, req)
+        dataset.serialize(:nodes, params)
       elsif params[:cmd] == 'start_end'
-        pgn = Node.dataset
+        dataset = Node.dataset
           .where(:nodes__id => Sequel.function(:ANY, Sequel.function(:get_start_end, cdk_id)))          
           .nodedata(params)
           .node_layers(params)
 
-        CitySDK_API.nodes_results(pgn, params, req)        
+        dataset.serialize(:nodes, params)
       elsif params[:cmd] == 'routes'
 
         sql_where = <<-SQL
@@ -34,7 +34,7 @@ class CitySDK_API < Sinatra::Base
             nodes.cdk_id != ?
         SQL
 
-        pgn = Node.dataset
+        dataset = Node.dataset
           .where(sql_where.lit(cdk_id, cdk_id))
           .name_search(params)
           .route_members(params)
@@ -42,7 +42,7 @@ class CitySDK_API < Sinatra::Base
           .node_layers(params)
           .do_paginate(params)
           
-        CitySDK_API.nodes_results(pgn, params, req)
+        dataset.serialize(:nodes, params)
       else 
         CitySDK_API.do_abort(422,"Command #{params[:cmd]} not defined for this node type.")
       end
