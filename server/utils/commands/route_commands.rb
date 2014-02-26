@@ -35,7 +35,7 @@ class CitySDK_API < Sinatra::Base
         SQL
 
         dataset = Node.dataset
-          .where(sql_where.lit(cdk_id, cdk_id))
+          .where(sql_where, cdk_id, cdk_id)
           .name_search(params)
           .route_members(params)
           .nodedata(params)
