@@ -64,9 +64,12 @@ class CitySDK_API < Sinatra::Base
   end
 
   get '/layers/?' do
+    # layer_geometry also sets proper PostGIS geom 
+    # serialization - always call layer_geometry
     dataset = Layer.dataset
       .name_search(params)
       .category_search(params)
+      .layer_geometry(params)
       .layer_geosearch(params)
       .do_paginate(params)    
 
@@ -75,7 +78,7 @@ class CitySDK_API < Sinatra::Base
   
   get '/layer/:name/?' do |name|
     layer_id = Layer.idFromText(name)
-    CitySDK_API.do_abort(422,"Unknown layer or invalid layer spec: #{name}") if layer_id.nil? or layer_id.is_a? Array
+
     Node.serializeStart(params,request)
     Layer[layer_id].serialize(params,request)
     Node.serializeEnd(params, request)

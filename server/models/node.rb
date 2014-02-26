@@ -2,27 +2,6 @@ class Node < Sequel::Model
   one_to_many :node_data
   
   NODE_TYPES = ['node', 'route', 'ptstop', 'ptline'] 
-  
-  # There's no need to output coordinates with 
-  # infinite decimal places.
-  # We will round all coordinates to PRECISION
-  # places with the round_coordinates function.
-  #
-  # From: http://stackoverflow.com/questions/7167604/how-accurately-should-i-store-latitude-and-longitude  
-  #
-  # decimal  degrees    distance
-  # places
-  # -------------------------------  
-  # 0        1.0        111 km
-  # 1        0.1        11.1 km
-  # 2        0.01       1.11 km
-  # 3        0.001      111 m
-  # 4        0.0001     11.1 m
-  # 5        0.00001    1.11 m
-  # 6        0.000001   0.111 m
-  # 7        0.0000001  1.11 cm
-  # 8        0.00000001 1.11 mm
-  PRECISION = 6 
 
   def getLayer(n)
     if n.is_a?(String)
@@ -46,7 +25,7 @@ class Node < Sequel::Model
     h[:layer] = Layer.nameFromId(h[:layer_id])
     h[:name] = '' if h[:name].nil?
     if h[:geom]
-      h[:geom] = JSON.parse(h[:geom].round_coordinates(PRECISION))
+      h[:geom] = h[:geom]
     end
     
     if h[:modalities]
@@ -62,7 +41,7 @@ class Node < Sequel::Model
     h.delete(:id)
     h.delete(:node_data)
     h.delete(:created_at)
-    h.delete(:updated_at)    
+    h.delete(:updated_at)     
     h
   end  
 

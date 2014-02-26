@@ -53,9 +53,6 @@ class Layer < Sequel::Model
     end
   end
   
-  
-  
-    
   def self.get_validity(id) 
     layer = self.get_layer(id)    
     if layer[:realtime]
@@ -65,98 +62,91 @@ class Layer < Sequel::Model
     end
   end
   
-  def serialize(params,request)
-    case params[:request_format]
-    when 'text/turtle'
-      prefixes = Set.new
-      prfs = ["@base <#{::CitySDK_API::CDK_BASE_URI}#{::CitySDK_API::Config[:ep_code]}/> ."]
-      prfs << "@prefix : <#{::CitySDK_API::CDK_BASE_URI}> ."
-      res = turtelize(params)
-      prefixes.each do |p|        
-        prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
-      end
-      return [prfs.join("\n"),"",res.join("\n")].join("\n")
-    when 'application/json'
-      return { :status => 'success', 
-        :url => request.url,  
-        :results => [ make_hash(params) ]
-      }.to_json 
-    end
-  end
+  # def serialize(params,request)
+  #   case params[:request_format]
+  #   when 'text/turtle'
+  #     prefixes = Set.new
+  #     prfs = ["@base <#{::CitySDK_API::CDK_BASE_URI}#{::CitySDK_API::Config[:ep_code]}/> ."]
+  #     prfs << "@prefix : <#{::CitySDK_API::CDK_BASE_URI}> ."
+  #     res = turtelize(params)
+  #     prefixes.each do |p|        
+  #       prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
+  #     end
+  #     return [prfs.join("\n"),"",res.join("\n")].join("\n")
+  #   when 'application/json'
+  #     return { :status => 'success', 
+  #       :url => request.url,  
+  #       :results => [ make_hash(params) ]
+  #     }.to_json 
+  #   end
+  # end
   
   
-  # TODO: gebruik http://www.w3.org/TR/vocab-dcat/
-  def turtelize(params)    
-    @@prefixes << 'rdf:'
-    @@prefixes << 'rdfs:'
-    @@prefixes << 'foaf:'
-    @@prefixes << 'geos:'
-    triples = []
-    
-    triples << "<layer/#{name}>"
-    triples << "  a :Layer ;"
-
-    d = description ? description.strip : ''
-    if d =~ /\n/
-      triples << "  rdfs:description \"\"\"#{d}\"\"\" ;"
-    else
-      triples << "  rdfs:description \"#{d}\" ;"
-    end
-
-    triples << "  :createdBy ["
-    triples << "    foaf:name \"#{organization.strip}\" ;"
-    triples << "    foaf:mbox \"#{owner.email.strip}\""
-    triples << "  ] ;"
-
-    
-    if data_sources 
-      data_sources.each { |s| 
-        a = s.index('=') ? s[s.index('=')+1..-1] : s 
-        triples << "  :dataSource \"#{a}\" ;"
-      }
-    end
-    
-    res = LayerProperty.where(:layer_id => id)
-    res.each do |r|
-      triples << "  :hasDataField ["
-      triples << "    rdfs:label #{r.key} ;"
-      triples << "    :valueType #{r.type} ;"
-      triples << "    :valueUnit #{r.unit} ;" if r.type =~ /(integer|float|double)/ and r.unit != ''
-      triples << "    :valueLanguange \"#{r.lang}\" ;" if r.lang != '' and r.type == 'xsd:string'
-      triples << "    owl:equivalentProperty \"#{r.eqprop}\" ;" if r.eqprop and r.eqprop != ''
-      if not r.descr.empty?
-        if r.descr =~ /\n/
-          triples << "    rdfs:description \"\"\"#{r.descr}\"\"\" ;"
-        else
-          triples << "    rdfs:description \"#{r.descr}\" ;"
-        end
-      end
-      triples[-1] = triples[-1][0...-1]
-      triples << "  ] ;"
-    end
-    
-    
-    if params.has_key? "geom" and !bbox.nil?
-      triples << "  geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(bbox) )  + "\" ;"
-    end
-
-    triples[-1][-1] = '.'
-    triples << ""
-    @@noderesults += triples
-    triples
-  end
+  # # TODO: gebruik http://www.w3.org/TR/vocab-dcat/
+  # def turtelize(params)    
+  #   @@prefixes << 'rdf:'
+  #   @@prefixes << 'rdfs:'
+  #   @@prefixes << 'foaf:'
+  #   @@prefixes << 'geos:'
+  #   triples = []
+  #   
+  #   triples << "<layer/#{name}>"
+  #   triples << "  a :Layer ;"
+  # 
+  #   d = description ? description.strip : ''
+  #   if d =~ /\n/
+  #     triples << "  rdfs:description \"\"\"#{d}\"\"\" ;"
+  #   else
+  #     triples << "  rdfs:description \"#{d}\" ;"
+  #   end
+  # 
+  #   triples << "  :createdBy ["
+  #   triples << "    foaf:name \"#{organization.strip}\" ;"
+  #   triples << "    foaf:mbox \"#{owner.email.strip}\""
+  #   triples << "  ] ;"
+  # 
+  #   
+  #   if data_sources 
+  #     data_sources.each { |s| 
+  #       a = s.index('=') ? s[s.index('=')+1..-1] : s 
+  #       triples << "  :dataSource \"#{a}\" ;"
+  #     }
+  #   end
+  #   
+  #   res = LayerProperty.where(:layer_id => id)
+  #   res.each do |r|
+  #     triples << "  :hasDataField ["
+  #     triples << "    rdfs:label #{r.key} ;"
+  #     triples << "    :valueType #{r.type} ;"
+  #     triples << "    :valueUnit #{r.unit} ;" if r.type =~ /(integer|float|double)/ and r.unit != ''
+  #     triples << "    :valueLanguange \"#{r.lang}\" ;" if r.lang != '' and r.type == 'xsd:string'
+  #     triples << "    owl:equivalentProperty \"#{r.eqprop}\" ;" if r.eqprop and r.eqprop != ''
+  #     if not r.descr.empty?
+  #       if r.descr =~ /\n/
+  #         triples << "    rdfs:description \"\"\"#{r.descr}\"\"\" ;"
+  #       else
+  #         triples << "    rdfs:description \"#{r.descr}\" ;"
+  #       end
+  #     end
+  #     triples[-1] = triples[-1][0...-1]
+  #     triples << "  ] ;"
+  #   end    
+  #   
+  #   if params.has_key? "geom" and !bbox.nil?
+  #     triples << "  geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(bbox) )  + "\" ;"
+  #   end
+  # 
+  #   triples[-1][-1] = '.'
+  #   triples << ""
+  #   @@noderesults += triples
+  #   triples
+  # end
 
   def self.make_hash(l, params)
-    # h = {
-    #   :name => name,
-    #   :category => category,
-    #   :organization => organization,
-    #   :owner => owner.email,
-    #   :description => description,
-    #   :data_sources => data_sources ? data_sources.map { |s| s.index('=') ? s[s.index('=')+1..-1] : s } : [],
-    #   :imported_at => imported_at
-    # }
-    #   
+   
+   #l[:owner] = owner.email  
+   l[:data_sources] = l[:data_sources] ? l[:data_sources].map { |s| s.index('=') ? s[s.index('=')+1..-1] : s } : [],
+     
     # res = LayerProperty.where(:layer_id => id)
     # h[:fields] = [] if res.count > 0
     # res.each do |r|
@@ -170,20 +160,8 @@ class Layer < Sequel::Model
     #   a[:description]    = r.descr if not r.descr.empty?
     #   h[:fields] << a
     # end
-    # 
-    # if sample_url
-    #   h[:sample_url] = sample_url
-    # end
-    # 
-    # if realtime 
-    #   h[:update_rate] = update_rate
-    # end
-    # 
-    # if !bbox.nil? and params.has_key? 'geom'
-    #   h[:geom] = (params[:request_format] == :turtle) ? wkt : geojson
-    # end    
-    # h
-    l
+    
+    l    
   end
 
   def self.idFromText(p)
@@ -266,7 +244,7 @@ class Layer < Sequel::Model
       name = l[:name]      
       
       # TODO: let postgis handle serialization
-      if layer[:bbox]    
+      if not layer[:bbox].nil?
         layer[:wkt] = RGeo::WKRep::WKTGenerator.new.generate(CitySDK_API.rgeo_factory.parse_wkb(layer[:bbox]))
         layer[:geojson] = RGeo::GeoJSON.encode(CitySDK_API.rgeo_factory.parse_wkb(layer[:bbox]))
       end

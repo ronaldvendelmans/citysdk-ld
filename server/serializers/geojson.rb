@@ -22,7 +22,7 @@ class GeoJSONSerializer < Serializer::Base
           name: node[:name],
           layer: node[:layer]          
         },
-        geometry: node[:geom]
+        geometry: node[:geom] ? JSON.parse(node[:geom].round_coordinates(Serializer::PRECISION)) : {}
       }
       feature[:properties][:layers] = node[:layers] if node.has_key? :layers and node[:layers] 
       @geojson[:features] << feature
@@ -35,8 +35,13 @@ class GeoJSONSerializer < Serializer::Base
         type: "Feature",
         properties: {        
           name: layer[:name],
+          title: layer[:title],
+          description: layer[:description],
+          category: layer[:category],
+          organization: layer[:organization]
+          # data_sources: layer[:data_sources]
         },
-        geometry: layer[:geom]
+        geometry: layer[:bbox] ? JSON.parse(layer[:bbox].round_coordinates(Serializer::PRECISION)) : {}
       }
       @geojson[:features] << feature
     end

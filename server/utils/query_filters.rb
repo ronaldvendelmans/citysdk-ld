@@ -111,7 +111,7 @@ module Sequel
           columns = (Node.dataset.columns - [:geom]).map { |column| "nodes__#{column}".to_sym }
           return self.select{columns}
         else          
-          return self.select_append(Sequel.function(geom_function, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom)).as(:geom))
+          return self.select{columns}.select_append(Sequel.function(geom_function, Sequel.function(:COALESCE, Sequel.function(:collect_member_geometries, :members), :geom)).as(:geom))
         end        
       elsif params.has_key? 'layer' or params.has_key? "nodedata_layer_ids"
         # don't select nodes without any data on the specified layers
@@ -277,13 +277,19 @@ module Sequel
       end
       self
     end
-
+    
+    def layer_geometry(params)
+      # TODO: check for params[:geom] ?      
+      geom_function = (params[:request_format] == :turtle) ? :ST_AsText : :ST_AsGeoJSON
+      columns = (Layer.dataset.columns - [:bbox])
+      return self.select{columns}.select_append(Sequel.function(geom_function, :bbox).as(:bbox))      
+    end
 
     # layers?per_page=15&lat=53.4962&lon=-1.3348
     # layers?per_page=150&where=admr.nl.haarlem
     def layer_geosearch(params)
       if params.has_key? 'lat' and params.has_key? 'lon'
-        return self.where("ST_Intersects(ST_SetSRID(ST_Point(%s, %s), 4326),bbox)" % [params["lon"], params["lat"]] )
+        return self.where("ST_Intersects(ST_SetSRID(ST_Point(?, ?), 4326),bbox)", params["lon"], params["lat"])
       elsif params.has_key? 'where'
         loc = Node.where(:cdk_id => params['where']).first
         if(loc)
@@ -300,8 +306,7 @@ module Sequel
         return self.where(mod => :nodes__modalities.pg_array.any)        
       end
       self
-    end
-    
+    end    
 
     def name_search(params)
       if params.has_key? "name"
@@ -375,8 +380,7 @@ module Sequel
       end
       
       dataset
-    end
-    
+    end    
     
     # Add WHERE clause to filter on node_data hstore keys/values
     def nodedata(params)

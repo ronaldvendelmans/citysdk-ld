@@ -22,7 +22,7 @@ module Sequel
         
         # TODO: make function layers (just like function nodes) in query_filters.rb ??
         layers = self.all.map { |a| a.values }.each { |l| Layer.make_hash(l, params) }
-
+                        
         if type == :layer and layers.length == 0
           CitySDK_API.do_abort(422,"Layer not found: '#{params[:layer]}'")
         end
