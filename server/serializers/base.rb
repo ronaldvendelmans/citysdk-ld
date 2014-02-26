@@ -27,12 +27,15 @@ module Serializer
     case format
     when :turtle
       TurtleSerializer.serialize type, data, layers, meta
-    when :json
-      JSONSerializer.serialize type, data, layers, meta
     when :geojson
       GeoJSONSerializer.serialize type, data, layers, meta
     when :jsonld
-      JSONldSerializer.serialize type, data, layers, meta
+      JSONLDSerializer.serialize type, data, layers, meta
+    when :json
+      CdkJSONSerializer.serialize type, data, layers, meta      
+    else
+      # default
+      CdkJSONSerializer.serialize type, data, layers, meta
     end
   end
   
