@@ -29,6 +29,7 @@ class Layer < Sequel::Model
   #   validates_presence [:body, :latitude, :longitude]
   # end
   
+  # TODO: make global function, for all memcache keys
   KEY_LAYER_NAMES = "layer_names"
   KEY_LAYERS_AVAILABLE = "layers_available"
   def self.memcache_key(id)
@@ -260,11 +261,20 @@ class Layer < Sequel::Model
   def self.getLayerHashes
     names = {}
     Layer.all.each do |l| 
+      layer = l.values
+      
       id = l[:id]
       name = l[:name]      
+      
+      # TODO: let postgis handle serialization
+      if layer[:bbox]      
+        layer[:wkt] = RGeo::WKRep::WKTGenerator.new.generate(CitySDK_API.rgeo_factory.parse_wkb(layer[:bbox]))
+        layer[:geojson] = RGeo::GeoJSON.encode(CitySDK_API.rgeo_factory.parse_wkb(layer[:bbox]))
+      end
+
       # Save layer data in memcache without expiration 
-      key = self.memcache_key(id)
-      CitySDK_API.memcache_set(key, l.values, 0)      
+      key = self.memcache_key(id.to_s)
+      CitySDK_API.memcache_set(key, layer, 0)      
       names[name] = id
     end
     
@@ -275,7 +285,3 @@ class Layer < Sequel::Model
 end
 
 Layer.getLayerHashes
-
-
-
-
