@@ -18,6 +18,9 @@ gem 'sinatra', :require => 'sinatra/base'
 gem 'sinatra-sequel'
 gem 'stringex'
 gem 'yajl-ruby'
+gem 'rdf'
+gem 'rdf-turtle'
+gem 'json-ld'
 
 group :development do
   gem 'capistrano', '~>2.14.1'
