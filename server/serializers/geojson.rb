@@ -20,7 +20,7 @@ class GeoJSONSerializer < Serializer::Base
         properties: {            
           cdk_id: node[:cdk_id],
           name: node[:name],
-          node_type: nil,
+          node_type: node[:node_type],
           layer: node[:layer]          
         },
         geometry: node[:geom] ? JSON.parse(node[:geom].round_coordinates(Serializer::PRECISION)) : {}

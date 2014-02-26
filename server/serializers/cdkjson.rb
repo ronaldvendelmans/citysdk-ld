@@ -14,7 +14,7 @@ class CdkJSONSerializer < Serializer::Base
       result = {
         cdk_id: node[:cdk_id],
         name: node[:name],
-        node_type: nil
+        node_type: node[:node_type]
       }
       result[:geom] = JSON.parse(node[:geom].round_coordinates(Serializer::PRECISION)) if node[:geom]
       result[:layers] = node[:layers] if node.has_key? :layers and node[:layers] 
