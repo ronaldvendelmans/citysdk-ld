@@ -60,7 +60,7 @@ class CitySDK_API < Sinatra::Base
     # @do_cache = (request.env['REQUEST_METHOD'] == 'GET')
     # @cache_time = 300
 
-    # TODO: params = {external: params, internal: {}}
+    # TODO: make two params sets: one for URL parameters, one for internal parameters: {external: params, internal: {}}
     # TODO: use symbols as keys in params?
     #params.inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}.inspect
     params[:url] = request.url

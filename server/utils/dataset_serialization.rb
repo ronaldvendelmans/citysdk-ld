@@ -3,6 +3,10 @@ module Sequel
   class Dataset
 
 	  def serialize(type, params)
+      meta = {
+        status: "succes",
+        url: params[:url]
+      }
 	    case type
       when :node, :nodes
         nodes = nodes(params).each { |h| Node.make_hash(h, params) }
@@ -11,14 +15,21 @@ module Sequel
           CitySDK_API.do_abort(422,"Node not found: '#{params[:node]}'")
         end
 
-        meta = {
-          status: "succes",
-          url: params[:url]
-        }
         meta.merge! pagination_results(params, get_pagination_data(params), nodes.length)         
         
         Serializer.serialize params[:request_format], :nodes, nodes, [], meta
       when :layer, :layers
+        
+        # TODO: make function layers (just like function nodes) in query_filters.rb ??
+        layers = self.all.map { |a| a.values }.each { |l| Layer.make_hash(l, params) }
+
+        if type == :layer and layers.length == 0
+          CitySDK_API.do_abort(422,"Layer not found: '#{params[:layer]}'")
+        end
+        
+        meta.merge! pagination_results(params, get_pagination_data(params), layers.length)         
+         
+        Serializer.serialize params[:request_format], :layers, layers, [], meta        
       when :message
       when :status
       end

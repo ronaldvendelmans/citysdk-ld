@@ -72,8 +72,7 @@ class Layer < Sequel::Model
       prfs = ["@base <#{::CitySDK_API::CDK_BASE_URI}#{::CitySDK_API::Config[:ep_code]}/> ."]
       prfs << "@prefix : <#{::CitySDK_API::CDK_BASE_URI}> ."
       res = turtelize(params)
-      prefixes.each do |p|
-        puts p
+      prefixes.each do |p|        
         prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
       end
       return [prfs.join("\n"),"",res.join("\n")].join("\n")
@@ -147,44 +146,44 @@ class Layer < Sequel::Model
     triples
   end
 
-  def make_hash(params)
-    h = {
-      :name => name,
-      :category => category,
-      :organization => organization,
-      :owner => owner.email,
-      :description => description,
-      :data_sources => data_sources ? data_sources.map { |s| s.index('=') ? s[s.index('=')+1..-1] : s } : [],
-      :imported_at => imported_at
-    }
-      
-    res = LayerProperty.where(:layer_id => id)
-    h[:fields] = [] if res.count > 0
-    res.each do |r|
-      a = {
-        :key => r.key,
-        :type => r.type
-      }
-      a[:valueUnit]      = r.unit if r.type =~ /(integer|float|double)/ and r.unit != ''
-      a[:valueLanguange] = r.lang if r.lang != '' and r.type == 'xsd:string'
-      a[:equivalentProperty] = r.eqprop if r.eqprop and r.eqprop != ''
-      a[:description]    = r.descr if not r.descr.empty?
-      h[:fields] << a
-    end
-    
-    if sample_url
-      h[:sample_url] = sample_url
-    end
-    
-    if realtime 
-      h[:update_rate] = update_rate
-    end
-    
-    if !bbox.nil? and params.has_key? 'geom'
-       h[:bbox] = RGeo::GeoJSON.encode(CitySDK_API.rgeo_factory.parse_wkb(bbox))
-    end
-    @@noderesults << h
-    h
+  def self.make_hash(l, params)
+    # h = {
+    #   :name => name,
+    #   :category => category,
+    #   :organization => organization,
+    #   :owner => owner.email,
+    #   :description => description,
+    #   :data_sources => data_sources ? data_sources.map { |s| s.index('=') ? s[s.index('=')+1..-1] : s } : [],
+    #   :imported_at => imported_at
+    # }
+    #   
+    # res = LayerProperty.where(:layer_id => id)
+    # h[:fields] = [] if res.count > 0
+    # res.each do |r|
+    #   a = {
+    #     :key => r.key,
+    #     :type => r.type
+    #   }
+    #   a[:valueUnit]      = r.unit if r.type =~ /(integer|float|double)/ and r.unit != ''
+    #   a[:valueLanguange] = r.lang if r.lang != '' and r.type == 'xsd:string'
+    #   a[:equivalentProperty] = r.eqprop if r.eqprop and r.eqprop != ''
+    #   a[:description]    = r.descr if not r.descr.empty?
+    #   h[:fields] << a
+    # end
+    # 
+    # if sample_url
+    #   h[:sample_url] = sample_url
+    # end
+    # 
+    # if realtime 
+    #   h[:update_rate] = update_rate
+    # end
+    # 
+    # if !bbox.nil? and params.has_key? 'geom'
+    #   h[:geom] = (params[:request_format] == :turtle) ? wkt : geojson
+    # end    
+    # h
+    l
   end
 
   def self.idFromText(p)
@@ -267,7 +266,7 @@ class Layer < Sequel::Model
       name = l[:name]      
       
       # TODO: let postgis handle serialization
-      if layer[:bbox]      
+      if layer[:bbox]    
         layer[:wkt] = RGeo::WKRep::WKTGenerator.new.generate(CitySDK_API.rgeo_factory.parse_wkb(layer[:bbox]))
         layer[:geojson] = RGeo::GeoJSON.encode(CitySDK_API.rgeo_factory.parse_wkb(layer[:bbox]))
       end

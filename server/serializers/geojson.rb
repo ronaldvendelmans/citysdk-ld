@@ -29,7 +29,7 @@ class GeoJSONSerializer < Serializer::Base
     end
   end
 
-  def self.layers
+  def self.layers    
     @data.each do |layer|
       feature = {
         type: "Feature",

@@ -64,18 +64,13 @@ class CitySDK_API < Sinatra::Base
   end
 
   get '/layers/?' do
-    #TODO: make two params sets: one for URL parameters, one for internal parameters
-    params['count'] = ''
-    pgn = Layer.dataset
+    dataset = Layer.dataset
       .name_search(params)
       .category_search(params)
       .layer_geosearch(params)
-      .do_paginate(params)
-      
-    Node.serializeStart(params,request)
-    res = 0
-    pgn.each { |l| l.serialize(params,request); res += 1 }
-    Node.serializeEnd(params, request, CitySDK_API::pagination_results(params, pgn.get_pagination_data(params), res))
+      .do_paginate(params)    
+
+    dataset.serialize :layers, params
   end
   
   get '/layer/:name/?' do |name|

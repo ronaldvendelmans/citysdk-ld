@@ -102,7 +102,7 @@ module Sequel
     LAYER_AND_SEPARATOR = ","
     def node_layers(params)      
       
-      geom_function = :ST_AsGeoJSON
+      geom_function = (params[:request_format] == :turtle) ? :ST_AsText : :ST_AsGeoJSON
             
       if params['layer'] == "*"        
 
