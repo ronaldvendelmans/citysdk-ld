@@ -17,7 +17,7 @@ class CitySDK_API < Sinatra::Base
           .node_layers(params)
           .do_paginate(params)
           
-        dataset.serialize(:nodes, params)            
+        dataset.serialize(:nodes, params)     
       elsif params[:cmd] == 'routes_start' or params[:cmd] == 'routes_end'
         # Select all routes that start or end in cdk_id, 
         # i.e. cdk_id = members[0] or cdk_id = members[-1]
