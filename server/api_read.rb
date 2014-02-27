@@ -142,7 +142,7 @@ class CitySDK_API < Sinatra::Base
         if( Nodes.process_command?(n,params) ) 
           Nodes.process_command(n,params)      
         else
-          PublicTransport.processStop(n,params)
+          PublicTransport.process_stop(n,params)
         end
       when 3 # ptlines
         if( Routes.process_command?(n,params) ) 
