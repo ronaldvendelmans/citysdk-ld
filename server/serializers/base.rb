@@ -75,30 +75,30 @@ module Serializer
     # Serialization start and end
     
     def self.start
-      CitySDK_API.do_abort(401,"Serialization error - start not implemented")
+      CitySDK_API.do_abort(500,"Serialization error - start not implemented")
     end
     
     # end function returns string with serialization result 
     def self.end
-      CitySDK_API.do_abort(401,"Serialization error - end not implemented")
+      CitySDK_API.do_abort(500,"Serialization error - end not implemented")
     end
     
     # Serialization functions per object type
     
     def self.nodes
-      CitySDK_API.do_abort(401,"Serialization error - nodes not implemented")
+      CitySDK_API.do_abort(500,"Serialization error - nodes not implemented")
     end
     
     def self.layers
-      CitySDK_API.do_abort(401,"Serialization error - layers not implemented")
+      CitySDK_API.do_abort(500,"Serialization error - layers not implemented")
     end
     
     def self.message
-      CitySDK_API.do_abort(401,"Serialization error - message not implemented")      
+      CitySDK_API.do_abort(500,"Serialization error - message not implemented")      
     end
 
     def self.status
-      CitySDK_API.do_abort(401,"Serialization error - status not implemented")
+      CitySDK_API.do_abort(500,"Serialization error - status not implemented")
     end
     
   end
