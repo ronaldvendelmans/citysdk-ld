@@ -221,14 +221,14 @@ class CitySDK_API < Sinatra::Base
   def path_regions
     begin 
       # TODO: hard-coded layer_id of admr = 2! 
-      pgn = Node.dataset.where(:nodes__layer_id=>2)
+      dataset = Node.dataset.where(:nodes__layer_id=>2)
         .geo_bounds(params)
         .name_search(params)
         .nodedata(params)
         .node_layers(params)
         .do_paginate(params)
 
-      CitySDK_API.nodes_results(pgn, params)
+      dataset.serialize(:nodes, params)
     rescue Exception => e
       CitySDK_API.do_abort(500,"Server error (#{e.message}, \n #{e.backtrace.join('\n')}.")
     end
