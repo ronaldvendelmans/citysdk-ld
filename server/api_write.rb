@@ -317,6 +317,7 @@ class CitySDK_API < Sinatra::Base
           CitySDK_API.do_abort(422,"Node without id, cdk_id or cdk_ids field encountered.")
         end
       
+        # TODO: check and abort if GeometryCollection. 
         geom = nil
         if node["geom"] and not cdk_id
           # geom must be present if a new node is created,
