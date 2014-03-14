@@ -10,15 +10,27 @@ module Sequel
       }
 	    case type
       when :node, :nodes
-        nodes = nodes(params).each { |h| Node.make_hash(h, params) }
+        
+        # Use layers hash to get data of used layer, to be used in json-ld/turtle serialization
+        layers = {}
+        layer_ids = []
+        nodes = nodes(params).each do |h|          
+          # Add layer_id of all data to layers array
+          h[:node_data].each { |d| layer_ids << d[:layer_id] } if h[:node_data]
+          Node.make_hash(h, params)
+        end
+        layer_ids.uniq.each do |layer_id|
+          layer = Layer.get_layer layer_id
+          layers[layer[:name]] = layer
+        end        
               
         if type == :node and nodes.length == 0
           CitySDK_API.do_abort(422,"Node not found: '#{params[:node]}'")
         end
-
+        
         meta.merge! pagination_results(params, get_pagination_data(params), nodes.length)         
         
-        Serializer.serialize params[:request_format], :nodes, nodes, [], meta
+        Serializer.serialize params[:request_format], :nodes, nodes, layers, meta
       when :layer, :layers
         
         # TODO: make function layers (just like function nodes) in query_filters.rb ??
