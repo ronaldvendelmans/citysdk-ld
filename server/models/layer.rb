@@ -1,6 +1,3 @@
-
-#custom model for intelligence, because sequel model 
-#doesn't allow custom insert statements easily
 require "sequel/model"
 
 class Layer < Sequel::Model
