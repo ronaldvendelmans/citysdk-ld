@@ -82,7 +82,7 @@ class CitySDK_API < Sinatra::Base
     dataset.serialize :layers, params
   end
   
-  get '/layer/:name/?' do |name|
+  get '/layers/:name/?' do |name|
     layer_id = Layer.id_from_text(name)
 
 
