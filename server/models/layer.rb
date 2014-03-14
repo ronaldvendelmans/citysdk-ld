@@ -61,19 +61,15 @@ class Layer < Sequel::Model
   
   # TODO: params needed here?
   def self.make_hash(l, params)
-   
     l.delete :validity
     l.delete :import_config
         
     l[:context] = JSON.parse(l[:context], {symbolize_names: true}) if l[:context]
-
-    # TODO: let PostGIS handle serialization
-    if not l[:bbox].nil?
-      l[:wkt] = RGeo::WKRep::WKTGenerator.new.generate(CitySDK_API.rgeo_factory.parse_wkb(l[:bbox]))
-      l[:geojson] = RGeo::GeoJSON.encode(CitySDK_API.rgeo_factory.parse_wkb(l[:bbox]))
-    end
-    l.delete :bbox
     
+    # TODO: use Serializer::PRECISION
+    l[:wkt] = l[:wkt].round_coordinates(6) if l[:wkt]
+    l[:geojson] = JSON.parse(l[:geojson].round_coordinates(6), {symbolize_names: true}) if l[:geojson]
+        
     # TODO: add owner!
 
     l[:data_sources] = l[:data_sources] ? l[:data_sources].map { |s| s.index('=') ? s[s.index('=')+1..-1] : s } : []
@@ -154,7 +150,12 @@ class Layer < Sequel::Model
   
   def self.get_layer_hashes
     names = {}
-    Layer.all.each do |l|
+    
+    columns = (Layer.dataset.columns - [:bbox])
+    Layer.select{columns}.select_append(
+      Sequel.function(:ST_AsGeoJSON, :bbox).as(:geojson),
+      Sequel.function(:ST_AsText, :bbox).as(:wkt)
+    ).all.each do |l|
       layer = make_hash l.values, nil
       
       # Save layer data in memcache without expiration 

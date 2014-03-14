@@ -279,11 +279,8 @@ module Sequel
       self
     end
     
-    def layer_geometry(params)
-      # TODO: check for params[:geom] ?      
-      geom_function = (params[:request_format] == :turtle) ? :ST_AsText : :ST_AsGeoJSON
-      columns = (Layer.dataset.columns - [:bbox])
-      return self.select{columns}.select_append(Sequel.function(geom_function, :bbox).as(:bbox))      
+    def only_layer_ids(params)
+      return self.select{id}
     end
 
     # layers?per_page=15&lat=53.4962&lon=-1.3348

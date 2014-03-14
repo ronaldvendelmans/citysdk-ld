@@ -33,12 +33,16 @@ module Sequel
         Serializer.serialize params[:request_format], :nodes, nodes, layers, meta
       when :layer, :layers
         
-        # TODO: make function layers (just like function nodes) in query_filters.rb ??
-        layers = self.all.map { |a| a.values }.each { |l| Layer.make_hash(l, params) }
-                        
-        if type == :layer and layers.length == 0
+        # Postgres result in self.all only contains layer_ids
+        # Get layers data from internal layers hash
+        
+        layer_ids = self.all.map { |a| a.values[:id] }
+
+        if type == :layer and layer_ids.length == 0
           CitySDK_API.do_abort(422,"Layer not found: '#{params[:layer]}'")
         end
+
+        layers = layer_ids.map { |layer_id| Layer.get_layer layer_id }        
         
         meta.merge! pagination_results(params, get_pagination_data(params), layers.length)         
          
