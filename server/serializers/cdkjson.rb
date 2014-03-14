@@ -26,15 +26,22 @@ class CdkJSONSerializer < Serializer::Base
   def self.layers
     @result[:results] =  []    
     @data.each do |layer|
-      @result[:results] << {
+      result = {
         name: layer[:name],
         title: layer[:title],
         description: layer[:description],
         category: layer[:category],
         organization: layer[:organization],
-        # data_sources: layer[:data_sources]
-        geom: layer[:bbox] ? JSON.parse(layer[:bbox].round_coordinates(Serializer::PRECISION)) : {}
-      }  
+        data_sources: layer[:data_sources],
+        #realtime: layer[:realtime],
+        update_rate: layer[:update_rate],
+        webservice: layer[:webservice],
+        imported_at: layer[:imported_at],
+        context: layer[:context],
+        bbox: layer[:geojson] ? layer[:geojson] : nil
+      }
+      result.delete_if { |k, v| v.nil? }
+      @result[:results] << result
     end
   end
   # 
