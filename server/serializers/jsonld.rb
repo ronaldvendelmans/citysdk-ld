@@ -38,6 +38,8 @@ class JSONLDSerializer < GeoJSONSerializer
         :@id => "cdk:objects/#{cdk_id}"
       }.merge feature[:properties]
       
+      feature[:properties][:layer] = "cdk:layers/#{feature[:properties][:layer]}"
+      
       feature[:properties][:layers].each do |l,layer|
         layer[:layer] = "cdk:layers/#{l}"
         
