@@ -77,21 +77,7 @@ class Layer < Sequel::Model
     # TODO: add owner!
 
     l[:data_sources] = l[:data_sources] ? l[:data_sources].map { |s| s.index('=') ? s[s.index('=')+1..-1] : s } : []
-    
-    # res = LayerProperty.where(:layer_id => id)
-    # h[:fields] = [] if res.count > 0
-    # res.each do |r|
-    #   a = {
-    #     :key => r.key,
-    #     :type => r.type
-    #   }
-    #   a[:valueUnit]      = r.unit if r.type =~ /(integer|float|double)/ and r.unit != ''
-    #   a[:valueLanguange] = r.lang if r.lang != '' and r.type == 'xsd:string'
-    #   a[:equivalentProperty] = r.eqprop if r.eqprop and r.eqprop != ''
-    #   a[:description]    = r.descr if not r.descr.empty?
-    #   h[:fields] << a
-    # end
-    
+        
     l
   end
 
