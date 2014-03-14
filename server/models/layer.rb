@@ -59,91 +59,25 @@ class Layer < Sequel::Model
     end
   end
   
-  # def serialize(params,request)
-  #   case params[:request_format]
-  #   when 'text/turtle'
-  #     prefixes = Set.new
-  #     prfs = ["@base <#{::CitySDK_API::CDK_BASE_URI}#{::CitySDK_API::Config[:ep_code]}/> ."]
-  #     prfs << "@prefix : <#{::CitySDK_API::CDK_BASE_URI}> ."
-  #     res = turtelize(params)
-  #     prefixes.each do |p|        
-  #       prfs << "@prefix #{p} <#{Prefix.where(:prefix => p).first[:url]}> ." 
-  #     end
-  #     return [prfs.join("\n"),"",res.join("\n")].join("\n")
-  #   when 'application/json'
-  #     return { :status => 'success', 
-  #       :url => request.url,  
-  #       :results => [ make_hash(params) ]
-  #     }.to_json 
-  #   end
-  # end
-  
-  
-  # # TODO: gebruik http://www.w3.org/TR/vocab-dcat/
-  # def turtelize(params)    
-  #   @@prefixes << 'rdf:'
-  #   @@prefixes << 'rdfs:'
-  #   @@prefixes << 'foaf:'
-  #   @@prefixes << 'geos:'
-  #   triples = []
-  #   
-  #   triples << "<layer/#{name}>"
-  #   triples << "  a :Layer ;"
-  # 
-  #   d = description ? description.strip : ''
-  #   if d =~ /\n/
-  #     triples << "  rdfs:description \"\"\"#{d}\"\"\" ;"
-  #   else
-  #     triples << "  rdfs:description \"#{d}\" ;"
-  #   end
-  # 
-  #   triples << "  :createdBy ["
-  #   triples << "    foaf:name \"#{organization.strip}\" ;"
-  #   triples << "    foaf:mbox \"#{owner.email.strip}\""
-  #   triples << "  ] ;"
-  # 
-  #   
-  #   if data_sources 
-  #     data_sources.each { |s| 
-  #       a = s.index('=') ? s[s.index('=')+1..-1] : s 
-  #       triples << "  :dataSource \"#{a}\" ;"
-  #     }
-  #   end
-  #   
-  #   res = LayerProperty.where(:layer_id => id)
-  #   res.each do |r|
-  #     triples << "  :hasDataField ["
-  #     triples << "    rdfs:label #{r.key} ;"
-  #     triples << "    :valueType #{r.type} ;"
-  #     triples << "    :valueUnit #{r.unit} ;" if r.type =~ /(integer|float|double)/ and r.unit != ''
-  #     triples << "    :valueLanguange \"#{r.lang}\" ;" if r.lang != '' and r.type == 'xsd:string'
-  #     triples << "    owl:equivalentProperty \"#{r.eqprop}\" ;" if r.eqprop and r.eqprop != ''
-  #     if not r.descr.empty?
-  #       if r.descr =~ /\n/
-  #         triples << "    rdfs:description \"\"\"#{r.descr}\"\"\" ;"
-  #       else
-  #         triples << "    rdfs:description \"#{r.descr}\" ;"
-  #       end
-  #     end
-  #     triples[-1] = triples[-1][0...-1]
-  #     triples << "  ] ;"
-  #   end    
-  #   
-  #   if params.has_key? "geom" and !bbox.nil?
-  #     triples << "  geos:hasGeometry \"" +  RGeo::WKRep::WKTGenerator.new.generate( CitySDK_API.rgeo_factory.parse_wkb(bbox) )  + "\" ;"
-  #   end
-  # 
-  #   triples[-1][-1] = '.'
-  #   triples << ""
-  #   @@noderesults += triples
-  #   triples
-  # end
-
+  # TODO: params needed here?
   def self.make_hash(l, params)
    
-   #l[:owner] = owner.email  
-   l[:data_sources] = l[:data_sources] ? l[:data_sources].map { |s| s.index('=') ? s[s.index('=')+1..-1] : s } : [],
-     
+    l.delete :validity
+    l.delete :import_config
+        
+    l[:context] = JSON.parse(l[:context], {symbolize_names: true}) if l[:context]
+
+    # TODO: let PostGIS handle serialization
+    if not l[:bbox].nil?
+      l[:wkt] = RGeo::WKRep::WKTGenerator.new.generate(CitySDK_API.rgeo_factory.parse_wkb(l[:bbox]))
+      l[:geojson] = RGeo::GeoJSON.encode(CitySDK_API.rgeo_factory.parse_wkb(l[:bbox]))
+    end
+    l.delete :bbox
+    
+    # TODO: add owner!
+
+    l[:data_sources] = l[:data_sources] ? l[:data_sources].map { |s| s.index('=') ? s[s.index('=')+1..-1] : s } : []
+    
     # res = LayerProperty.where(:layer_id => id)
     # h[:fields] = [] if res.count > 0
     # res.each do |r|
@@ -158,7 +92,7 @@ class Layer < Sequel::Model
     #   h[:fields] << a
     # end
     
-    l    
+    l
   end
 
   def self.id_from_text(p)
@@ -234,22 +168,13 @@ class Layer < Sequel::Model
   
   def self.get_layer_hashes
     names = {}
-    Layer.all.each do |l| 
-      layer = l.values
+    Layer.all.each do |l|
+      layer = make_hash l.values, nil
       
-      id = l[:id]
-      name = l[:name]      
-      
-      # TODO: let postgis handle serialization
-      if not layer[:bbox].nil?
-        layer[:wkt] = RGeo::WKRep::WKTGenerator.new.generate(CitySDK_API.rgeo_factory.parse_wkb(layer[:bbox]))
-        layer[:geojson] = RGeo::GeoJSON.encode(CitySDK_API.rgeo_factory.parse_wkb(layer[:bbox]))
-      end
-
       # Save layer data in memcache without expiration 
-      key = self.memcache_key(id.to_s)
-      CitySDK_API.memcache_set(key, layer, 0)      
-      names[name] = id
+      key = self.memcache_key(layer[:id].to_s)
+      CitySDK_API.memcache_set(key, layer, 0)
+      names[layer[:name]] = layer[:id]
     end
     
     CitySDK_API.memcache_set(KEY_LAYER_NAMES, names, 0)
