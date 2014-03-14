@@ -75,8 +75,8 @@ class CitySDK_API < Sinatra::Base
     dataset = Layer.dataset
       .name_search(params)
       .category_search(params)
-      .layer_geometry(params)
       .layer_geosearch(params)
+      .only_layer_ids(params)
       .do_paginate(params)    
 
     dataset.serialize :layers, params
