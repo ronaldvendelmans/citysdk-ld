@@ -32,18 +32,26 @@ class GeoJSONSerializer < Serializer::Base
 
   def self.layers    
     @data.each do |layer|
-      @result[:features] << {
+      feature = {
         type: "Feature",
         properties: {        
           name: layer[:name],
           title: layer[:title],
           description: layer[:description],
           category: layer[:category],
-          organization: layer[:organization]
-          # data_sources: layer[:data_sources]
+          organization: layer[:organization],
+          data_sources: layer[:data_sources],
+          #realtime: layer[:realtime],
+          update_rate: layer[:update_rate],
+          webservice: layer[:webservice],
+          imported_at: layer[:imported_at],
+          context: layer[:context]
         },
-        geometry: layer[:bbox] ? JSON.parse(layer[:bbox].round_coordinates(Serializer::PRECISION)) : {}
+        geometry: layer[:geojson] ? layer[:geojson] : {}
       }
+      feature.delete_if { |k, v| v.nil? }
+      feature[:properties].delete_if { |k, v| v.nil? }
+      @result[:features] << feature
     end
   end
   # 
