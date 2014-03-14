@@ -51,7 +51,7 @@ module Serializer
       @data = data
       @layers = layers
       @meta = meta
-      
+            
       self.start 
       
       # TODO: add owners, layer semantics, node data, individual key/value
