@@ -111,6 +111,7 @@ Sequel.migration do
       
       String :rdf_type_uri
       
+      column :context, 'json'      
     end
 
     run <<-SQL
