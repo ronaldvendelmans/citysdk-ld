@@ -22,9 +22,11 @@ class JSONLDSerializer < GeoJSONSerializer
       }.merge feature[:properties]
       
       feature[:properties][:layers].each do |l,layer|
+        layer[:layer] = "cdk:layers/#{l}"
+        
         layer = {
           :@id => "cdk:layers/#{l}/objects/#{cdk_id}",
-          :@type => "cdk:LayerOnObject",
+          :@type => "cdk:LayerOnObject",          
         }.merge layer
         
         context = "http://api.citysdk.waag.org/layers/#{l}/fields"
@@ -62,6 +64,10 @@ class JSONLDSerializer < GeoJSONSerializer
       :features => "cdk:apiResult",
       :properties => "_:properties",
       :date_created => "dc:date",
+      :layer => {
+        :@id => "cdk:createdOnLayer",
+        :@type => "@id"        
+      },
       :layers => {
         :@id => "cdk:layerOnObject",
         :@container => "@index"
