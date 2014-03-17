@@ -64,7 +64,6 @@ class CSDK_CMS < Sinatra::Base
   after do
   end
   
-  # TODO: no camel casing! not here and not nowhere!!!!
   def get_layers
     @layerSelect = Layer.selectTag()
     @selected = params[:category] || 'administrative'
