@@ -73,6 +73,7 @@ class CitySDK_API < Sinatra::Base
     # layer_geometry also sets proper PostGIS geom 
     # serialization - always call layer_geometry
     dataset = Layer.dataset
+      .order(:id)
       .name_search(params)
       .category_search(params)
       .layer_geosearch(params)
@@ -82,12 +83,11 @@ class CitySDK_API < Sinatra::Base
     dataset.serialize :layers, params
   end
   
-  get '/layers/:name/?' do |name|
+  get '/layers/:layer/?' do |name|
     layer_id = Layer.id_from_text(name)
 
-
-    Layer[layer_id].serialize(params)
-
+    dataset = Layer.where(:id => layer_id)
+    dataset.serialize :layer, params
   end
 
   get '/nodes/?' do
