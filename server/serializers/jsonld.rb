@@ -40,26 +40,28 @@ class JSONLDSerializer < GeoJSONSerializer
       
       feature[:properties][:layer] = "cdk:layers/#{feature[:properties][:layer]}"
       
-      feature[:properties][:layers].each do |l,layer|
-        layer[:layer] = "cdk:layers/#{l}"
+      if feature[:properties].has_key? :layers
+        feature[:properties][:layers].each do |l,layer|
+          layer[:layer] = "cdk:layers/#{l}"
         
-        layer = {
-          :@id => "cdk:layers/#{l}/objects/#{cdk_id}",
-          :@type => "cdk:LayerOnObject",          
-        }.merge layer
+          layer = {
+            :@id => "cdk:layers/#{l}/objects/#{cdk_id}",
+            :@type => "cdk:LayerOnObject",          
+          }.merge layer
         
-        context = "http://api.citysdk.waag.org/layers/#{l}/fields"
-        if first_feature
-          context = @layers[l][:context] if @layers[l][:context]
+          context = "http://api.citysdk.waag.org/layers/#{l}/fields"
+          if first_feature
+            context = @layers[l][:context] if @layers[l][:context]
+          end
+        
+          layer[:data] = {
+            :@id => "cdk:objects/#{cdk_id}/layers/#{l}",
+            :@type => "cdk:LayerData",
+            :@context => context,
+          }.merge layer[:data]
+        
+          feature[:properties][:layers][l] = layer
         end
-        
-        layer[:data] = {
-          :@id => "cdk:objects/#{cdk_id}/layers/#{l}",
-          :@type => "cdk:LayerData",
-          :@context => context,
-        }.merge layer[:data]
-        
-        feature[:properties][:layers][l] = layer
       end
       
       first_feature = false
