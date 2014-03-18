@@ -116,9 +116,10 @@ class CitySDK_API < Sinatra::Base
     end
   end
   
+  # TODO: move to serializer? or only use JSON in (error) messages?
   def self.do_abort(code, message)
     @do_cache = false
-    throw(:halt, [code, {'Content-Type' => 'application/json'}, {:status => 'fail', :message  => message}.to_json])
+    throw(:halt, [code, {'Content-Type' => 'application/json'}, {:status => 'fail', :message => message}.to_json])
   end  
 
   def self.request_format(params, req)
