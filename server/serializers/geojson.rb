@@ -54,9 +54,6 @@ class GeoJSONSerializer < Serializer::Base
       @result[:features] << feature
     end
   end
-  # 
-  # def message
-  # end
   
   def self.status
     @result[:features] << {

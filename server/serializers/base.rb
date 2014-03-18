@@ -60,8 +60,6 @@ module Serializer
         self.nodes
       when :layers
         self.layers
-      when :message
-        self.message
       when :status
         self.status
       end
@@ -91,10 +89,6 @@ module Serializer
     
     def self.layers
       CitySDK_API.do_abort(500,"Serialization error - layers not implemented")
-    end
-    
-    def self.message
-      CitySDK_API.do_abort(500,"Serialization error - message not implemented")      
     end
 
     def self.status
