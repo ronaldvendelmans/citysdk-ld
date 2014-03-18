@@ -166,4 +166,3 @@ class String
     self.gsub(/(\d+)\.(\d{#{precision}})\d+/, '\1.\2')
   end
 end
-
