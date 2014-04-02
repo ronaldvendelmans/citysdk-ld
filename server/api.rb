@@ -40,7 +40,8 @@ configure do | sinatraApp |
   Dir[File.dirname(__FILE__) + '/utils/commands/*.rb'].each {|file| require file }
   Dir[File.dirname(__FILE__) + '/models/*.rb'].each {|file| require file }
   Dir[File.dirname(__FILE__) + '/serializers/*.rb'].each {|file| require file }
-    
+   
+  Layer.get_layer_hashes 
 end
 
 class CitySDK_API < Sinatra::Base
