@@ -5,15 +5,15 @@ class JSONLDSerializer < GeoJSONSerializer
   
   def self.end
     # @result[:meta] = {
-    #   :"@type" => "cdk:ApiResultMeta"
+    #   :"@type" => ":ApiResultMeta"
     # }.merge @result[:meta]
-    
+
     case @type    
     when :node, :nodes
       @result = {
         :@context => create_node_context,
         :@id => @result[:meta][:url],
-        :@type => "cdk:APIResult",
+        :@type => ":APIResult",
       }.merge @result      
       
       jsonld_nodes
@@ -21,7 +21,7 @@ class JSONLDSerializer < GeoJSONSerializer
       @result = {
         :@context => create_layer_context,
         :@id => @result[:meta][:url],
-        :@type => "cdk:APIResult",
+        :@type => ":APIResult",
       }.merge @result      
       
       jsonld_layers
@@ -31,32 +31,36 @@ class JSONLDSerializer < GeoJSONSerializer
   end
   
   def self.jsonld_nodes
-    first_feature = true
+    # TODO: add fields!!!
+    
+    first = true
     @result[:features].map! do |feature|      
       cdk_id = feature[:properties][:cdk_id]
       feature[:properties] = {
-        :@id => "cdk:objects/#{cdk_id}"
+        :@id => ":objects/#{cdk_id}"
       }.merge feature[:properties]
       
-      feature[:properties][:layer] = "cdk:layers/#{feature[:properties][:layer]}"
+      feature[:properties][:layer] = ":layers/#{feature[:properties][:layer]}"
       
       if feature[:properties].has_key? :layers
         feature[:properties][:layers].each do |l,layer|
-          layer[:layer] = "cdk:layers/#{l}"
+                    
+          layer[:layer] = ":layers/#{l}"
         
           layer = {
-            :@id => "cdk:layers/#{l}/objects/#{cdk_id}",
-            :@type => "cdk:LayerOnObject",          
+            :@id => ":layers/#{l}/objects/#{cdk_id}",
+            :@type => ":LayerOnObject",          
           }.merge layer
         
+          # TODO: url from config
           context = "http://api.citysdk.waag.org/layers/#{l}/fields"
-          if first_feature
+          if first
             context = @layers[l][:context] if @layers[l][:context]
           end
         
           layer[:data] = {
-            :@id => "cdk:objects/#{cdk_id}/layers/#{l}",
-            :@type => "cdk:LayerData",
+            :@id => ":objects/#{cdk_id}/layers/#{l}",
+            :@type => ":LayerData",
             :@context => context,
           }.merge layer[:data]
         
@@ -64,11 +68,11 @@ class JSONLDSerializer < GeoJSONSerializer
         end
       end
       
-      first_feature = false
+      first = false
       
       {
-        :"@id" => "cdk:objects/#{cdk_id}",
-        :"@type" => "cdk:Object",
+        :"@id" => ":objects/#{cdk_id}",
+        :"@type" => ":Object",
       }.merge feature
     end
   end
@@ -77,12 +81,12 @@ class JSONLDSerializer < GeoJSONSerializer
     first_feature = true
     @result[:features].map! do |feature|
       feature[:properties] = {
-        :@id => "cdk:layers/#{feature[:properties][:name]}"
+        :@id => ":layers/#{feature[:properties][:name]}"
       }.merge feature[:properties]
 
       {
-        :"@id" => "cdk:layers/#{feature[:properties][:name]}",
-        :"@type" => ["cdk:Layer", "dcat:Dataset"]
+        :"@id" => ":layers/#{feature[:properties][:name]}",
+        :"@type" => [":Layer", "dcat:Dataset"]
       }.merge feature
     end
   end  
@@ -92,19 +96,19 @@ class JSONLDSerializer < GeoJSONSerializer
     {      
       :@base => "http://rdf.citysdk.eu/ams/",
       :name => "dc:title",
-      :cdk_id => "cdk:cdk_id",
-      :features => "cdk:apiResult",
+      :cdk_id => ":cdk_id",
+      :features => ":apiResult",
       :properties => "_:properties",
       :date_created => "dc:date",
       :layer => {
-        :@id => "cdk:createdOnLayer",
+        :@id => ":createdOnLayer",
         :@type => "@id"        
       },
       :layers => {
-        :@id => "cdk:layerOnObject",
+        :@id => ":layerOnObject",
         :@container => "@index"
       },
-      :data => "cdk:layerData"
+      :data => ":layerData"
       #:wkt => "geos:hasGeometry"
     }
   end
@@ -113,7 +117,7 @@ class JSONLDSerializer < GeoJSONSerializer
     {
       :@base => "http://rdf.citysdk.eu/ams/",
       :title => "dct:title",
-      :features => "cdk:apiResult",
+      :features => ":apiResult",
       :properties => "_:properties",
       :imported_at => "dct:modified"
     }
