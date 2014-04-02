@@ -13,8 +13,7 @@ class Owner < Sequel::Model
     self.timeout = Time.now + 60
     self.save
   end
-  
-  
+   
   def self.domains(s)
     o = Owner.where(:session => s).first
     o ? o.domains.split(',') : []
@@ -80,9 +79,15 @@ class Owner < Sequel::Model
     end
     CitySDK_API.do_abort(500,"Server error.")
   end
-
-  def serialize
-    {}
+    
+  def self.make_hash(o)
+    {
+      name: o[:name],
+      email: o[:email],
+      website: o[:www],
+      organization: o[:organization]
+    }
   end
+
 end
 
