@@ -1,8 +1,8 @@
 ## Links
 
  - [CitySDK project site](http://www.citysdk.eu/)
- - [CitySDK Linked Open Data Distribution API endpoint](http://api.citysdk.waag.org/)
- - [Visualization of CitySDK Mobility data](http://dev.citysdk.waag.org/visualisation/)
+ - [CitySDK Linked Data API endpoint](http://api.citysdk.waag.org/)
+ - [Visualization of real-time CitySDK LD API mobility data](http://dev.citysdk.waag.org/visualisation/)
  - [Map with building and address data](http://dev.citysdk.waag.org/buildings/)
  - [Additional APIs in the CitySDK toolkit](http://www.citysdk.eu/developers/) 
 

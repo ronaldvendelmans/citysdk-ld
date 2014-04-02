@@ -1,16 +1,16 @@
 # Data & other APIs
 
-##### What is the CitySDK Linked Open Data Distribution API?
+##### What is the CitySDK Linked Data API?
 
-The CitySDK Linked Open Data Distribution API is a linked data distribution platform. See the [about page](about) for more information.
+The CitySDK Linked Data API is a linked data distribution platform. See the [about page](about) for more information.
 
-##### What's the difference between CitySDK and other data catalogs and platforms (e.g. CKAN, Socrata)?
+##### What's the difference between CitySDK LD API and other data catalogs and platforms (e.g. CKAN, Socrata)?
 
-The main difference is that CitySDK creates links between objects in different datasets from different data sources. CitySDK stores data about objects that really exist in a city - e.g. bus stops, bridges, roads, neighborhoods and museums - and collects and links these datasets and APIs; available via one simple interface for both realtime and static data. See the [about page](about), [API specifiation](dev) or the examples in the [map viewer](map) for more information.
+The main difference is that CitySDK LD API creates links between objects in different datasets from different data sources. CitySDK LD API stores data about objects that really exist in a city - e.g. bus stops, bridges, roads, neighborhoods and museums - and collects and links these datasets and APIs; available via one simple interface for both realtime and static data. See the [about page](about), [API specifiation](dev) or the examples in the [map viewer](map) for more information.
 
 CitySDK is more than a data catalog. Data is stored in CitySDK itself, making it searchable, comparable and viewable.
 
-##### Which datasets are available in CitySDK?
+##### Which datasets are available in CitySDK LD API?
 
 The CitySDK [CMS](http://cms.citysdk.waag.org/) lists all datasets, with a data example in JSON and our map viewer.
 

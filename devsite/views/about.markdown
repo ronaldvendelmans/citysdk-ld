@@ -3,7 +3,7 @@
 <table id="about">
   <tr>
     <td>
-      <p>The concept of CitySDK Linked Open Data Distribution API is best explained using Tim Berners-Lee’s <a href="http://5stardata.info/">Five Star Linked Open Data model</a>.</p>
+      <p>The concept of CitySDK Linked Data API is best explained using Tim Berners-Lee’s <a href="http://5stardata.info/">Five Star Linked Open Data model</a>.</p>
       <p>
 On the right, you see a city. Like more and more cities all over Europe, this city is opening its data to the public, and making it available through data catalog portals like <a href="http://ckan.org/">CKAN</a>. Moreover, it is also working on APIs and services to facilitate the communication with citizens (i.e. <a href="http://open311.org/">Open311</a>).
       </p>
@@ -49,7 +49,7 @@ Many of the datasets in open data catalog contain data about objects that exist 
   <td>
 CitySDK is a linked open data distribution platform - for static and real-time data - and connects existing open datasets, data catalogs and APIs. CitySDK provides one easy to use REST API with both JSON and <a href="http://www.w3.org/TeamSubmission/turtle/">Turtle/RDF</a> output. With this API, datasets that were previously difficult to access and use can be accessed in a single unified way, on an per-object basis.
 
-Datasets in the following categories are currently accessible for multiple European cities using CitySDK Linked Open Data Distribution API:
+Datasets in the following categories are currently accessible for multiple European cities using CitySDK Linked Data API:
 
 <ul>
 <li>Public transport data (GTFS) 	&ndash; static &amp; real-time</li>

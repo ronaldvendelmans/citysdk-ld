@@ -2,7 +2,7 @@
               
 ####Authentication
 
-To use the CitySDK Mobility Write API, you need a valid user account. For now, we only provide write access to a couple of selected organisations and data owners, but this will change soon. In the meantime, if you have data you think CitySDK desperately needs, you can send an email to 
+To write to the CitySDK Linked Data API, you need a valid user account. For now, we only provide write access to a couple of selected organisations and data owners, but this will change soon. In the meantime, if you have data you think CitySDK desperately needs, you can send an email to 
 <a href='&#109;&#97;&#105;lto&#58;%63%69%&#55;4&#37;&#55;&#57;sd&#37;6&#66;%&#52;0wa&#97;&#103;&#46;org'>Citysdk Support</a>
 
 All Write API requests require authentication by means of a session key, a random string that provides temporary, secure access to the Write API. To start a session and request a session key, you need to do the following call:
