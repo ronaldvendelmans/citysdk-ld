@@ -63,14 +63,12 @@ class Layer < Sequel::Model
   def self.make_hash(l, params)
     l.delete :validity
     l.delete :import_config
-        
+    
     l[:context] = JSON.parse(l[:context], {symbolize_names: true}) if l[:context]
     
     # TODO: use Serializer::PRECISION
     l[:wkt] = l[:wkt].round_coordinates(6) if l[:wkt]
     l[:geojson] = JSON.parse(l[:geojson].round_coordinates(6), {symbolize_names: true}) if l[:geojson]
-        
-    # TODO: add owner!
 
     l[:data_sources] = l[:data_sources] ? l[:data_sources].map { |s| s.index('=') ? s[s.index('=')+1..-1] : s } : []
         
@@ -150,12 +148,15 @@ class Layer < Sequel::Model
   
   def self.get_layer_hashes
     names = {}
-    
+      
     columns = (Layer.dataset.columns - [:bbox])
     Layer.select{columns}.select_append(
       Sequel.function(:ST_AsGeoJSON, :bbox).as(:geojson),
       Sequel.function(:ST_AsText, :bbox).as(:wkt)
     ).all.each do |l|
+      l.values[:owner] = Owner.make_hash Owner.where(:id => l.values[:owner_id]).first
+      l.values[:fields] = LayerProperty.where(:layer_id => l.values[:id]).all.map { |l| LayerProperty.make_hash l.values }
+
       layer = make_hash l.values, nil
       
       # Save layer data in memcache without expiration 
@@ -169,5 +170,3 @@ class Layer < Sequel::Model
   end  
   
 end
-
-Layer.get_layer_hashes
