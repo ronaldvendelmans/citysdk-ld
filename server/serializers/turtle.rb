@@ -13,17 +13,16 @@ class TurtleSerializer < Serializer::Base
       
   def self.start
     @result = []
-    @result << "@base <http://rdf.citysdk.eu/asd/> ."
     
+    @prefixes = []
+    @prefixes << "@base <http://rdf.citysdk.eu/asd/> ."
     PREFIXES.each do |prefix, iri| 
-      @result << "@prefix #{prefix}: <#{iri}> ."
+      @prefixes << "@prefix #{prefix}: <#{iri}> ."
     end
-    
-    @result << ""
   end
   
   def self.end
-    @result.join("\n")
+    (@prefixes.uniq + [""] + @result).join("\n")
   end
   
   def self.nodes
@@ -88,7 +87,16 @@ class TurtleSerializer < Serializer::Base
               iri.index("http") == 0 and ["/", "#"].include? iri[-1]            
             }.merge PREFIXES
             
-            @result << graph.dump(:ttl, :prefixes => prefixes)
+            graph.dump(:ttl, :prefixes => prefixes).each_line do |line|
+              # Turtle output of graph.dump contains both prefixes statements
+              # Filter out prefixes, and add them to @prefixes and rest to @result
+              if line.index("@prefix") == 0
+                @prefixes << line.strip
+              else
+                @result << line.rstrip
+              end
+            end
+            
           end
         end
       end
