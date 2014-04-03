@@ -69,11 +69,17 @@ module CitySDK
           @port = $2
           @host = $1
         else
-          @port = 80
+          @port = (host =~ /^https/)? 443 : 80
         end
       end
       
-      @connection = Faraday.new :url => "http://#{@host}:#{@port}"
+      @host = $2 if @host =~ /^(http|https):\/\/(.*)$/
+      
+      if host =~ /^https/
+        @connection = Faraday.new :url => "https://#{@host}:#{@port}", :ssl => {:verify => false}
+      else
+        @connection = Faraday.new :url => "http://#{@host}:#{@port}"
+      end
       @connection.headers = {
         :user_agent => 'CitySDK_API GEM ' + CitySDK::VERSION,
         :content_type => 'application/json'
