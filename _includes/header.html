@@ -6,7 +6,10 @@
     <meta name="viewport"content="width=device-width,initial-scale=1">
     <link href="{{ site.baseurl }}/img/favicon.ico" rel="shortcut icon" type=image/x-icon>
     <link rel="stylesheet" href="{{ site.baseurl }}/css/style.css">
+
+    {% if page.layout == "map" %}
     <script src="{{ site.baseurl }}/js/jquery-1.9.1.min.js"></script>
+    <script src="{{ site.baseurl }}/js/jquery-migrate-1.2.1.min.js"></script>
     <script src="{{ site.baseurl }}/js/highlight.min.js"></script>
     <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->    
 
@@ -15,8 +18,6 @@
     <script src="{{ site.baseurl }}/js/spin.min.js"></script>
     <script src="{{ site.baseurl }}/leaflet/leaflet.js"></script>
 
-
-    <script src="{{ site.baseurl }}/js/jquery-migrate-1.2.1.min.js"></script>
   	<script type="text/javascript">
       $(document).ready(function () {
         hljs.initHighlightingOnLoad();
@@ -25,6 +26,8 @@
       // Dynamic endpoint URL, used on data page
       var epApiUrl = "<%= config[:ep_api_url] %>";
   	</script>
+    {% endif %}
+    
   </head>
   <body>	
     <header>
