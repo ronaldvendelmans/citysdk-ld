@@ -1,8 +1,7 @@
 ---
-layout: default
+layout: api
 title: API - match
 ---
-
 
 ## Match API
 
