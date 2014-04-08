@@ -16,9 +16,6 @@
     <script src="/leaflet/leaflet.js"></script>
 
 
-    {% jsonconfig config from config.json %}
-    {% jsonball foo from data { "a": "hondje" } %}
-    
     <script src="/js/jquery-migrate-1.2.1.min.js"></script>
   	<script type="text/javascript">
       $(document).ready(function () {
@@ -32,7 +29,7 @@
   <body>	
     <header>
       <div class="container">
-        <h1>CitySDK Linked Open Data Distribution API - {{ config.db_host }} {{foo.a}}</h1>
+        <h1>CitySDK Linked Data API</h1>
         <div class="logo">
           <img src="/img/citysdk.png" />
         </div>

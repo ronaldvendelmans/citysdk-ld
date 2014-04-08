@@ -1,4 +1,3 @@
-
 ## Links
 
  - [CitySDK project site](http://www.citysdk.eu/)
