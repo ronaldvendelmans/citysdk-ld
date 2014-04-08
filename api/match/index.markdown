@@ -1,6 +1,6 @@
 ---
 layout: api
-title: API - match
+title: Match API
 ---
 
 ## Match API

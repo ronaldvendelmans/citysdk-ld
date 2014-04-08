@@ -1,6 +1,6 @@
 ---
 layout: api
-title: API - read
+title: Read API
 ---
 
 ## GET Interface

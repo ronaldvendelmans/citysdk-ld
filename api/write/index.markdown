@@ -1,11 +1,11 @@
 ---
 layout: api
-title: API - write
+title: Write API
 ---
 
-##PUT/POST/DELETE Interface
+## PUT/POST/DELETE Interface
               
-####Authentication
+#### Authentication
 
 For write access to the CitySDK Linked Data API, you need a valid user account. For now, we only provide write access to a couple of selected organisations and data owners, but this will change soon. In the meantime, if you have data you think CitySDK desperately needs, you can send an email to 
 <a href='&#109;&#97;&#105;lto&#58;%63%69%&#55;4&#37;&#55;&#57;sd&#37;6&#66;%&#52;0wa&#97;&#103;&#46;org'>Citysdk Support</a>
