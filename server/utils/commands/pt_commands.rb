@@ -66,7 +66,7 @@ class CitySDK_API < Sinatra::Base
           :results => r
         }.to_json
       else
-        # needs generic solution!!
+        # TODO: needs generic solution!!
         g = stop.get_layer('ns')
         if(g)
           h = g.data
@@ -168,18 +168,21 @@ class CitySDK_API < Sinatra::Base
 
     def self.process_stop(stop,params)
       if params.has_key? 'cdk_id'
-        if(stop)
+        if stop
           case params[:cmd]
           when 'ptlines'
             lines = Node.where("members @> '{ #{stop.id} }' ").eager_graph(:node_data).where(:node_id => :nodes__id)
             lines = lines.all.map { |a| a.values.merge(:node_data=>a.node_data.map{|al| al.values}) }
+            
+            puts lines.inspect
             
             return { 
               :status => 'success', 
               :pages => 1, 
               :per_page => lines.length, 
               :record_count => lines.length, 
-              :results => lines.each {|l| Node.serialize(l,params)} 
+              #:results => lines.each {|l| Node.to_hash(l,params)},
+              :chips => "vis"
             }.to_json
           when 'schedule'
             return schedule_for_stop(stop)
@@ -219,8 +222,8 @@ class CitySDK_API < Sinatra::Base
               :status => 'success', 
               :pages => 1, 
               :per_page => stops.length, 
-              :record_count => stops.length, 
-              :results => stops.each {|l| Node.serialize(l,params)}
+              :record_count => stops.length #, 
+              #:results => stops.each {|l| Node.to_hash(l,params)}
             }.to_json
           when 'schedule'
             return schedule_for_line(line,params[:day]||0)
