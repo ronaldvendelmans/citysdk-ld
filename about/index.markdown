@@ -66,6 +66,6 @@ title: About
       </ul>
     </td>
     <td class="number"><div>7</div></td>  
-    <td><img src="/img/city-07.png" /></td>
+    <td><img src="{{ site.baseurl }}/img/city-07.png" /></td>
   </tr>
 </table>

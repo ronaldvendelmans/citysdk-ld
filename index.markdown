@@ -14,7 +14,7 @@ The CitySDK Linked Open Data Distribution API is a linked data distribution plat
 3. The API enables the _Read/Write City_: per layer, data can be added to objects the city, using URIs.
 4. Data exchange between citizens and the city will become open, more efficient and more transparent data.
 5. The API enables innovation for businesses, media and citizens, and Manages the constant technological change: adding new datasets and services is made easy.
-6. The API is released as [open source on GitHub](http://github.com/waagsociety/citysdk), and can easily be implemented and amended to local needs.
+6. The API is released as [open source on GitHub](http://github.com/waagsociety/citysdk-ld), and can easily be implemented and amended to local needs.
 
 ### Features
 
@@ -24,7 +24,7 @@ The CitySDK Linked Open Data Distribution API is a linked data distribution plat
 * Write access for data owners and app developers
 * CMS for data owners for easy integration of new datasets
 * Interactive linking of data sets
-* [Map viewer](/map)
+* [Map viewer]({{ site.baseurl }}/map)
 * Standardized interface in 8 cities
 * [Ruby API gem](http://rubygems.org/gems/citysdk)
 
