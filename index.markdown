@@ -14,7 +14,7 @@ The CitySDK Linked Open Data Distribution API is a linked data distribution plat
 3. The API enables the _Read/Write City_: per layer, data can be added to objects the city, using URIs.
 4. Data exchange between citizens and the city will become open, more efficient and more transparent data.
 5. The API enables innovation for businesses, media and citizens, and Manages the constant technological change: adding new datasets and services is made easy.
-6. The API is released as [open source on GitHub](http://github.com/waagsociety/citysdk-ld), and can easily be implemented and amended to local needs.
+6. The API is released as [open source on GitHub]({{ site.data.endpoint.github }}), and can easily be implemented and amended to local needs.
 
 ### Features
 
@@ -34,8 +34,8 @@ The CitySDK Linked Open Data Distribution API is a linked data distribution plat
 * Data stored in PostgreSQL/PostGIS database
 
 ### Adding your own data
-If you are a data owner, the API offers a user-friendly <a class="ep_cms_url">CMS</a>.
-It makes it easy to upload and (automatically) update your static and realtime data sets. To get a login, send an email to <a href='&#109;&#97;&#105;lto&#58;%63%69%&#55;4&#37;&#55;&#57;sd&#37;6&#66;%&#52;0wa&#97;&#103;&#46;org'>CitySDK support</a>.
+If you are a data owner, the API offers a user-friendly <a href="{{ site.data.endpoint.cms }}">CMS</a>.
+It makes it easy to upload and (automatically) update your static and realtime data sets. To get a login, send an email to <a href="mailto:{{ site.data.endpoint.email }}">CitySDK support</a>.
 
 ### Interested?
-If your city is interested in CitySDK and the API interface and toolkit, or if you are a developer looking to develop apps that work in different European cities, then get in touch via <a href='&#109;&#97;&#105;lto&#58;%63%69%&#55;4&#37;&#55;&#57;sd&#37;6&#66;%&#52;0wa&#97;&#103;&#46;org'>CitySDK support</a>.
+If your city is interested in CitySDK and the API interface and toolkit, or if you are a developer looking to develop apps that work in different European cities, then get in touch via <a href="mailto:{{ site.data.endpoint.email }}">CitySDK support</a>.
