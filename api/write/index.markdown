@@ -7,7 +7,7 @@ title: API - write
               
 ####Authentication
 
-To use the CitySDK Mobility Write API, you need a valid user account. For now, we only provide write access to a couple of selected organisations and data owners, but this will change soon. In the meantime, if you have data you think CitySDK desperately needs, you can send an email to 
+For write access to the CitySDK Linked Data API, you need a valid user account. For now, we only provide write access to a couple of selected organisations and data owners, but this will change soon. In the meantime, if you have data you think CitySDK desperately needs, you can send an email to 
 <a href='&#109;&#97;&#105;lto&#58;%63%69%&#55;4&#37;&#55;&#57;sd&#37;6&#66;%&#52;0wa&#97;&#103;&#46;org'>Citysdk Support</a>
 
 All Write API requests require authentication by means of a session key, a random string that provides temporary, secure access to the Write API. To start a session and request a session key, you need to do the following call:
@@ -122,7 +122,7 @@ By default, the node is kept when removing data. Afterwards, the `<cdk_id>` and 
 
 You can only write data or create nodes in one layer at a time. Of course, you can only 
 modify nodes on layers you own. You can create, modify and delete 
-layers in the [CitySDK Mobility CMS](http://cms.citysdk.waag.org/).
+layers in the [CitySDK LD API CMS](http://cms.citysdk.waag.org/).
 
 ### Input
 
