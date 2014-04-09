@@ -25,7 +25,7 @@ module Sequel
         end        
               
         if type == :node and nodes.length == 0
-          CitySDK_API.do_abort(422,"Node not found: '#{params[:node]}'")
+          CitySDK_LD.do_abort(422,"Node not found: '#{params[:node]}'")
         end
         
         meta.merge! pagination_results(params, get_pagination_data(params), nodes.length)         
@@ -39,7 +39,7 @@ module Sequel
         layer_ids = self.all.map { |a| a.values[:id] }
 
         if type == :layer and layer_ids.length == 0
-          CitySDK_API.do_abort(422,"Layer not found: '#{params[:layer]}'")
+          CitySDK_LD.do_abort(422,"Layer not found: '#{params[:layer]}'")
         end
 
         layers = layer_ids.map { |layer_id| Layer.get_layer layer_id }        
