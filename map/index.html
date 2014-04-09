@@ -439,6 +439,7 @@ title: Map
     
     function addDropdownExamples() {
     
+      // Jekyll inserts examples from endpoint.yml:
       var examples = [
         {% for example in site.data.endpoint.examples %}
         {
@@ -475,7 +476,7 @@ title: Map
         if (index == 0) {
           cls += " last_history";
         }
-        var tr = "<tr class=\"" + cls + "\" data-url=\"" + this + "\"><td class=\"minimize endpoint\"><%= @config[:ep_api_url] %>/</td><td class=\"fill\" colspan=\"4\"><span class=\"url\">" + this + "</span></td></tr>";
+        var tr = "<tr class=\"" + cls + "\" data-url=\"" + this + "\"><td class=\"minimize endpoint\">{{ site.data.endpoint.endpoint }}</td><td class=\"fill\" colspan=\"4\"><span class=\"url\">" + this + "</span></td></tr>";
         $(tr).insertAfter($('#before_history'));          
       });      
     }
@@ -491,7 +492,6 @@ title: Map
       $(selector).addClass("button_down"); 
     }      
   }    
-   
   
 	$.ajaxTransport("+*", function( options, originalOptions, jqXHR ) {                                   
     if($.browser.msie && window.XDomainRequest) {
