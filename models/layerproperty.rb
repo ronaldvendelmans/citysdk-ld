@@ -18,5 +18,5 @@ class Prefix < Sequel::Model(:ldprefix)
 end
 
 class OSMProps < Sequel::Model(:osmprops)
-  
+
 end

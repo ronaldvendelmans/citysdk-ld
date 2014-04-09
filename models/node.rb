@@ -1,7 +1,7 @@
 class Node < Sequel::Model
   one_to_many :node_data
-  
-  NODE_TYPES = ['node', 'route', 'ptstop', 'ptline'] 
+
+  NODE_TYPES = ['node', 'route', 'ptstop', 'ptline']
 
   def get_layer(n)
     if n.is_a?(String)
@@ -17,7 +17,7 @@ class Node < Sequel::Model
   end
 
   # TODO: to_hash cannot be used, it seems. Find other name?
-  def self.make_hash(h, params)    
+  def self.make_hash(h, params)
     h[:layers] = NodeDatum.make_hash h[:cdk_id], h[:node_data], params if h[:node_data]
 
     h.delete(:members)
@@ -27,22 +27,22 @@ class Node < Sequel::Model
     if h[:geom]
       h[:geom] = h[:geom]
     end
-    
+
     if h[:modalities]
       h[:modalities] = h[:modalities].map { |m| Modality.name_from_id(m) }
     else
       h.delete(:modalities)
     end
 
-    h.delete(:related) if h[:related].nil?    
+    h.delete(:related) if h[:related].nil?
     #h.delete(:modalities) if (h[:modalities] == [] or h[:modalities].nil?)
     h[:node_type] = NODE_TYPES[h[:node_type]]
     h.delete(:layer_id)
     h.delete(:id)
     h.delete(:node_data)
     h.delete(:created_at)
-    h.delete(:updated_at)     
+    h.delete(:updated_at)
     h
-  end  
+  end
 
 end

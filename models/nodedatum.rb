@@ -12,16 +12,16 @@ class NodeDatum < Sequel::Model
 	plugin :validation_helpers
 
   KEY_SEPARATOR = ':'
-  
+
   def self.array_to_nested_hash(a,v,h)
     begin
       g = h
       while(a.length > 1 )
         aa = a.shift.to_sym
         if g[aa].nil?
-          g[aa] = {} 
+          g[aa] = {}
         elsif g[aa].class == String
-          g[aa] = {'->' => g[aa]} 
+          g[aa] = {'->' => g[aa]}
         end
         g = g[aa]
       end
@@ -49,19 +49,19 @@ class NodeDatum < Sequel::Model
     end
     h
   end
-   
-  def self.make_hash(cdk_id, h, params)    
+
+  def self.make_hash(cdk_id, h, params)
     newh = {}
     h.each do |nd|
 
       layer_id = nd[:layer_id]
-      
+
       name = Layer.name_from_id(layer_id)
-      
+
       nd.delete(:validity)
-            
+
       nd.delete(:tags) if nd[:tags].nil?
-      
+
       if nd[:modalities]
         nd[:modalities] = nd[:modalities].map { |m| Modality.name_from_id(m) }
       else
@@ -79,11 +79,11 @@ class NodeDatum < Sequel::Model
       if Layer.is_webservice?(layer_id) and !params.has_key?('skip_webservice')
         nd[:data] = WebService.load(layer_id, cdk_id, nd[:data])
       end
-      
+
       nd[:data] = nest(nd[:data].to_hash)
       newh[name] = nd
     end
     newh
   end
-  
+
 end

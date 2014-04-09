@@ -1,10 +1,10 @@
 require "sequel/model"
 
 class Modality < Sequel::Model
-  
+
 	plugin :validation_helpers
   plugin :json_serializer
-  
+
   @@modalityIdHash = {};
   @@modalityNameHash = {};
 
@@ -15,7 +15,7 @@ class Modality < Sequel::Model
     }
     h
   end
-  
+
   def self.id_from_name(p)
     case p
       when Array
@@ -24,7 +24,7 @@ class Modality < Sequel::Model
         return @@modalityIdHash[p]
     end
   end
- 
+
   def self.name_from_id(id)
     @@modalityNameHash[id] ||= Modality[id].name
   end
@@ -37,7 +37,7 @@ class Modality < Sequel::Model
     Modality.all.each do |m|
       @@modalityIdHash[m[:name]] = m[:id]
     end
-  end 
+  end
 end
 
 Modality.get_modality_hashes
