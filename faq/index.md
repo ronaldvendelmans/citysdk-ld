@@ -21,7 +21,7 @@ The CitySDK [CMS](http://cms.citysdk.waag.org/) lists all datasets, with a data 
 
 ##### Can you add dataset X?
 
-Yes, probably. Datasets need to be open and have a geolocation. You can send an email to <a href='&#109;&#97;&#105;lto&#58;%63%69%&#55;4&#37;&#55;&#57;sd&#37;6&#66;%&#52;0wa&#97;&#103;&#46;org'>CitySDK Support</a> to request the addition of a dataset. You can also ask for a CitySDK account and add the dataset yourself using our CMS or API. 
+Yes, probably. Datasets need to be open and have a geolocation. You can send an email to <a href='citysdk@waag.org'>CitySDK Support</a> to request the addition of a dataset. You can also ask for a CitySDK account and add the dataset yourself using our CMS or API.
 
 ##### How does CitySDK manage the differences in data models between European cities?
 
@@ -33,7 +33,7 @@ It doesn't. In CitySDK, the quality of datasets is very visible, which should pr
 
 ##### Does CitySDK comply with existing standards/standardization practices (INSPIRE/W3C/Forum Standaardisatie/...)?
 
-Yes, although the level of compliance varies between domains and datasets. 
+Yes, although the level of compliance varies between domains and datasets.
 
 ##### Isn't building your own database a bit web 2.0?
 
@@ -59,11 +59,11 @@ CitySDK is a powerful tool for any organisation wanting to distribute open data 
 
 ##### What are the costs of CitySDK?
 
-This depends on what you need. A minimum version would consist of costs for a server, bandwidth and support to keep the API running and give some assistance when importing datasets. 
+This depends on what you need. A minimum version would consist of costs for a server, bandwidth and support to keep the API running and give some assistance when importing datasets.
 
 ##### What are the revenues of CitySDK?
 
-This also depends on the individual use case. When sharing datasets between departments in your organisation, quick efficiency wins are possible. When you want to interest developers in working with your data, it is important to offer a comprehensive set of related data. 
+This also depends on the individual use case. When sharing datasets between departments in your organisation, quick efficiency wins are possible. When you want to interest developers in working with your data, it is important to offer a comprehensive set of related data.
 
 ##### Other questions
 
