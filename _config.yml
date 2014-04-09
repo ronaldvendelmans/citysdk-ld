@@ -3,6 +3,7 @@ baseurl: /citysdk-ld
 
 prose:
   ignore:
+    - .gitignore
     - /\..*
     - /_config.yml
     - /LICENSE.md
