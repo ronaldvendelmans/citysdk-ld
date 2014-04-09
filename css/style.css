@@ -1,3 +1,6 @@
+---
+---
+
 /* "Simpliste" template. Renat Rafikov. http: //cssr.ru/simpliste/ */
 
 @import url('reset.css');
@@ -12,7 +15,7 @@ body {
 header {
   margin: 0;
   padding: 0;
-  background-image: url('../img/header.png');
+  background-image: url('{{ site.baseurl }}/img/header.png');
   background-repeat: repeat-x;
   height: 148px;
 }
@@ -32,7 +35,7 @@ header h1 {
 footer {
   margin: 0;
   padding: 30px 0;
-  background-image: url('../img/footer.png');
+  background-image: url('{{ site.baseurl }}/img/footer.png');
   background-repeat: repeat-x;
   height: 40px;
 }
@@ -198,7 +201,7 @@ h5 {
 .header {
   padding: 0 2% 0 2%;
   background-color: #ffffff;
-  background-image: url('img/bg.png');
+  background-image: url('{{ site.baseurl }}/img/bg.png');
   background-repeat: no-repeat;
   background-position: center bottom;
   height: 104px;
@@ -268,7 +271,7 @@ article pre code {
 }
 
 .col_33 ul {
-  list-style-image: url(../img/bullet.png); 
+  list-style-image: url({{ site.baseurl }}/img/bullet.png); 
 }
 
 .example li a:hover {color: #000000;}
@@ -331,7 +334,7 @@ table#about tr td:last-child img {
 table#about tr td.number {
   width: 35px;
   padding: 0;
-  background-image: url('../img/line-eee.png');
+  background-image: url('{{ site.baseurl }}/img/line-eee.png');
   background-repeat: repeat-y;
   background-position: center; 
 }

@@ -8,8 +8,8 @@ Endpoint-specific configuration is in [`config.yml`](../../blob/gh-pages/_data/e
 
 Run the following command:
 
-```
+```bash
 jekyll serve --watch --baseurl ''
 ```
 
-The website will be available at `http://localhost:4000/`.
+The website will be available at [http://localhost:4000/](http://localhost:4000/).

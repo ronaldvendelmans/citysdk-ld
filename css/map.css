@@ -1,3 +1,5 @@
+---
+---
 
 #urlinp {
   float: right; 
@@ -36,17 +38,6 @@ article img {
 #map {
 	height: 100%;
 	width: 100%; 
-}
-
-.leaflet-control.crosshair {
-  margin: 0;
-  padding: 0;
-  background-image: url('img/crosshair.png');
-  background-position: center bottom;
-  width: 50px;
-  height: 50px;
-  position: absolute;
-  opacity: 0.75;
 }
 
 #floatbox {
@@ -184,7 +175,7 @@ code#nodedata .number {
   position: relative;
 }
 
-#input table td.server {
+#input table td.endpoint {
   color: #aaa;
   padding-left: 2px;
 }
@@ -265,9 +256,9 @@ button.button_down {
 }
 
 button.button_down {
-  background: white url('img/button_down.png') no-repeat scroll center 5px;
+  background: white url('{{ site.baseurl }}/img/button_down.png') no-repeat scroll center 5px;
 }
 
 button.button_up {
-  background: white url('img/button_up.png') no-repeat scroll center 5px;
+  background: white url('{{ site.baseurl }}/img/button_up.png') no-repeat scroll center 5px;
 }

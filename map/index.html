@@ -8,8 +8,8 @@ title: Map
      <div id="input">           
        <table>   
          <tr>
-           <td class="minimize server">
-             <!-- <%= @config[:ep_api_url] %> -->
+           <td class="minimize endpoint">
+             {{ site.data.endpoint.endpoint }}
            </td>
            <td class="fill">
              <input id="url" type="text" />
@@ -37,17 +37,17 @@ title: Map
         <div id="latlong_large" class="latlong hidden">
           Map center:
           <table>
-            <tr><td><img src="/img/latlong/latlong.png" /></td><td class="cntrLatLon"></td></tr>
+            <tr><td><img src="{{ site.baseurl }}/img/latlong/latlong.png" /></td><td class="cntrLatLon"></td></tr>
             <tr><td>WKT</td><td class="cntrWkt"></td></tr>
-            <tr><td><img src="/img/latlong/postgres.png" /></td><td class="cntrPostGis"></td></tr>
-            <tr><td><img src="/img/latlong/citysdk.png" /></td><td class="cntrCdk"></td></tr>                              
+            <tr><td><img src="{{ site.baseurl }}/img/latlong/postgres.png" /></td><td class="cntrPostGis"></td></tr>
+            <tr><td><img src="{{ site.baseurl }}/img/latlong/citysdk.png" /></td><td class="cntrCdk"></td></tr>                              
           </table>
           Bounding box:
           <table>
-            <tr><td><img src="/img/latlong/latlong.png" /></td><td class="bbLatLon"></td></tr>
+            <tr><td><img src="{{ site.baseurl }}/img/latlong/latlong.png" /></td><td class="bbLatLon"></td></tr>
             <tr><td>WKT</td><td class="bbWkt"></td></tr>
-            <tr><td><img src="/img/latlong/postgres.png" /></td><td class="bbPostGis"></td></tr>
-            <tr><td><img src="/img/latlong/citysdk.png" /></td><td class="bbCdk"></td></tr>
+            <tr><td><img src="{{ site.baseurl }}/img/latlong/postgres.png" /></td><td class="bbPostGis"></td></tr>
+            <tr><td><img src="{{ site.baseurl }}/img/latlong/citysdk.png" /></td><td class="bbCdk"></td></tr>
           </table>            
           <button id="hideLatLong" type="button" class="button_down"></button>
         </div>          
@@ -59,11 +59,13 @@ title: Map
 <script>
   $(document).ready(function() {
         
-    var server  = "{{ site.data.endpoint.endpoint }}",
+    var endpoint  = "{{ site.data.endpoint.endpoint }}",
         tileUrl = "{{ site.data.endpoint.tiles }}",
-        curr_location = [{{ site.data.endpoint.geometry.lat }}, {{ site.data.endpoint.geometry.lat }}],
-        http = 'http://';
+        latLng = [{{ site.data.endpoint.map.geometry.lat }}, {{ site.data.endpoint.map.geometry.lon }}],
+        zoom = {{ site.data.endpoint.map.zoom }};
 
+    //hljs.initHighlightingOnLoad();
+    
     var spinnerOpts = {
       lines: 12, // The number of lines to draw
       length: 4, // The length of each line
@@ -137,30 +139,19 @@ title: Map
       }
     }).addTo(map);      
 
-    var Crosshair = L.Control.extend({
-      options: {
-        position: 'topleft'
-      },
-      onAdd: function (map) {
-        var container = L.DomUtil.create('div', 'hidden crosshair');
-        return container;
-      }
-    });
-    map.addControl(new Crosshair());
-
-    map.setView(new L.LatLng(parseFloat(curr_location[1]), parseFloat(curr_location[0])), parseInt(curr_location[2]));
+    map.setView(latLng, zoom);
           
     map.on("move", function(e) {
       printGeoStrings();
     });
     
-    window.onresize = function() {
-      var point = getMapCenterPoint();
-      $(".leaflet-control.crosshair").css({
-        "top": (point.x - $(".leaflet-control.crosshair").height() / 2) + "px",
-        "left": point.y + "px"
-      });
-    };
+    // window.onresize = function() {
+    //   var point = getMapCenterPoint();
+    //   $(".leaflet-control.crosshair").css({
+    //     "top": (point.x - $(".leaflet-control.crosshair").height() / 2) + "px",
+    //     "left": point.y + "px"
+    //   });
+    // };
     
     function getMapCenterPoint() {
       return new L.Point(
@@ -238,7 +229,7 @@ title: Map
     // CitySDK API data
     // ================================================================================
     
-    function loadCitySDKData(url, is_example) {
+    function loadCitySDKData(url, isExample) {
       hideDropdown();
               
       if (!url) {
@@ -260,8 +251,11 @@ title: Map
     
       spinner.spin(document.getElementById('busy'))
       
-      if (url.substring(0, http.length) !== http) {
-        url = http + server + url;
+      var http = 'http://',
+          https = 'https://';
+          
+      if (url.substring(0, http.length) !== http && url.substring(0, https.length) !== https) {
+        url = endpoint + url;
       }
       url += (url.split('?')[1] ? '&':'?') + 'geom';
       if( url.indexOf("per_page") == -1 ) {
@@ -274,7 +268,7 @@ title: Map
       $.getJSON(url, function(data) {                 
         // If data is returned, and data.results.length > 0,
         // add URL to urlHistory
-        if ((data.results.length > 0) &! is_example) {
+        if ((data.results.length > 0) &! isExample) {
           addHistory(historyUrl);            
           setDropdownHistory();
         }
@@ -339,7 +333,7 @@ title: Map
 		   {
 				$('#nodedata').html("unknown error (maybe server is unavailable / maybe the requested was not formatted correctly)")
 		   }
-		   spinner.stop() 
+		   spinner.stop();
      });
 
     }
@@ -369,9 +363,8 @@ title: Map
         var hash = window.location.hash;
         if (hash.length > 1) {
           var url = hash.substring(1);
-          var srv = "<%= @config[:ep_api_url] %>"
-          if (url.substring(0, srv.length) == srv) {
-            $("#url").val(url.substring(srv.length+1));
+          if (url.substring(0, endpoint.length) == endpoint) {
+            $("#url").val(url.substring(endpoint.length + 1));
           } else {
             $("#url").val(url);
           }
@@ -383,14 +376,14 @@ title: Map
 
     // Call functions on page load:
     window.onhashchange();
-    window.onresize();
+    //window.onresize();
     $('#url').focus();
     
     // ================================================================================
     // Combobox functions
     // ================================================================================
     
-    $('td.server').click(function() {
+    $('td.endpoint').click(function() {
       $('#url').focus();
     });
     
@@ -405,10 +398,10 @@ title: Map
   
     $("#input table").on("click", "tr.dropdown", function(event){
       var url = $(this).attr("data-url");
-      var is_example = $(this).attr("data-example");
+      var isExample = $(this).attr("data-example");
       hideDropdown();
       $("#url").val(url);        
-      loadCitySDKData(url, is_example === "true");
+      loadCitySDKData(url, isExample === "true");
     });
     
     $("#showLatLong").click(function() {
@@ -482,7 +475,7 @@ title: Map
         if (index == 0) {
           cls += " last_history";
         }
-        var tr = "<tr class=\"" + cls + "\" data-url=\"" + this + "\"><td class=\"minimize server\"><%= @config[:ep_api_url] %>/</td><td class=\"fill\" colspan=\"4\"><span class=\"url\">" + this + "</span></td></tr>";
+        var tr = "<tr class=\"" + cls + "\" data-url=\"" + this + "\"><td class=\"minimize endpoint\"><%= @config[:ep_api_url] %>/</td><td class=\"fill\" colspan=\"4\"><span class=\"url\">" + this + "</span></td></tr>";
         $(tr).insertAfter($('#before_history'));          
       });      
     }

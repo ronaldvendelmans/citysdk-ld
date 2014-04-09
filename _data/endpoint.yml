@@ -5,17 +5,25 @@ email       : citysdk@waag.org
 cms         : http://cms.citysdk.waag.org/
 title       : Amsterdam
 location    : The Netherlands
-geometry    :
-  lat: 4.88342
-  lon: 52.35211
+map         :
+  zoom    : 10
+  geometry:
+    lat: 52.35
+    lon: 5.39
+tiles       : "http://tiles.citysdk.waag.org/v2/citysdk/{z}/{x}/{y}.png"
+
 datasets    :
-  - title: GTFS - public transport schedules and real-time data
+  - url  : http://gtfs.ovapi.nl/
+    title: GTFS - public transport schedules and real-time data
   
-  - title: Amsterdam infrastructure and transportation data
+  - url  : http://www.amsterdam.nl/gemeente/organisatie-diensten/ivv/
+    title: Amsterdam infrastructure and transportation data
   
-  - title: Dutch addresses and buildings
+  - url  : http://www.kadaster.nl/bag
+    title: Dutch addresses and buildings
   
-  - title: OpenStreetMap
+  - url  : http://download.geofabrik.de/europe/netherlands.html
+    title: OpenStreetMap
     
 links       :
   - url  : http://dev.citysdk.waag.org/visualisation/
@@ -46,17 +54,14 @@ examples    :
   - url  : admr.nl.groningen/regions?admr::admn_level=4&layer=rain
     title: Rain forecast per neighbourhood in Groningen
 
-  - url  : admr.nl.amsterdam/ptstops?name=Leidseplein&layer=gtfs
-    title: Public transport stops in Amsterdam named Leidseplein
+  - url  : admr.nl.woerden/ptstops?layer=gtfs
+    title: Public transport stops in Woerden
 
   - url  : gtfs.stop.060671/select/ptlines
-    title: Public transport lines that call at one of these stops
+    title: Public transport lines that call at Leidseplein, Amsterdam
 
   - url  : routes?layer=divv.traffic&per_page=200
     title: Real time traffic flow on main roads in Amsterdam
-
-  - url  : routes?contains=n726817991,n726817955,n726816865
-    title: Routes containing a specific set of nodes
 
   - url  : r326516/select/nodes?osm::railway=tram_stop|halt&data_op=or
     title: Tram stops on Utrecht-IJsselstein tram route

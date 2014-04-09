@@ -16,18 +16,8 @@
     <link rel="stylesheet" href="{{ site.baseurl }}/leaflet/leaflet.css" />
     <link rel="stylesheet" href="{{ site.baseurl }}/css/map.css">
     <script src="{{ site.baseurl }}/js/spin.min.js"></script>
-    <script src="{{ site.baseurl }}/leaflet/leaflet.js"></script>
-    
-    <script type="text/javascript">
-      $(document).ready(function () {
-        hljs.initHighlightingOnLoad();
-        $("a.ep_cms_url").attr("href", "<%= config[:ep_cms_url] %>");
-  		});
-      // Dynamic endpoint URL, used on data page
-      var epApiUrl = "<%= config[:ep_api_url] %>";
-  	</script>
+    <script src="{{ site.baseurl }}/leaflet/leaflet.js"></script>    
     {% endif %}
-    
   </head>
   <body>	
     <header>

@@ -20,7 +20,7 @@ Data sources currently available:
 <ul>
 {% for dataset in site.data.endpoint.datasets %}
   <li>
-    {{ dataset.title }}
+    <a href="{{ dataset.url }}">{{ dataset.title }}</a>
   </li>
 {% endfor %}
 </ul>
@@ -30,9 +30,7 @@ Data sources currently available:
 <ul>
 {% for example in site.data.endpoint.examples %}
   <li>
-    <a href="{{ site.baseurl }}/map#{{ example.url }}">
-      {{ example.title }}
-    </a>
+    <a href="{{ site.baseurl }}/map#{{ example.url }}">{{ example.title }}</a>
   </li>
 {% endfor %}
 </ul>
