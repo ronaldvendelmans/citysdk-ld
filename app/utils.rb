@@ -26,21 +26,23 @@ module CitySDK_LD
   # end
     
   ##########################################################################################
-  # memcache utilities
+  # memcached utilities
   ##########################################################################################
+  
+  MEMCACHED_NAMESPACE = 'citysdk-ld::'
   
   # To flush local instance of memcached:
   #   echo 'flush_all' | nc localhost 11211
   
-  def self.memcache_new
+  def self.memcached_new
     @@memcache = Dalli::Client.new('localhost:11211')
   end
   
   @@memcache = Dalli::Client.new('localhost:11211')
 
-  def self.memcache_get(key)
+  def self.memcached_get(key)
     begin
-      return @@memcache.get(key)
+      return @@memcache.get(MEMCACHED_NAMESPACE + key)
     rescue
       begin
         @@memcache = Dalli::Client.new('localhost:11211')
@@ -51,9 +53,9 @@ module CitySDK_LD
     end
   end
   
-  def self.memcache_set(key, value, ttl=300)
+  def self.memcached_set(key, value, ttl=300)
     begin      
-      return @@memcache.set(key,value,ttl)
+      return @@memcache.set(MEMCACHED_NAMESPACE + key, value, ttl)
     rescue
       begin
         @@memcache = Dalli::Client.new('localhost:11211')
