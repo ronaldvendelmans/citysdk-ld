@@ -31,9 +31,10 @@ module CitySDKLD
 
       end
 
-      Return metadata of single layer about single object, e.g. the date the data was added/modified, etc.
+      desc 'Return metadata of single layer about single object, e.g. the date the data was added/modified, etc.'
       get '/layers/:layer_name/objects/:cdk_id' do
 
+      end
 
       desc 'Return all users associated with single layer'
       get '/layers/:layer_name/users/' do
