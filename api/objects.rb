@@ -1,4 +1,4 @@
-module CitySDK_LD
+module CitySDKLD
   class Objects < Grape::API
         
     resource :objects do    

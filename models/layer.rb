@@ -36,16 +36,16 @@ class Layer < Sequel::Model
   def self.get_layer(id)
     self.ensure_layer_cache
     key = self.memcached_key(id)
-    CitySDK_LD.memcached_get(key)
+    CitySDKLD.memcached_get(key)
   end
 
   def self.get_layer_names
     self.ensure_layer_cache
-    CitySDK_LD.memcached_get(KEY_LAYER_NAMES)
+    CitySDKLD.memcached_get(KEY_LAYER_NAMES)
   end
   
   def self.ensure_layer_cache
-    if not CitySDK_LD.memcached_get(KEY_LAYERS_AVAILABLE)
+    if not CitySDKLD.memcached_get(KEY_LAYERS_AVAILABLE)
       self.get_layer_hashes
     end
   end
@@ -91,14 +91,14 @@ class Layer < Sequel::Model
             prefix = p[0..(p.index("*") - 1)]                  
             return layer_names.select{|k,v| k.start_with? prefix}.values
           else
-            CitySDK_LD.do_abort(422,"You can only use wildcards in layer names directly after a name separator (e.g. osm.*)")
+            CitySDKLD.do_abort(422,"You can only use wildcards in layer names directly after a name separator (e.g. osm.*)")
           end
         else
           return layer_names[p]
         end
       else
         # No layer names available, something went wrong
-        CitySDK_LD.do_abort(500,"Layer cache unavailable")
+        CitySDKLD.do_abort(500,"Layer cache unavailable")
       end
     end
   end
@@ -161,12 +161,12 @@ class Layer < Sequel::Model
       
       # Save layer data in memcache without expiration 
       key = self.memcached_key(layer[:id].to_s)
-      CitySDK_LD.memcached_set(key, layer, 0)
+      CitySDKLD.memcached_set(key, layer, 0)
       names[layer[:name]] = layer[:id]
     end
     
-    CitySDK_LD.memcached_set(KEY_LAYER_NAMES, names, 0)
-    CitySDK_LD.memcached_set(KEY_LAYERS_AVAILABLE, true, 0)
+    CitySDKLD.memcached_set(KEY_LAYER_NAMES, names, 0)
+    CitySDKLD.memcached_set(KEY_LAYERS_AVAILABLE, true, 0)
   end  
   
 end

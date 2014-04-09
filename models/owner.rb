@@ -56,7 +56,7 @@ class Owner < Sequel::Model
       o.touch_session
       return true
     end
-    CitySDK_LD.do_abort(401,"Not authorized for layer '#{Layer[l].name}'.")
+    CitySDKLD.do_abort(401,"Not authorized for layer '#{Layer[l].name}'.")
   end
   
   def self.login(email,pw)
@@ -72,12 +72,12 @@ class Owner < Sequel::Model
         puts "[#{Time.now.strftime('%b %d, %Y %H:%M')}] #{email} logged in.."
         return 'success',o.session 
       else
-        CitySDK_LD.do_abort(401,'Not Authorized')
+        CitySDKLD.do_abort(401,'Not Authorized')
       end
     else
-      CitySDK_LD.do_abort(422,"email not known: #{email}.")
+      CitySDKLD.do_abort(422,"email not known: #{email}.")
     end
-    CitySDK_LD.do_abort(500,"Server error.")
+    CitySDKLD.do_abort(500,"Server error.")
   end
     
   def self.make_hash(o)

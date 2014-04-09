@@ -28,14 +28,14 @@ class NodeDatum < Sequel::Model
 
     def self.load(layer_id, cdk_id, hstore)
       key = memcached_key(layer_id, cdk_id)
-      data = CitySDK_LD.memcached_get(key)      
+      data = CitySDKLD.memcached_get(key)      
       if data        
         return data
       else
         url = Layer.get_webservice_url(layer_id)
         data = load_from_ws(url,hstore)
         if(data)
-          CitySDK_LD.memcached_set(key, data, Layer.get_data_timeout(layer_id) )
+          CitySDKLD.memcached_set(key, data, Layer.get_data_timeout(layer_id) )
           return data
         end
       end

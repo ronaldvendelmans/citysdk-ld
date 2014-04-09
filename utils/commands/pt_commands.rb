@@ -1,4 +1,4 @@
-class CitySDK_API < Sinatra::Base
+class CitySDKLD < Sinatra::Base
 
   module PublicTransport
 
@@ -14,7 +14,7 @@ class CitySDK_API < Sinatra::Base
     end
 
     def self.get_realtime(key,stop_id,deptime)
-      rt = CitySDK_API.memcache_get("#{stop_id}!!#{key}!!#{deptime}")
+      rt = CitySDKLD.memcached_get("#{stop_id}!!#{key}!!#{deptime}")
       if rt
         return "#{rt} (#{deptime})"
       end
@@ -190,13 +190,13 @@ class CitySDK_API < Sinatra::Base
             tzdiff = params['tz'] ? -60 * (Time.now.utc_offset/3600 + params['tz'].to_i) : 0
             return now_for_stop(stop,"#{tzdiff} minutes")
           else
-            CitySDK_API.do_abort(422,"Command #{params[:cmd]} not defined for ptstop.")
+            CitySDKLD.do_abort(422,"Command #{params[:cmd]} not defined for ptstop.")
           end
         else 
-          CitySDK_API.do_abort(422,'Stop ' + params[:cdk_id] + ' not found..')
+          CitySDKLD.do_abort(422,'Stop ' + params[:cdk_id] + ' not found..')
         end
       else
-        CitySDK_API.do_abort(500,'Server error. ')
+        CitySDKLD.do_abort(500,'Server error. ')
       end
     end    
 
@@ -228,13 +228,13 @@ class CitySDK_API < Sinatra::Base
           when 'schedule'
             return schedule_for_line(line,params[:day]||0)
           else
-            CitySDK_API.do_abort(422,"Command #{params[:cmd]} not defined for ptline.")
+            CitySDKLD.do_abort(422,"Command #{params[:cmd]} not defined for ptline.")
           end
         else
-          CitySDK_API.do_abort(422,'Line ' + params[:cdk_id] + ' not found..')
+          CitySDKLD.do_abort(422,'Line ' + params[:cdk_id] + ' not found..')
         end
       else
-        CitySDK_API.do_abort(500,'Server error. ')
+        CitySDKLD.do_abort(500,'Server error. ')
       end
     end
   end

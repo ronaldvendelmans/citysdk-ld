@@ -5,7 +5,7 @@ module Sequel
 	  def serialize(type, params)
       # TODO: move to api.rb, add meta as parameter
       meta = {
-        status: "succes",
+        status: "success",
         url: params[:url]
       }
 	    case type
@@ -25,7 +25,7 @@ module Sequel
         end        
               
         if type == :node and nodes.length == 0
-          CitySDK_LD.do_abort(422,"Node not found: '#{params[:node]}'")
+          CitySDKLD.do_abort(422,"Node not found: '#{params[:node]}'")
         end
         
         meta.merge! pagination_results(params, get_pagination_data(params), nodes.length)         
@@ -39,7 +39,7 @@ module Sequel
         layer_ids = self.all.map { |a| a.values[:id] }
 
         if type == :layer and layer_ids.length == 0
-          CitySDK_LD.do_abort(422,"Layer not found: '#{params[:layer]}'")
+          CitySDKLD.do_abort(422,"Layer not found: '#{params[:layer]}'")
         end
 
         layers = layer_ids.map { |layer_id| Layer.get_layer layer_id }        

@@ -1,6 +1,6 @@
 # require 'set'
 # 
-# class CitySDK_LD < Sinatra::Base
+# class CitySDKLD < Sinatra::Base
 #   
 #   ##########################################################################################
 #   # RGeo
@@ -112,7 +112,7 @@
 #     begin  
 #       return JSON.parse(request.body.read)
 #     rescue => exception
-#       CitySDK_LD.do_abort(422, "Error parsing JSON - " + exception.message)
+#       CitySDKLD.do_abort(422, "Error parsing JSON - " + exception.message)
 #     end
 #   end
 #   

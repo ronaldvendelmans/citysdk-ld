@@ -1,4 +1,4 @@
-module CitySDK_LD
+module CitySDKLD
   class Users < Grape::API
         
     resource :users do    

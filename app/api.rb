@@ -1,4 +1,4 @@
-module CitySDK_LD
+module CitySDKLD
   class API < Grape::API    
 
     # default_format :json
@@ -13,9 +13,13 @@ module CitySDK_LD
       object.to_json 
     }
     
-    mount ::CitySDK_LD::Layers
-    mount ::CitySDK_LD::Objects
-    mount ::CitySDK_LD::Users
+    before do
+      params[:url] = env["REQUEST_URI"]
+    end    
+    
+    mount ::CitySDKLD::Layers
+    mount ::CitySDKLD::Objects
+    mount ::CitySDKLD::Users
     
     add_swagger_documentation api_version: 'v1'
   end

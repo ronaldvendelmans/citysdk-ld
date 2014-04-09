@@ -1,4 +1,4 @@
-class CitySDK_API < Sinatra::Base
+class CitySDKLD < Sinatra::Base
 
   module Nodes
     
@@ -45,7 +45,7 @@ class CitySDK_API < Sinatra::Base
         # TODO: hard-coded layer_id of admr = 2! 
         layers = [0,1,2]
         if params.has_key? 'layer'
-          layers = Layer.id_from_text(params['layer'].split(','))          
+          layers = Layer.id_from_name(params['layer'].split(','))          
         end
        
         # TODO: also filter on node_data, name etc!
@@ -73,7 +73,7 @@ class CitySDK_API < Sinatra::Base
         dataset.serialize(:nodes, params)
 
       else 
-        CitySDK_API.do_abort(422,"Command #{params[:cmd]} not defined for this node type.")
+        CitySDKLD.do_abort(422,"Command #{params[:cmd]} not defined for this node type.")
       end
     end
   end

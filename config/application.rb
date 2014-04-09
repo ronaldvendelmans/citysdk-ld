@@ -11,5 +11,5 @@ Dir[File.expand_path('../../api/*.rb', __FILE__)].each do |f|
 end
 
 require 'api'
-require 'citysdk_ld_app'
+require 'CitySDKLD_app'
 require 'utils'

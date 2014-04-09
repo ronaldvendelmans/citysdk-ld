@@ -127,7 +127,7 @@ module Sequel
           is_and_query = params['layer'].include? LAYER_AND_SEPARATOR        
         
           if is_or_query and is_and_query
-            CitySDK_LD.do_abort(422,"Layer parameter cannot contain a combination of '#{LAYER_OR_SEPARATOR}' and '#{LAYER_AND_SEPARATOR}' characters. Use '#{LAYER_OR_SEPARATOR}' to request nodes with data on any of the specified layers, use '#{LAYER_AND_SEPARATOR}' for nodes with data on all of the specified layers.")
+            CitySDKLD.do_abort(422,"Layer parameter cannot contain a combination of '#{LAYER_OR_SEPARATOR}' and '#{LAYER_AND_SEPARATOR}' characters. Use '#{LAYER_OR_SEPARATOR}' to request nodes with data on any of the specified layers, use '#{LAYER_AND_SEPARATOR}' for nodes with data on all of the specified layers.")
           elsif is_or_query
             op = :| # boolean AND operator
             layer_ids = Layer.id_from_name(params['layer'].split(LAYER_OR_SEPARATOR))
@@ -335,7 +335,7 @@ module Sequel
           contains = Sequel.function(:ST_Intersects, Sequel.function(:ST_Buffer, container.geom, -0.00002), :geom)
           dataset = dataset.where(contains).exclude(Sequel.function(:ST_Contains, :geom, container.geom ))
         else
-          CitySDK_LD.do_abort(422,"Containing node not found: #{params[:within]}")
+          CitySDKLD.do_abort(422,"Containing node not found: #{params[:within]}")
         end
       end
       
@@ -405,7 +405,7 @@ module Sequel
         
           if (op == :& and values and values.include?(LAYER_OR_SEPARATOR)) or
             (op == :| and values and values.include?(LAYER_AND_SEPARATOR))
-            CitySDK_LD.do_abort(422,"'data_op=or' can only be used in combination with 'layer::key=a|b|c', 'data_op=and' can only be used in combination with 'layer::key=a,b,c'. Default is 'and'.")
+            CitySDKLD.do_abort(422,"'data_op=or' can only be used in combination with 'layer::key=a|b|c', 'data_op=and' can only be used in combination with 'layer::key=a,b,c'. Default is 'and'.")
           end
         
           if not joined.include? layer    

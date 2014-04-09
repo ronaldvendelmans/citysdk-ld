@@ -1,4 +1,4 @@
-class CitySDK_API < Sinatra::Base
+class CitySDKLD < Sinatra::Base
   
   module Routes
     
@@ -44,7 +44,7 @@ class CitySDK_API < Sinatra::Base
           
         dataset.serialize(:nodes, params)
       else 
-        CitySDK_API.do_abort(422,"Command #{params[:cmd]} not defined for this node type.")
+        CitySDKLD.do_abort(422,"Command #{params[:cmd]} not defined for this node type.")
       end
     end
   end

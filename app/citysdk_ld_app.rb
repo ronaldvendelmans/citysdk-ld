@@ -1,6 +1,6 @@
 require 'json'
 
-module CitySDK_LD
+module CitySDKLD
     
   Sequel.extension :pg_hstore_ops
   Sequel.extension :pg_array_ops
@@ -67,13 +67,13 @@ module CitySDK_LD
           end
         end
 
-        run CitySDK_LD::App.new
+        run CitySDKLD::App.new
       end.to_app
     end
 
     def call(env)
       # api
-      response = CitySDK_LD::API.call(env)
+      response = CitySDKLD::API.call(env)
 
       # Check if the App wants us to pass the response along to others
       if response[1]['X-Cascade'] == 'pass'
