@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class TurtleSerializer < Serializer::Base
 
   PREFIXES = {
@@ -24,7 +26,7 @@ class TurtleSerializer < Serializer::Base
     end
   end
 
-  def self.end
+  def self.finish
     (@prefixes.uniq + [""] + @result).join("\n")
   end
 
@@ -137,10 +139,8 @@ class TurtleSerializer < Serializer::Base
 
       first = false
     end
-
   end
 
   def self.status
   end
-
 end

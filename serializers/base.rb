@@ -1,6 +1,6 @@
+# encoding: UTF-8
 
 module Serializer
-
   # There's no need to output coordinates with
   # infinite decimal places.
   # We will round all coordinates to PRECISION
@@ -40,7 +40,6 @@ module Serializer
   end
 
   class Base
-
     #########################################################################
     # Base seralization function
     #########################################################################
@@ -63,7 +62,7 @@ module Serializer
       when :status
         self.status
       end
-      self.end
+      self.finish
     end
 
     #########################################################################
@@ -73,26 +72,26 @@ module Serializer
     # Serialization start and end
 
     def self.start
-      CitySDKLD.do_abort(500,"Serialization error - start not implemented")
+      CitySDKLD.do_abort(500, "Serialization error - start not implemented")
     end
 
     # end function returns string with serialization result
-    def self.end
-      CitySDKLD.do_abort(500,"Serialization error - end not implemented")
+    def self.finish
+      CitySDKLD.do_abort(500, "Serialization error - finish not implemented")
     end
 
     # Serialization functions per object type
 
     def self.nodes
-      CitySDKLD.do_abort(500,"Serialization error - nodes not implemented")
+      CitySDKLD.do_abort(500, "Serialization error - nodes not implemented")
     end
 
     def self.layers
-      CitySDKLD.do_abort(500,"Serialization error - layers not implemented")
+      CitySDKLD.do_abort(500, "Serialization error - layers not implemented")
     end
 
     def self.status
-      CitySDKLD.do_abort(500,"Serialization error - status not implemented")
+      CitySDKLD.do_abort(500, "Serialization error - status not implemented")
     end
 
   end

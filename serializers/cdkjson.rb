@@ -1,10 +1,12 @@
+# encoding: UTF-8
+
 class CdkJSONSerializer < Serializer::Base
 
   def self.start
     @result = @meta
   end
 
-  def self.end
+  def self.finish
     @result
   end
 

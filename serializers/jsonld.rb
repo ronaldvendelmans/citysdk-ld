@@ -1,9 +1,10 @@
+# encoding: UTF-8
 
 class JSONLDSerializer < GeoJSONSerializer
 
   #https://code.google.com/p/linked-data-api/wiki/API_Viewing_Resources#Page_Description
 
-  def self.end
+  def self.finish
     # @result[:meta] = {
     #   :"@type" => ":ApiResultMeta"
     # }.merge @result[:meta]
@@ -13,7 +14,7 @@ class JSONLDSerializer < GeoJSONSerializer
       @result = {
         :@context => create_node_context,
         :@id => @result[:meta][:url],
-        :@type => ":APIResult",
+        :@type => ':APIResult'
       }.merge @result
 
       jsonld_nodes
@@ -21,7 +22,7 @@ class JSONLDSerializer < GeoJSONSerializer
       @result = {
         :@context => create_layer_context,
         :@id => @result[:meta][:url],
-        :@type => ":APIResult",
+        :@type => ':APIResult'
       }.merge @result
 
       jsonld_layers
@@ -49,7 +50,7 @@ class JSONLDSerializer < GeoJSONSerializer
 
           layer = {
             :@id => ":layers/#{l}/objects/#{cdk_id}",
-            :@type => ":LayerOnObject",
+            :@type => ':LayerOnObject'
           }.merge layer
 
           # TODO: url from config
@@ -60,8 +61,8 @@ class JSONLDSerializer < GeoJSONSerializer
 
           layer[:data] = {
             :@id => ":objects/#{cdk_id}/layers/#{l}",
-            :@type => ":LayerData",
-            :@context => context,
+            :@type => ':LayerData',
+            :@context => context
           }.merge layer[:data]
 
           feature[:properties][:layers][l] = layer
@@ -72,7 +73,7 @@ class JSONLDSerializer < GeoJSONSerializer
 
       {
         :"@id" => ":objects/#{cdk_id}",
-        :"@type" => ":Object",
+        :"@type" => ':Object'
       }.merge feature
     end
   end
@@ -115,11 +116,11 @@ class JSONLDSerializer < GeoJSONSerializer
 
   def self.create_layer_context
     {
-      :@base => "http://rdf.citysdk.eu/ams/",
-      :title => "dct:title",
-      :features => ":apiResult",
-      :properties => "_:properties",
-      :imported_at => "dct:modified"
+      :@base => 'http://rdf.citysdk.eu/ams/',
+      :title => 'dct:title',
+      :features => ':apiResult',
+      :properties => '_:properties',
+      :imported_at => 'dct:modified'
     }
   end
 

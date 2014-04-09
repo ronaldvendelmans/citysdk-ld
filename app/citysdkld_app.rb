@@ -32,15 +32,6 @@ module CitySDKLD
       Dir[File.expand_path('../../serializers/*.rb', __FILE__)].each { |file| require file }
       Dir[File.expand_path('../../utils/*.rb', __FILE__)].each { |file| require file }
 
-      #
-      # sinatraApp.database =
-      #
-      # #sinatraApp.database.logger = Logger.new(STDOUT)
-      #
-      # sinatraApp.database.extension :pg_array
-      # sinatraApp.database.extension :pg_range
-      # sinatraApp.database.extension :pg_hstore
-      #
       # require File.dirname(__FILE__) + '/api_read.rb'
       # require File.dirname(__FILE__) + '/api_write.rb'
       # require File.dirname(__FILE__) + '/api_delete.rb'
@@ -48,13 +39,6 @@ module CitySDKLD
       # Dir[File.dirname(__FILE__) + '/utils/*.rb'].each {|file| require file }
       # Dir[File.dirname(__FILE__) + '/utils/match/*.rb'].each {|file| require file }
       # Dir[File.dirname(__FILE__) + '/utils/commands/*.rb'].each {|file| require file }
-      # Dir[File.dirname(__FILE__) + '/models/*.rb'].each {|file| require file }
-      # Dir[File.dirname(__FILE__) + '/serializers/*.rb'].each {|file| require file }
-
-
-
-
-
 
     end
 
