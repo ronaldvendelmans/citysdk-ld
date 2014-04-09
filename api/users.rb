@@ -5,6 +5,10 @@ module CitySDKLD
 
     resource :users do
 
+      # /users                            All users
+      # /users/<user>                     Single user
+      # /users/<user>/layers              All layers belonging to single user
+
       get '/' do
 
       end

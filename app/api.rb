@@ -22,6 +22,7 @@ module CitySDKLD
     mount ::CitySDKLD::Layers
     mount ::CitySDKLD::Objects
     mount ::CitySDKLD::Users
+    mount ::CitySDKLD::Status
 
     add_swagger_documentation api_version: 'v1'
   end
