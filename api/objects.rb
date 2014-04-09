@@ -1,7 +1,7 @@
 module CitySDK_LD
   class Objects < Grape::API
         
-    resource :layers do    
+    resource :objects do    
     
       get '/' do
       
