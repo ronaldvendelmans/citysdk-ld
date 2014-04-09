@@ -1,2 +1,11 @@
 markdown: kramdown
 baseurl: /citysdk-ld
+
+prose:
+  ignore:
+    - /\..*
+    - /_config.yml
+    - /LICENSE.md
+    - /README.md
+    - /_includes
+    - /js
