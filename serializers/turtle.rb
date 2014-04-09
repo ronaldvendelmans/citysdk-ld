@@ -13,39 +13,39 @@ class TurtleSerializer < Serializer::Base
     :"foaf" => "http://xmlns.com/foaf/0.1/",
     :"dcat" => "http://www.w3.org/ns/dcat#"
   }
-      
+
   def self.start
     @result = []
-    
+
     @prefixes = []
     @prefixes << "@base <http://rdf.citysdk.eu/asd/> ."
-    PREFIXES.each do |prefix, iri| 
+    PREFIXES.each do |prefix, iri|
       @prefixes << "@prefix #{prefix}: <#{iri}> ."
     end
   end
-  
+
   def self.end
     (@prefixes.uniq + [""] + @result).join("\n")
   end
-  
+
   def self.nodes
-    
-    @layers.each do |l, layer|      
+
+    @layers.each do |l, layer|
       layer[:fields].each do |field|
         @result << "<layers/#{l}/fields/#{field[:id]}>"
-        @result << "    :definedOnLayer <layers/#{l}> ;"        
-        
+        @result << "    :definedOnLayer <layers/#{l}> ;"
+
         @result << "    rdf:type #{field[:type]} ;" if field[:type]
         @result << "    rdfs:description #{field[:description].to_json} ;" if field[:description]
         @result << "    xsd:language #{field[:lang].to_json} ;" if field[:lang]
         @result << "    owl:equivalentProperty #{field[:eqprop]} ;" if field[:eqprop]
         @result << "    :hasValueUnit #{field[:unit]} ;" if field[:unit]
-        
+
         @result << "    rdfs:subPropertyOf :layerProperty ."
         @result << ""
       end
     end
-        
+
     first = true
     @data.each do |node|
       @result << "" if not first
@@ -55,7 +55,7 @@ class TurtleSerializer < Serializer::Base
       @result << "    dc:title #{node[:name].to_json} ;" if node[:name]
       @result << "    geos:hasGeometry #{node[:geom].round_coordinates(Serializer::PRECISION).to_json} ;" if node[:geom]
       @result << "    :createdOnLayer <layers/#{node[:layer]}> ;"
-      
+
       if node.has_key? :layers
         node[:layers].keys.each do |layer|
           s = (layer == node[:layers].keys[-1]) ? '.' : ';'
@@ -63,7 +63,7 @@ class TurtleSerializer < Serializer::Base
         end
       end
       @result << ""
-     
+
       if node.has_key? :layers
         node[:layers].keys.each do |layer|
           @result << "<layers/#{layer}/objects/#{node[:cdk_id]}>"
@@ -71,25 +71,25 @@ class TurtleSerializer < Serializer::Base
           @result << "    :layerData <objects/#{node[:cdk_id]}/layers/#{layer}> ;"
           @result << "    :createdOnLayer <layers/#{layer}> ."
           #@result << "    dc:created \"<node datum created date>\"^^xsd:date ."
-          
+
           if @layers[layer][:context]
             jsonld = {
               :"@context" => @layers[layer][:context],
               :"@id" => ":objects/#{node[:cdk_id]}/layers/#{layer}",
               :"@type" => ":LayerData"
-            }.merge node[:layers][layer][:data]        
+            }.merge node[:layers][layer][:data]
             graph = RDF::Graph.new << JSON::LD::API.toRdf(JSON.parse(jsonld.to_json))
-                    
+
             # Get layer prefixes from JSON-LD context
             # only add first-level values, if they
             # start with http and end with either # or /
             # Afterwards, merge layer prefixes with global
             # PREFIXES
-            prefixes = @layers[layer][:context].select { |prefix,iri| 
-              prefix != :"@base" and iri.is_a? String and 
-              iri.index("http") == 0 and ["/", "#"].include? iri[-1]            
+            prefixes = @layers[layer][:context].select { |prefix,iri|
+              prefix != :"@base" and iri.is_a? String and
+              iri.index("http") == 0 and ["/", "#"].include? iri[-1]
             }.merge PREFIXES
-            
+
             graph.dump(:ttl, :prefixes => prefixes).each_line do |line|
               # Turtle output of graph.dump contains both prefixes statements
               # Filter out prefixes, and add them to @prefixes and rest to @result
@@ -99,15 +99,15 @@ class TurtleSerializer < Serializer::Base
                 @result << line.rstrip
               end
             end
-            
+
           end
         end
       end
       first = false
     end
-        
+
   end
-  
+
   def self.layers
     first = true
     @data.each do |layer|
@@ -137,9 +137,9 @@ class TurtleSerializer < Serializer::Base
 
       first = false
     end
-    
+
   end
-  
+
   def self.status
   end
 

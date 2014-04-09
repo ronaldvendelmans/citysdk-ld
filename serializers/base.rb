@@ -1,16 +1,16 @@
 
 module Serializer
-  
-  # There's no need to output coordinates with 
+
+  # There's no need to output coordinates with
   # infinite decimal places.
   # We will round all coordinates to PRECISION
   # places with the round_coordinates function.
   #
-  # From: http://stackoverflow.com/questions/7167604/how-accurately-should-i-store-latitude-and-longitude  
+  # From: http://stackoverflow.com/questions/7167604/how-accurately-should-i-store-latitude-and-longitude
   #
   # decimal  degrees    distance
   # places
-  # -------------------------------  
+  # -------------------------------
   # 0        1.0        111 km
   # 1        0.1        11.1 km
   # 2        0.01       1.11 km
@@ -20,8 +20,8 @@ module Serializer
   # 6        0.000001   0.111 m
   # 7        0.0000001  1.11 cm
   # 8        0.00000001 1.11 mm
-  PRECISION = 6 
-  
+  PRECISION = 6
+
   def self.serialize(format, type, data, layers, meta)
     # TODO: 'register/plug-in' pattern, also register mimetype/format
     case format
@@ -32,28 +32,28 @@ module Serializer
     when :jsonld
       JSONLDSerializer.serialize type, data, layers, meta
     when :json
-      CdkJSONSerializer.serialize type, data, layers, meta      
+      CdkJSONSerializer.serialize type, data, layers, meta
     else
       # default
       CdkJSONSerializer.serialize type, data, layers, meta
     end
   end
-  
+
   class Base
-    
+
     #########################################################################
     # Base seralization function
     #########################################################################
-    
+
     def self.serialize(type, data, layers, meta)
       # TODO: is this ok? and safe?
       @type = type
       @data = data
       @layers = layers
       @meta = meta
-            
-      self.start 
-      
+
+      self.start
+
       # TODO: add owners, layer semantics, node data, individual key/value
       case type
       when :nodes
@@ -65,28 +65,28 @@ module Serializer
       end
       self.end
     end
-    
+
     #########################################################################
     # Serializer-specific functions - overridden in separate serializers
     #########################################################################
-    
+
     # Serialization start and end
-    
+
     def self.start
       CitySDKLD.do_abort(500,"Serialization error - start not implemented")
     end
-    
-    # end function returns string with serialization result 
+
+    # end function returns string with serialization result
     def self.end
       CitySDKLD.do_abort(500,"Serialization error - end not implemented")
     end
-    
+
     # Serialization functions per object type
-    
+
     def self.nodes
       CitySDKLD.do_abort(500,"Serialization error - nodes not implemented")
     end
-    
+
     def self.layers
       CitySDKLD.do_abort(500,"Serialization error - layers not implemented")
     end
@@ -94,6 +94,6 @@ module Serializer
     def self.status
       CitySDKLD.do_abort(500,"Serialization error - status not implemented")
     end
-    
+
   end
 end
