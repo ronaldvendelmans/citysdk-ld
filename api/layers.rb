@@ -14,15 +14,14 @@ module CitySDK_LD
           .do_paginate(params)    
 
         dataset.serialize :layers, params
-      end
- 
+      end 
     
       get "/:layer_name" do 
       
-        layer_id = Layer.id_from_text(:layer_name)
-
+        layer_id = Layer.id_from_text(params[:layer_name])
+        
         dataset = Layer.where(:id => layer_id)
-        dataset.serialize :layer, params
+        dataset.serialize :layer, params      
       
       end    
     
