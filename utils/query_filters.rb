@@ -5,6 +5,7 @@ module Sequel
     MAX_PER_PAGE = 1000
     
     def do_paginate(params)
+            
       if not params.has_key? "subselect_pagination"
         page = 1
         per_page = 10

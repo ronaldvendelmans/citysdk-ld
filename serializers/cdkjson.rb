@@ -5,7 +5,7 @@ class CdkJSONSerializer < Serializer::Base
   end
   
   def self.end
-    @result.to_json
+    @result
   end
   
   def self.nodes

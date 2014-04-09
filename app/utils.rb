@@ -1,29 +1,29 @@
 require 'set'
 
-class CitySDK_API < Sinatra::Base
+module CitySDK_LD
   
   ##########################################################################################
   # RGeo
   ##########################################################################################
     
-  @@rgeo_factory = RGeo::Geographic.simple_mercator_factory(
-    :wkb_parser => {:support_ewkb => true}, 
-    :wkb_generator => {:hex_format => true, :emit_ewkb_srid => true}
-  )
-  
-  @@wkb_generator = RGeo::WKRep::WKBGenerator.new({
-    :type_format => :ewkb,
-    :hex_format => true,
-    :emit_ewkb_srid => true 
-  })  
-  
-  def self.rgeo_factory
-    @@rgeo_factory
-  end
-
-  def self.wkb_generator
-    @@wkb_generator
-  end
+  # @@rgeo_factory = RGeo::Geographic.simple_mercator_factory(
+  #   :wkb_parser => {:support_ewkb => true}, 
+  #   :wkb_generator => {:hex_format => true, :emit_ewkb_srid => true}
+  # )
+  # 
+  # @@wkb_generator = RGeo::WKRep::WKBGenerator.new({
+  #   :type_format => :ewkb,
+  #   :hex_format => true,
+  #   :emit_ewkb_srid => true 
+  # })  
+  # 
+  # def self.rgeo_factory
+  #   @@rgeo_factory
+  # end
+  # 
+  # def self.wkb_generator
+  #   @@wkb_generator
+  # end
     
   ##########################################################################################
   # memcache utilities
@@ -112,7 +112,7 @@ class CitySDK_API < Sinatra::Base
     begin  
       return JSON.parse(request.body.read)
     rescue => exception
-      CitySDK_API.do_abort(422, "Error parsing JSON - " + exception.message)
+      CitySDK_LD.do_abort(422, "Error parsing JSON - " + exception.message)
     end
   end
   
