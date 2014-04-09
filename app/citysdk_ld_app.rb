@@ -14,9 +14,9 @@ module CitySDK_LD
         urls: ['/']
         )
     
-      @config = JSON.parse(File.read('./config.json'),{:symbolize_names => true}) 
+      @config = JSON.parse(File.read('./config.json'), {:symbolize_names => true}) 
       
-      @database = Sequel.connect "postgres://#{@config[:db_user]}:#{@config[:db_pass]}@#{@config[:db_host]}/#{@config[:db_name]}"
+      @database = Sequel.connect "postgres://#{@config[:db][:user]}:#{@config[:db][:password]}@#{@config[:db][:host]}/#{@config[:db][:database]}"
       
       #@database.logger = Logger.new(STDOUT)
 
