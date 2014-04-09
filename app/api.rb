@@ -8,7 +8,7 @@ module CitySDKLD
     format :json
     version 'v1', using: :header, vendor: 'citysdk-ld'
 
-    content_type :turtle, "text/turtle"
+    content_type :turtle, 'text/turtle'
     formatter :turtle, lambda { |object, env|
       puts object.inspect
       puts env.inspect
@@ -16,7 +16,7 @@ module CitySDKLD
     }
 
     before do
-      params[:url] = env["REQUEST_URI"]
+      params[:url] = env['REQUEST_URI']
     end
 
     mount ::CitySDKLD::Layers

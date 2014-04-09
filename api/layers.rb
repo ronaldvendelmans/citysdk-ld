@@ -5,14 +5,7 @@ module CitySDKLD
   class Layers < Grape::API
     resource :layers do
 
-      # /layers                           All layers
-      # /layers/<layer>                   Single layer
-      # /layers/<layer>/objects           All objects with data on single layer
-      # /layers/<layer>/objects/<cdk_id>  Metadata of single layer about single object, e.g. the date the data was added/modified, etc.
-      # /layers/<layer>/users/            Users associated with single layer
-      # /layers/<layer>/fields/           Fields of single layer
-      # /layers/<layer>/fields/<field>    Single field of single layer
-
+      desc 'Return all layers'
       get '/' do
         dataset = Layer.dataset
           .order(:id)
@@ -25,11 +18,36 @@ module CitySDKLD
         dataset.serialize :layers, params
       end
 
+      desc 'Return single layer'
       get '/:layer_name' do
         layer_id = Layer.id_from_name(params[:layer_name])
 
         dataset = Layer.where(id: layer_id)
         dataset.serialize :layer, params
+      end
+
+      desc 'Return all objects with data on single layer'
+      get '/layers/:layer_name/objects' do
+
+      end
+
+      Return metadata of single layer about single object, e.g. the date the data was added/modified, etc.
+      get '/layers/:layer_name/objects/:cdk_id' do
+
+
+      desc 'Return all users associated with single layer'
+      get '/layers/:layer_name/users/' do
+
+      end
+
+      desc 'Return all fields of single layer'
+      get '/layers/:layer_name/fields/' do
+
+      end
+
+      desc 'Return single field of single layer'
+      get '/layers/:layer_name/fields/:field_name' do
+
       end
 
     end

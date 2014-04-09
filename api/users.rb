@@ -5,15 +5,18 @@ module CitySDKLD
 
     resource :users do
 
-      # /users                            All users
-      # /users/<user>                     Single user
-      # /users/<user>/layers              All layers belonging to single user
-
+      desc 'Return all users'
       get '/' do
 
       end
 
-      get "/:user_name" do
+      desc 'Return single user'
+      get '/:user_name' do
+
+      end
+
+      desc 'Return all layers belonging to single user'
+      get '/:user_name/layers' do
 
       end
 
