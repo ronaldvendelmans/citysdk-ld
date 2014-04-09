@@ -35,7 +35,7 @@ module Serializer
       CdkJSONSerializer.serialize type, data, layers, meta
     else
       # default
-      CdkJSONSerializer.serialize type, data, layers, meta
+      GeoJSONSerializer.serialize type, data, layers, meta
     end
   end
 
