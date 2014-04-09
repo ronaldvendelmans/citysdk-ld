@@ -1,4 +1,4 @@
-require 'json'
+# encoding: UTF-8
 
 module CitySDKLD
 

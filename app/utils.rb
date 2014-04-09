@@ -1,4 +1,4 @@
-require 'set'
+# encoding: UTF-8
 
 module CitySDKLD
 
