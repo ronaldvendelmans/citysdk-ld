@@ -75,7 +75,7 @@ module CitySDK_LD
     Digest::MD5.hexdigest(s).to_i(16).base62_encode
   end
   
-  def self.generate_cdk_id_from_text(layer, text)
+  def self.generate_cdk_id_from_name(layer, text)
     # Normalize text:
     #  downcase, strip,
     #  normalize (é = e, ü = u), 

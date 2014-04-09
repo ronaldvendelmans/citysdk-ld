@@ -75,13 +75,13 @@ class Layer < Sequel::Model
     l
   end
 
-  def self.id_from_text(p)
+  def self.id_from_name(p)
     # Accepts full layer names and layer names
     # with wildcards after dot layer separators:
     #    cbs.*
     case p
     when Array
-      return p.map do |name| self.id_from_text(name) end.flatten.uniq
+      return p.map do |name| self.id_from_name(name) end.flatten.uniq
     when String 
       layer_names = self.get_layer_names
       if layer_names

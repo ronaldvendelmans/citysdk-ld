@@ -130,12 +130,12 @@ module Sequel
             CitySDK_LD.do_abort(422,"Layer parameter cannot contain a combination of '#{LAYER_OR_SEPARATOR}' and '#{LAYER_AND_SEPARATOR}' characters. Use '#{LAYER_OR_SEPARATOR}' to request nodes with data on any of the specified layers, use '#{LAYER_AND_SEPARATOR}' for nodes with data on all of the specified layers.")
           elsif is_or_query
             op = :| # boolean AND operator
-            layer_ids = Layer.id_from_text(params['layer'].split(LAYER_OR_SEPARATOR))
+            layer_ids = Layer.id_from_name(params['layer'].split(LAYER_OR_SEPARATOR))
           elsif is_and_query
             op = :& # boolean AND operator
-            layer_ids = Layer.id_from_text(params['layer'].split(LAYER_AND_SEPARATOR))
+            layer_ids = Layer.id_from_name(params['layer'].split(LAYER_AND_SEPARATOR))
           else # just one layer
-            layer_ids = [Layer.id_from_text(params['layer'])]
+            layer_ids = [Layer.id_from_name(params['layer'])]
           end
         end
         
@@ -301,7 +301,7 @@ module Sequel
     def modality_search(params)
       # TODO: zoeken op meerdere modalities?
       if params.has_key? "modality"
-        mod = Modality.id_from_text(params['modality'])
+        mod = Modality.id_from_name(params['modality'])
         return self.where(mod => :nodes__modalities.pg_array.any)        
       end
       self
@@ -399,7 +399,7 @@ module Sequel
         match = /(?<layer>[\w\.]+)::(?<key>.+)/.match(param)  
         if match != nil
           layer = match[:layer]
-          layer_id = Layer.id_from_text(layer)
+          layer_id = Layer.id_from_name(layer)
           layer_ids << layer_id
           key = match[:key]
         

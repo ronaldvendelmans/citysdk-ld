@@ -16,7 +16,7 @@ class Modality < Sequel::Model
     h
   end
   
-  def self.id_from_text(p)
+  def self.id_from_name(p)
     case p
       when Array
         return p.map do |m| @@modalityIdHash[m] end
