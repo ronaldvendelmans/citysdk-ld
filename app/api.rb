@@ -8,11 +8,19 @@ module CitySDKLD
     format :json
     version 'v1', using: :header, vendor: 'citysdk-ld'
 
+    content_type :json, 'application/json'
+    formatter :json, lambda { |object, env|
+      Serializer.serialize :geojson, object
+    }
+
+    content_type :jsonld, 'application/ld+json'
+    formatter :jsonld, lambda { |object, env|
+      Serializer.serialize :jsonld, object
+    }
+
     content_type :turtle, 'text/turtle'
     formatter :turtle, lambda { |object, env|
-      puts object.inspect
-      puts env.inspect
-      object.to_json
+      Serializer.serialize :turtle, object
     }
 
     before do

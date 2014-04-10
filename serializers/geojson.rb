@@ -11,7 +11,7 @@ class GeoJSONSerializer < Serializer::Base
   end
 
   def self.finish
-    @result
+    @result.to_json
   end
 
   def self.nodes

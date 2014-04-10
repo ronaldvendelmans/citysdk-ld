@@ -22,8 +22,14 @@ module Serializer
   # 8        0.00000001 1.11 mm
   PRECISION = 6
 
-  def self.serialize(format, type, data, layers, meta)
+  def self.serialize(format, object)
     # TODO: 'register/plug-in' pattern, also register mimetype/format
+
+    type = object[:type]
+    data = object[:data ]
+    layers = object[:layers]
+    meta = object[:meta]
+
     case format
     when :turtle
       TurtleSerializer.serialize type, data, layers, meta

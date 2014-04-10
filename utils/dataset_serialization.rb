@@ -30,7 +30,13 @@ module Sequel
 
         meta.merge! pagination_results(params, get_pagination_data(params), nodes.length)
 
-        Serializer.serialize params[:request_format], :nodes, nodes, layers, meta
+        # Serializer.serialize params[:request_format], :nodes, nodes, layers, meta
+        {
+          type: :nodes,
+          data:  nodes,
+          layers: layers,
+          meta: meta
+        }
       when :layer, :layers
 
         # Postgres result in self.all only contains layer_ids
@@ -46,7 +52,13 @@ module Sequel
 
         meta.merge! pagination_results(params, get_pagination_data(params), layers.length)
 
-        Serializer.serialize params[:request_format], :layers, layers, [], meta
+        # Serializer.serialize params[:request_format], :layers, layers, [], meta
+        {
+          type: :layers,
+          data:  layers,
+          layers: [],
+          meta: meta
+        }
       end
 	  end
 
