@@ -22,7 +22,7 @@ module Serializer
   # 8        0.00000001 1.11 mm
   PRECISION = 6
 
-  def self.serialize(format, object)
+  def self.serialize(format, object, env)
     # TODO: 'register/plug-in' pattern, also register mimetype/format
 
     type = object[:type]
@@ -30,18 +30,27 @@ module Serializer
     layers = object[:layers]
     meta = object[:meta]
 
-    case format
-    when :turtle
-      TurtleSerializer.serialize type, data, layers, meta
-    when :geojson
-      GeoJSONSerializer.serialize type, data, layers, meta
-    when :jsonld
-      JSONLDSerializer.serialize type, data, layers, meta
-    when :json
-      CdkJSONSerializer.serialize type, data, layers, meta
+    if type == :@context
+      # Override Grape api.format - @context request always return JSON
+      env["api.format"] = "json"
+      return data.to_json
     else
-      # default
-      GeoJSONSerializer.serialize type, data, layers, meta
+      case format
+      when :turtle
+        TurtleSerializer.serialize type, data, layers, meta
+      when :geojson
+        env["api.format"] = "json"
+        GeoJSONSerializer.serialize type, data, layers, meta
+      when :jsonld
+        env["api.format"] = "json"
+        JSONLDSerializer.serialize type, data, layers, meta
+      when :json
+        CdkJSONSerializer.serialize type, data, layers, meta
+      else
+        # default
+        env["api.format"] = "json"
+        GeoJSONSerializer.serialize type, data, layers, meta
+      end
     end
   end
 

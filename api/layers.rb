@@ -22,8 +22,8 @@ module CitySDKLD
 
         desc 'Return single layer'
         get '/' do
+          # TODO: make sure only memcached is accessed - not the database
           layer_id = Layer.id_from_name(params[:layer_name])
-
           dataset = Layer.where(id: layer_id)
           dataset.serialize :layer, params
         end
@@ -35,10 +35,15 @@ module CitySDKLD
 
         desc 'Return JSON-LD context of single layer'
         get '/@context' do
+          # TODO: make sure only memcached is accessed - not the database
           layer_id = Layer.id_from_name(params[:layer_name])
           layer = Layer.get_layer(layer_id)
-
-          layer[:@context]
+          {
+            type: :@context,
+            data:  layer[:@context],
+            layers: [],
+            meta: []
+          }
         end
 
       end

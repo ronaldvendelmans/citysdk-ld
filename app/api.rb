@@ -10,17 +10,17 @@ module CitySDKLD
 
     content_type :json, 'application/json'
     formatter :json, lambda { |object, env|
-      Serializer.serialize :geojson, object
+      Serializer.serialize :geojson, object, env
     }
 
     content_type :jsonld, 'application/ld+json'
     formatter :jsonld, lambda { |object, env|
-      Serializer.serialize :jsonld, object
+      Serializer.serialize :jsonld, object, env
     }
 
     content_type :turtle, 'text/turtle'
     formatter :turtle, lambda { |object, env|
-      Serializer.serialize :turtle, object
+      Serializer.serialize :turtle, object, env
     }
 
     before do

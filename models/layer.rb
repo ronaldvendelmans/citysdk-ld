@@ -133,10 +133,6 @@ class Layer < Sequel::Model
     layer[:webservice]
   end
 
-  def self.get_data(id, node_id, data)
-    WebService.load(id, node_id, data)
-  end
-
   def self.get_data_timeout(id)
     layer = self.get_layer(id)
     layer[:update_rate] || 3000
