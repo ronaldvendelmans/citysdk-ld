@@ -39,7 +39,7 @@ class CdkJSONSerializer < Serializer::Base
         update_rate: layer[:update_rate],
         webservice: layer[:webservice],
         imported_at: layer[:imported_at],
-        context: layer[:context],
+        :@context => layer[:@context],
         bbox: layer[:geojson] ? layer[:geojson] : nil
       }
       result.delete_if { |k, v| v.nil? }

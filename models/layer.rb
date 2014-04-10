@@ -64,7 +64,7 @@ class Layer < Sequel::Model
     l.delete :validity
     l.delete :import_config
 
-    l[:context] = JSON.parse(l[:context], {symbolize_names: true}) if l[:context]
+    l[:@context] = JSON.parse(l[:@context], {symbolize_names: true}) if l[:@context]
 
     # TODO: use Serializer::PRECISION
     l[:wkt] = l[:wkt].round_coordinates(6) if l[:wkt]

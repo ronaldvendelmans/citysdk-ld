@@ -54,9 +54,9 @@ class JSONLDSerializer < GeoJSONSerializer
           }.merge layer
 
           # TODO: url from config
-          context = "http://api.citysdk.waag.org/layers/#{l}/fields"
+          context = "http://api.citysdk.waag.org/layers/#{l}/@context"
           if first
-            context = @layers[l][:context] if @layers[l][:context]
+            context = @layers[l][:@context] if @layers[l][:@context]
           end
 
           layer[:data] = {

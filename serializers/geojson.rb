@@ -48,7 +48,7 @@ class GeoJSONSerializer < Serializer::Base
           imported_at: layer[:imported_at],
           owner: layer[:owner].delete_if { |k, v| v.nil? },
           fields: layer[:fields],
-          context: layer[:context]
+          :@context => layer[:@context]
         },
         geometry: layer[:geojson] ? layer[:geojson] : {}
       }
