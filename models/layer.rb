@@ -119,7 +119,6 @@ class Layer < Sequel::Model
 
   def self.is_webservice?(id)
     layer = self.get_layer(id)
-
     webservice = layer[:webservice]
     if layer[:name] == 'ns'
       webservice = false
@@ -131,10 +130,6 @@ class Layer < Sequel::Model
   def self.get_webservice_url(id)
     layer = self.get_layer(id)
     layer[:webservice]
-  end
-
-  def self.get_data(id, node_id, data)
-    WebService.load(id, node_id, data)
   end
 
   def self.get_data_timeout(id)
