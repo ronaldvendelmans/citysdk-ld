@@ -119,7 +119,6 @@ class Layer < Sequel::Model
 
   def self.is_webservice?(id)
     layer = self.get_layer(id)
-
     webservice = layer[:webservice]
     if layer[:name] == 'ns'
       webservice = false
