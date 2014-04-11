@@ -19,21 +19,30 @@ module CitySDKLD
         dataset.serialize :nodes, params
       end
 
-      desc 'Return single object'
-      get '/:cdk_id' do
-        dataset = Node.where(cdk_id: params[:cdk_id])
-          .node_layers(params)
+      # TODO: get regex from Object model class
+      resource '/:cdk_id', requirements: { cdk_id: /\w+(\.\w+)*/ } do
 
-        dataset.serialize :node, params
-      end
+        desc 'Return single object'
+        get '/' do
+          dataset = Node.where(cdk_id: params[:cdk_id])
+            .node_layers(params)
 
-      desc 'Return all layers that contain data of single object'
-      get '/:cdk_id/layers' do
+          dataset.serialize :node, params
+        end
 
-      end
+        resource '/layers' do
 
-      desc 'Return all data on single layer of single object'
-      get '/:cdk_id/layers/:layer_name' do
+          desc 'Return all layers that contain data of single object'
+          get '/' do
+
+          end
+
+          desc 'Return all data on single layer of single object'
+          get '/:layer_name', requirements: { layer_name: /\w+(\.\w+)*/ } do
+
+          end
+
+        end
 
       end
 

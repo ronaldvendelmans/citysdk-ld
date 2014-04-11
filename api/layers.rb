@@ -18,7 +18,8 @@ module CitySDKLD
         dataset.serialize :layers, params
       end
 
-      segment '/:layer_name' do
+      # TODO: get regex from Layer model class
+      resource '/:layer_name', requirements: { layer_name: /\w+(\.\w+)*/ } do
 
         desc 'Return single layer'
         get '/' do
@@ -28,9 +29,10 @@ module CitySDKLD
           dataset.serialize :layer, params
         end
 
-        desc 'Return all objects with data on single layer'
-        get '/objects' do
-          {hond: "vis"}
+        desc 'Return all users associated with single layer'
+        get '/users' do
+          puts "users"
+          {}
         end
 
         desc 'Return JSON-LD context of single layer'
@@ -46,36 +48,37 @@ module CitySDKLD
           }
         end
 
+        resource '/objects' do
+
+          desc 'Return all objects with data on single layer'
+          get '/' do
+            puts 'Return all objects with data on single layer'
+            {}
+          end
+
+          desc 'Return metadata of single layer about single object, e.g. the date the data was added/modified, etc.'
+          get '/:cdk_id' do
+            puts 'vissen Return metadata of single layer about single object, e.g. the date the data was added/modified, etc.'
+            {}
+          end
+
+        end
+
+        resource '/fields' do
+
+          desc 'Return all fields of single layer'
+          get '/fields/' do
+
+          end
+
+          desc 'Return single field of single layer'
+          get '/fields/:field_name' do
+
+          end
+
+        end
+
       end
-
-
-
-
-
-
-
-
-
-
-      # desc 'Return metadata of single layer about single object, e.g. the date the data was added/modified, etc.'
-      # get '/layers/:layer_name/objects/:cdk_id' do
-      #
-      # end
-      #
-      # desc 'Return all users associated with single layer'
-      # get '/layers/:layer_name/users/' do
-      #
-      # end
-      #
-      # desc 'Return all fields of single layer'
-      # get '/layers/:layer_name/fields/' do
-      #
-      # end
-      #
-      # desc 'Return single field of single layer'
-      # get '/layers/:layer_name/fields/:field_name' do
-      #
-      # end
 
     end
   end
