@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Home
-published: true
 ---
 
 <div class="col_12" >
