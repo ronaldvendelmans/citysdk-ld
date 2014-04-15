@@ -10,7 +10,9 @@ title: Home
 (QED) The CitySDK Linked Open Data Distribution API is a linked data distribution platform. Developed by Waag Society, the distribution API is a component of the [CitySDK toolkit](http://citysdk.eu). This toolkit supports the development of open and interoperable interfaces for open data and city services in eight European cities (Amsterdam, Helsinki, Manchester, Lisbon, Istanbul, Lamia, Rome and Barcelona). The CitySDK Linked Open Data Distribution API enables the distribution and linking of open data sets and city services. This website explains the distribution API. For a comprehensive overview of the complete CitySDK toolkit have a look at the [CitySDK project homepage](http://www.citysdk.eu/).
 
 </div>
+
 <hr/>	
+
 <div class="col_7" >
 
 ### Benefits
@@ -47,7 +49,9 @@ It makes it easy to upload and (automatically) update your static and realtime d
 If your city is interested in CitySDK and the API interface and toolkit, or if you are a developer looking to develop apps that work in different European cities, then get in touch via <a href="mailto:{{ site.data.endpoint.email }}">CitySDK support</a>.
 
 </div>
+
 <div class=" col_1"></div>
+
 <div class=" col_4  gridsmaller">
 
 ### Links
