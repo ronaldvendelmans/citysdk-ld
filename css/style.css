@@ -17,13 +17,8 @@ h1,h2,h3,h4,h5,h6{
 font-weight:bold;
 line-height:140%;
 }
-h3,h4,h5,h6{
+h2,h3,h4,h5,h6{
 color: #525252 !important;
-}
-
-h1{
-font-size:2.5em;
-margin:10px 0 10px 0;
 }
 
 .headertitle {
@@ -32,6 +27,11 @@ font-size:3.0em;
 padding-top:55px !important;
 XXtabletXXpadding-top: 10px !important;
 line-height:0% !important;
+}
+
+h1{
+font-size:2.0em;
+margin:10px 0 10px 0;
 }
 
 h2{
