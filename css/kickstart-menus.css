@@ -177,7 +177,7 @@ z-index:600;
 	.grid .menu.vertical li.has-menu span.arrow,
 	.grid .menu.vertical.right li.has-menu span.arrow,
 	.grid .menu li li.has-menu span.arrow, .menu.vertical li.has-menu span.arrow
-	{border-color-top:#196cb8;border-color:#196cb8 transparent transparent transparent;}
+	{border-color-top:#fff;border-color:#fff transparent transparent transparent;}
 	
 	.grid .menu.vertical.right li.has-menu span.arrow{
 	right:5px;left:auto;
