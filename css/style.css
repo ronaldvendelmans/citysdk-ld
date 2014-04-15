@@ -35,8 +35,8 @@ margin:10px 0 10px 0;
 }
 
 h2{
-font-size:1.8em;
-margin:10px 0 10px 0;
+font-size:1.7em;
+margin:15px 0 2px 0;
 }
 
 h3{
@@ -47,21 +47,21 @@ line-height:130%;
 
 h4{
 font-size:1.2em;
-margin:0px 0 5px 0;
+margin:5px 0 0px 0;
 }
 
 h5{
 font-size:1.1em;
-margin:10px 0 10px 0;
+margin:5px 0 0px 0;
 }
 
 h6{
 font-size:1.0em;
-margin:10px 0 5px 0;
+margin:5px 0 0px 0;
 }
 
 pre {
-background-color: #facb3f ; /*#fce5a0; #ffe32b;*/
+background-color: #fdeab2; /* #facb3f; */
 }
 .gridsmaller {
 font-size: 90%;

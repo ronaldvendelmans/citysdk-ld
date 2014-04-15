@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>{{ page.title }} | CitySDK Linked Open Data Platform</title>
+    <title>{{ page.title }} | CitySDK Linked Data Platform</title>
     <meta charset="utf-8">
     <meta name="viewport"content="width=device-width,initial-scale=1">
     <link href="{{ site.baseurl }}/img/favicon.ico" rel="shortcut icon" type=image/x-icon>
@@ -41,17 +41,19 @@
 	
 		<div class="col_12 ">
 			<div class="rhnav">	
-				<div class="col_9 left" >
-					<h1 class="headertitle"><a href="index.htm" style="text-decoration: none; color: #000;">CitySDK Linked Data Platform</a></h1>
-				</div>
-				<div class="col_3" >
-					<a href="index.htm" style="text-decoration: none; color: #000;"><img src="{{ site.baseurl }}/img/citysdk.png" class="imgextramarge"></a>
+				<div class="col_12">
+					<div class="col_9">
+						<a href="index.htm" style="text-decoration: none; color: #000;"><img src="{{ site.baseurl }}/img/logotitel.jpg" class="imgextramarge"></a>
+					</div>
+					<div class="col_3">
+						<a href="index.htm" style="text-decoration: none; color: #000;"><img src="{{ site.baseurl }}/img/citysdk.png" class="imgextramarge" ></a>
+					</div>
 				</div>
 	
 				<!-- Menu Horizontal -->
 				<div class="col_12" >
 				<ul class="menu extramarge">
-				<li><a href="{{ site.baseurl }}/">Home</a></li>
+				<li{% if page.title == "Home" %} class='current'{% endif %}><a href="{{ site.baseurl }}/">Home</a></li>
 				<li class='current'><a href="#">Getting started</a>
 					<ul>
 					<li><a href="{{ site.baseurl }}/doc">Documentation</a></li>
@@ -60,7 +62,7 @@
 					<li><a href="{{ site.baseurl }}/api">API Key/account</a></li>
 					</ul>
 				</li>
-				<li ><a href="#">Data</a>
+				<li><a href="#">Data</a>
 					<ul>
 					<li><a href="{{ site.baseurl }}/map">Map viewer</a></li>
 					<li><a href="{{ site.baseurl }}/data">Data (CMS)</a></li>
