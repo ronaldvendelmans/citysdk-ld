@@ -3,7 +3,9 @@ layout: default
 title: FAQ
 ---
 
-# Data & other APIs
+#FAQ
+
+## Data & other APIs
 
 ##### What is the CitySDK Linked Open Data Distribution API?
 
@@ -47,7 +49,7 @@ CitySDK is not a database, it is a linked data distribution platform. CitySDK ne
 
 CitySDK is a distributed system where each data owner (such as cities, provinces or countries) can run its own instance.
 
-# Maintenance, Support, Ownership
+## Maintenance, Support, Ownership
 
 ##### Who are the intended users of CitySDK?
 
