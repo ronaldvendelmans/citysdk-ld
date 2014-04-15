@@ -1,5 +1,20 @@
 {% include header.html %}
 
-            {{content}}
-          
+<div class="col_7" >
+
+{{content}}
+			
+</div>
+
+<div class=" col_1"></div>
+
+<div class=" col_4  gridsmaller">
+
+{% capture info_content %}
+{% include info.md %}
+{% endcapture %}
+{{ info_content | markdownify }}
+
+</div>
+ 
 {% include footer.html %}

@@ -4,7 +4,7 @@ title: Home
 ---
 
 
-## Benefits22
+## Benefits
 
 1. CitySDK Linked Open Data Distribution API is a one-stop-shop for developers. With standardized interfaces, developers can build better apps and services for end users and governments. 
 2. _Moveable code_ &ndash; developers can use the same interface for open data, in Amsterdam, Helsinki and Istanbul alike.

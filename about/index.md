@@ -3,7 +3,7 @@ layout: single
 title: About
 ---
 
-## About CitySDK Linked Open Data Distribution API
+# About CitySDK Linked Open Data Distribution API
 
 <table id="about">
   <tr>
