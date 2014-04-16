@@ -1,6 +1,6 @@
 ---
-layout: single
-title: FAQ
+layout: home
+title: Home
 ---
 
 #FAQ
