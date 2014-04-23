@@ -3,15 +3,13 @@ layout: map2
 title: Data
 ---
 
-
-    
-       <div id="maincontent" class="full-width-content">
+<div id="maincontent" class="full-width-content">
    <div class="container">
      <div id="input">           
        <table>   
          <tr>
-           <td class="minimize server">
-             http://api.citysdk.waag.org/
+           <td class="minimize endpoint">
+             {{ site.data.endpoint.endpoint }}
            </td>
            <td class="fill">
              <input id="url" type="text" />
@@ -39,17 +37,17 @@ title: Data
         <div id="latlong_large" class="latlong hidden">
           Map center:
           <table>
-            <tr><td><img src="img/latlong/latlong.png" /></td><td class="cntrLatLon"></td></tr>
+            <tr><td><img src="{{ site.baseurl }}/img/latlong/latlong.png" /></td><td class="cntrLatLon"></td></tr>
             <tr><td>WKT</td><td class="cntrWkt"></td></tr>
-            <tr><td><img src="img/latlong/postgres.png" /></td><td class="cntrPostGis"></td></tr>
-            <tr><td><img src="img/latlong/citysdk.png" /></td><td class="cntrCdk"></td></tr>                              
+            <tr><td><img src="{{ site.baseurl }}/img/latlong/postgres.png" /></td><td class="cntrPostGis"></td></tr>
+            <tr><td><img src="{{ site.baseurl }}/img/latlong/citysdk.png" /></td><td class="cntrCdk"></td></tr>                              
           </table>
           Bounding box:
           <table>
-            <tr><td><img src="img/latlong/latlong.png" /></td><td class="bbLatLon"></td></tr>
+            <tr><td><img src="{{ site.baseurl }}/img/latlong/latlong.png" /></td><td class="bbLatLon"></td></tr>
             <tr><td>WKT</td><td class="bbWkt"></td></tr>
-            <tr><td><img src="img/latlong/postgres.png" /></td><td class="bbPostGis"></td></tr>
-            <tr><td><img src="img/latlong/citysdk.png" /></td><td class="bbCdk"></td></tr>
+            <tr><td><img src="{{ site.baseurl }}/img/latlong/postgres.png" /></td><td class="bbPostGis"></td></tr>
+            <tr><td><img src="{{ site.baseurl }}/img/latlong/citysdk.png" /></td><td class="bbCdk"></td></tr>
           </table>            
           <button id="hideLatLong" type="button" class="button_down"></button>
         </div>          
@@ -60,14 +58,14 @@ title: Data
 
 <script>
   $(document).ready(function() {
-    
-    // var tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    //var tileUrl = 'http://test-api.citysdk.waag.org:8888/v2/citysdk/{z}/{x}/{y}.png';
-    var server  = "http://api.citysdk.waag.org".split('http://')[1] + '/';
-    var tileUrl = "http://tiles.citysdk.waag.org/v2/citysdk" + '/{z}/{x}/{y}.png';
-    var curr_location = "4.90312,52.37274,13".split(',');
-    var http = 'http://';
+        
+    var endpoint  = "{{ site.data.endpoint.endpoint }}",
+        tileUrl = "{{ site.data.endpoint.tiles }}",
+        latLng = [{{ site.data.endpoint.map.geometry.lat }}, {{ site.data.endpoint.map.geometry.lon }}],
+        zoom = {{ site.data.endpoint.map.zoom }};
 
+    //hljs.initHighlightingOnLoad();
+    
     var spinnerOpts = {
       lines: 12, // The number of lines to draw
       length: 4, // The length of each line
@@ -141,30 +139,19 @@ title: Data
       }
     }).addTo(map);      
 
-    var Crosshair = L.Control.extend({
-      options: {
-        position: 'topleft'
-      },
-      onAdd: function (map) {
-        var container = L.DomUtil.create('div', 'hidden crosshair');
-        return container;
-      }
-    });
-    map.addControl(new Crosshair());
-
-    map.setView(new L.LatLng(parseFloat(curr_location[1]), parseFloat(curr_location[0])), parseInt(curr_location[2]));
+    map.setView(latLng, zoom);
           
     map.on("move", function(e) {
       printGeoStrings();
     });
     
-    window.onresize = function() {
-      var point = getMapCenterPoint();
-      $(".leaflet-control.crosshair").css({
-        "top": (point.x - $(".leaflet-control.crosshair").height() / 2) + "px",
-        "left": point.y + "px"
-      });
-    };
+    // window.onresize = function() {
+    //   var point = getMapCenterPoint();
+    //   $(".leaflet-control.crosshair").css({
+    //     "top": (point.x - $(".leaflet-control.crosshair").height() / 2) + "px",
+    //     "left": point.y + "px"
+    //   });
+    // };
     
     function getMapCenterPoint() {
       return new L.Point(
@@ -242,7 +229,7 @@ title: Data
     // CitySDK API data
     // ================================================================================
     
-    function loadCitySDKData(url, is_example) {
+    function loadCitySDKData(url, isExample) {
       hideDropdown();
               
       if (!url) {
@@ -264,8 +251,11 @@ title: Data
     
       spinner.spin(document.getElementById('busy'))
       
-      if (url.substring(0, http.length) !== http) {
-        url = http + server + url;
+      var http = 'http://',
+          https = 'https://';
+          
+      if (url.substring(0, http.length) !== http && url.substring(0, https.length) !== https) {
+        url = endpoint + url;
       }
       url += (url.split('?')[1] ? '&':'?') + 'geom';
       if( url.indexOf("per_page") == -1 ) {
@@ -278,7 +268,7 @@ title: Data
       $.getJSON(url, function(data) {                 
         // If data is returned, and data.results.length > 0,
         // add URL to urlHistory
-        if ((data.results.length > 0) &! is_example) {
+        if ((data.results.length > 0) &! isExample) {
           addHistory(historyUrl);            
           setDropdownHistory();
         }
@@ -343,7 +333,7 @@ title: Data
 		   {
 				$('#nodedata').html("unknown error (maybe server is unavailable / maybe the requested was not formatted correctly)")
 		   }
-		   spinner.stop() 
+		   spinner.stop();
      });
 
     }
@@ -373,9 +363,8 @@ title: Data
         var hash = window.location.hash;
         if (hash.length > 1) {
           var url = hash.substring(1);
-          var srv = "http://api.citysdk.waag.org"
-          if (url.substring(0, srv.length) == srv) {
-            $("#url").val(url.substring(srv.length+1));
+          if (url.substring(0, endpoint.length) == endpoint) {
+            $("#url").val(url.substring(endpoint.length + 1));
           } else {
             $("#url").val(url);
           }
@@ -387,14 +376,14 @@ title: Data
 
     // Call functions on page load:
     window.onhashchange();
-    window.onresize();
+    //window.onresize();
     $('#url').focus();
     
     // ================================================================================
     // Combobox functions
     // ================================================================================
     
-    $('td.server').click(function() {
+    $('td.endpoint').click(function() {
       $('#url').focus();
     });
     
@@ -409,10 +398,10 @@ title: Data
   
     $("#input table").on("click", "tr.dropdown", function(event){
       var url = $(this).attr("data-url");
-      var is_example = $(this).attr("data-example");
+      var isExample = $(this).attr("data-example");
       hideDropdown();
       $("#url").val(url);        
-      loadCitySDKData(url, is_example === "true");
+      loadCitySDKData(url, isExample === "true");
     });
     
     $("#showLatLong").click(function() {
@@ -450,95 +439,14 @@ title: Data
     
     function addDropdownExamples() {
     
+      // Jekyll inserts examples from endpoint.yml:
       var examples = [
+        {% for example in site.data.endpoint.examples %}
         {
-          "url": "admr.nl.amsterdam/nodes?osm::tourism=museum",
-          "title": "Museums in Amsterdam"
+          url: "{{ example.url }}",
+          title: "{{ example.title }}"
         },
-        {
-          "url": "nodes?311.helsinki::status=open",
-          "title": "Open service requests in Helsinki"
-        },
-        {
-          "url": "nodes?lat=52.090774&lon=5.121281&radius=10000&per_page=1000&osm::highway=motorway",
-          "title": "Highways in a 10km radius around Utrecht"
-        },
-        {
-          "url": "nodes?name=stedenroute&layer=osm",
-          "title": "Routes named \"Stedenroute\""
-        },       
-        {
-          "url": "nodes?per_page=250&layer=ns&bbox=53.579461,4.487915,52.069377,7.146606",
-          "title": "NS stations in the upper half of the Netherlands "
-        },          
-        {
-          "url": "admr.nl.zwolle/regions?admr::admn_level=4&layer=cbs&per_page=50",
-          "title": "Statistical data of all neighbourhoods in Zwolle"
-        },
-        {
-          "url": "admr.nl.groningen/regions?admr::admn_level=4&layer=rain",
-          "title": "Rain forecast per neighbourhood in Groningen"
-        },
-        {
-          "url": "admr.nl.amsterdam/ptstops?name=Leidseplein&layer=gtfs",
-          "title": "Public transport stops in Amsterdam named Leidseplein"
-        },
-        {
-          "url": "gtfs.stop.060671/select/ptlines",
-          "title": "Public transport lines that call at one of these stops"
-        },
-        {
-          "url": "routes?layer=divv.traffic&per_page=200",
-          "title": "Real time traffic flow on main roads in Amsterdam"
-        },
-        {
-          "url": "routes?contains=n726817991,n726817955,n726816865",
-          "title": "Routes containing a specific set of nodes"
-        },
-        {
-          "url": "r326516/select/nodes?osm::railway=tram_stop|halt&data_op=or",
-          "title": "Tram stops on Utrecht-IJsselstein tram route"
-        },
-        {
-          "url": "admr.nl.amsterdam/nodes?layer=artsholland",
-          "title": "Cultural events in Amsterdam for the next two weeks"
-        },
-        {
-          "url": "nodes?2cm.hmp::wegnummer=N200&per_page=300",
-          "title": "Highway location markers along the N200"
-        },
-        {
-          "url": "nodes?layer=divv.parking.buildings",
-          "title": "Public parking in Amsterdam"
-        },
-        {
-          "url": "admr.nl.amsterdam_stadsdeel_oost_oostelijk_havengebied/nodes?layer=bag.ligplaatsen",
-          "title": "Houseboat locations near our offices."
-        },
-        {
-          "url": "nodes?layer=bag.panden&lat=52.0936&lon=4.3451&per_page=100",
-          "title": "Buildings from near the Dutch Royal Palace"
-        },
-        {
-          "url": "n798432345/select/regions",
-          "title": "Administrative regions which contain the Olympic Stadium in Amsterdam"
-        },
-        {
-          "url": "admr.nl.alkmaar/nodes?layer=rce.rijksmonumenten",
-          "title": "Cultural heritage sites in Alkmaar"
-        },
-        {
-          "url": "nodes?layer=rce.rijksmonumenten,amsterdam.hotels,bag.vbo",
-          "title": "Hotels in Amsterdam that are also a cultural heritage site"
-        },
-        {
-          "url": "admr.nl.eindhoven/nodes?layer=nl.risicokaart.*",
-          "title": "Objects from the Risicokaart in the city of Eindhoven"
-        },
-        {
-          "url": "nodes?layer=rws.nap",
-          "title": "Waterlevels in millimeters above the Amsterdam Ordnance Datum"
-        }
+        {% endfor %}        
       ];
       
       $.each(examples.slice(0).reverse(), function() {
@@ -568,7 +476,7 @@ title: Data
         if (index == 0) {
           cls += " last_history";
         }
-        var tr = "<tr class=\"" + cls + "\" data-url=\"" + this + "\"><td class=\"minimize server\">http://api.citysdk.waag.org/</td><td class=\"fill\" colspan=\"4\"><span class=\"url\">" + this + "</span></td></tr>";
+        var tr = "<tr class=\"" + cls + "\" data-url=\"" + this + "\"><td class=\"minimize endpoint\">{{ site.data.endpoint.endpoint }}</td><td class=\"fill\" colspan=\"4\"><span class=\"url\">" + this + "</span></td></tr>";
         $(tr).insertAfter($('#before_history'));          
       });      
     }
@@ -584,7 +492,6 @@ title: Data
       $(selector).addClass("button_down"); 
     }      
   }    
-   
   
 	$.ajaxTransport("+*", function( options, originalOptions, jqXHR ) {                                   
     if($.browser.msie && window.XDomainRequest) {
@@ -623,5 +530,3 @@ title: Data
   });
   
 </script>
-
-
