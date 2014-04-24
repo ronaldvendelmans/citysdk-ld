@@ -35,9 +35,9 @@ article img {
   border-top-style: solid;  
 }
 
-@media all and (max-width: 500px) {
+@media all and (max-width: 768px) {
 	#output {
-		top: 315px;
+		top: 275px;
 	}
 }
 
