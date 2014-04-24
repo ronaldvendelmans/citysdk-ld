@@ -1,0 +1,25 @@
+			<!-- Menu Horizontal -->
+			<div class="col_12" >
+				<ul class="menu extramarge">
+				<li{% if page.title == "Home" %} class='current'{% endif %}><a href="{{ site.baseurl }}/">Home</a></li>
+				<li{% if page.title == "Start" %} class='current'{% endif %}><a href="#">Getting started</a>
+					<ul>
+					<li><a href="{{ site.baseurl }}/doc">Documentation</a></li>
+					<li><a href="{{ site.baseurl }}/app">App Gallery</a></li>
+					<li><a href="{{ site.baseurl }}/sample">Sample data</a></li>
+					<li><a href="{{ site.baseurl }}/api">API Key/account</a></li>
+					</ul>
+				</li>
+				<li{% if page.title == "Data" %} class='current'{% endif %}><a href="#">Data</a>
+					<ul>
+					<li><a href="{{ site.baseurl }}/map">Map viewer</a></li>
+					<li><a href="{{ site.baseurl }}/data">Data (CMS)</a></li>
+					<li><a href="{{ site.baseurl }}/cities">Cities/areas</a></li>
+					</ul>
+				</li>
+				<li{% if page.title == "FAQ" %} class='current'{% endif %}><a href="{{ site.baseurl }}/faq">FAQ</a></li>
+				<li{% if page.title == "Blog" %} class='current'{% endif %}><a href="{{ site.baseurl }}/blog">Blog</a></li>
+				<li{% if page.title == "Contact" %} class='current'{% endif %}><a href="{{ site.baseurl }}/contact">Contact</a></li>
+				</ul>
+			</div>	
+			<!--End Menu Horizontal -->
