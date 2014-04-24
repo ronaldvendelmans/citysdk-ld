@@ -152,7 +152,7 @@ code#nodedata .literal {
 
 pre code .string,
 code#nodedata .string {
-  color: #d0dbe1; /*#CE2027;*/  
+  color: #CE2027;
 }
 
 pre code .number,
