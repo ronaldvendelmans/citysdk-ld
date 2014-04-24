@@ -181,6 +181,10 @@ code#nodedata .number {
   position: relative;
 }
 
+#input table td {
+padding: 0px;
+}
+
 #input table td.endpoint {
   color: #333;
   padding-left: 2px;
