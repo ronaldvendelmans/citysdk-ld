@@ -68,24 +68,7 @@ font-size: 90%;
 /*---------------------------------
 	OVERRIDES
 -----------------------------------*/
-table {
-border-color: #fff !important;
-}
 
-td { 
-padding: 0; 
-border: none;
-text-align: left;
-vertical-align: top;
-}
-
-td img {
-padding: 0px 15px 15px 0px;
-}
-
-.verbergen {
-display: none;
-}
 
 h1,h2,h3,h4,h5,h6{
 font-family: 'Ubuntu', sans-serif;
@@ -93,16 +76,6 @@ font-weight:bold;
 color:#000;
 }
 
-h1,h2 {
-xxmargin: 0 0.833333%;
-}
-
-.reference {
-font-size:0.9em;
-margin:10px 0 5px 0;
-color: #777;
-color:#000;
-}
 
 thead th,
 tbody th{
@@ -164,10 +137,6 @@ margin: 10px 0 30px 0;
 margin-top: 30px !important;
 margin-top: 10px !important;
 }
-.rhnav .extramarge15 {
-margin-top: 15px !important;
-}
-
 .rhnav .imgextramarge {
 margin-top: 10px !important;
 }
