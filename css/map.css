@@ -27,7 +27,7 @@ article img {
 #output  {
   bottom: 0;
   position: absolute;
-  top: 215px;
+  top: 225px;
   width: 100%;   
    
   border-top-color: #d0dbe1; /*#CE2027;*/
@@ -37,7 +37,7 @@ article img {
 
 @media all and (max-width: 768px) {
 	#output {
-		top: 275px;
+		top: 295px;
 	}
 }
 
