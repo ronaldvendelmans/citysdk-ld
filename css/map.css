@@ -186,11 +186,11 @@ padding: 0px;
 }
 
 #input table td.endpoint {
-  color: #333;
+  color: #888;
   padding-left: 2px;
   display: block;
-  padding-right: 2px !important;
-  padding-top: 3px;
+  padding-right: 4px !important;
+  padding-top: 2px;
 }
 
 #input td #url {
