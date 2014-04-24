@@ -15,9 +15,9 @@ body {
 header {
   margin: 0;
   padding: 0;
-  background-image: url('{{ site.baseurl }}/img/header.png');
-  background-repeat: repeat-x;
-  height: 148px;
+  XXbackground-image: url('{{ site.baseurl }}/img/header.png');
+  XXbackground-repeat: repeat-x;
+  XXheight: 148px;
 }
 
 header .logo {
@@ -32,21 +32,6 @@ header h1 {
   color: black;
 }
 
-footer {
-  margin: 0;
-  padding: 30px 0;
-  background-image: url('{{ site.baseurl }}/img/footer.png');
-  background-repeat: repeat-x;
-  height: 40px;
-}
-
-footer .logos {
-  float: right;
-}
-
-footer .logos img {
-  margin-left: 20px;
-}
 
 nav {
   top: 50px;

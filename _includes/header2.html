@@ -32,35 +32,45 @@
 	
   </head>
   <body>	
-<header>
+  <header>
       <div class="container">
-        <h1>CitySDK Linked Data API</h1>
+<!--         <h1>CitySDK Linked Data API</h1>
         <div class="logo">
           <img src="{{ site.baseurl }}/img/citysdk.png" />
-        </div>
+        </div> -->
 		
-        <nav>
-          <ul>
-            <li><a href="{{ site.baseurl }}/">Home</a></li>
-            <li>
-              <ul>
-                <li><a href="{{ site.baseurl }}/about">About</a></li>
-                <li><a href="{{ site.baseurl }}/faq">FAQ</a></li>
-              </ul>
-            </li>
-            <li><a href="{{ site.baseurl }}/apps">Apps</a></li>
-            <li><a href="{{ site.baseurl }}/data">Data</a></li>
-            <li><a href="{{ site.baseurl }}/api">API</a></li>
-            <li>
-              <ul>                
-                <li><a href="{{ site.baseurl }}/api/read">Read</a></li>
-                <li><a href="{{ site.baseurl }}/api/write">Write</a></li>
-                <li><a href="{{ site.baseurl }}/api/match">Match</a></li>
-              </ul>
-            </li>
-            <li><a href="{{ site.baseurl }}/map">Map viewer</a></li>
-          </ul> 
-        </nav>
+		<div class="col_9 left" >
+			<h1 class="headertitle"><a href="index.htm" style="text-decoration: none; color: #000;">CitySDK Linked Data Platform</a></h1>
+		</div>
+		<div class="col_3" >
+			<a href="index.htm" style="text-decoration: none; color: #000;"><img src="{{ site.baseurl }}/img/citysdk.png" class="imgextramarge"></a>
+		</div>
+		
+		<!-- Menu Horizontal -->
+		<div class="mapmenu" >
+				<ul class="menu extramarge">
+				<li><a href="{{ site.baseurl }}/">Home</a></li>
+				<li class='current'><a href="#">Getting started</a>
+					<ul>
+					<li><a href="{{ site.baseurl }}/doc">Documentation</a></li>
+					<li><a href="{{ site.baseurl }}/app">App Gallery</a></li>
+					<li><a href="{{ site.baseurl }}/sample">Sample data</a></li>
+					<li><a href="{{ site.baseurl }}/api">API Key/account</a></li>
+					</ul>
+				</li>
+				<li ><a href="#">Data</a>
+					<ul>
+					<li><a href="{{ site.baseurl }}/map">Map viewer</a></li>
+					<li><a href="{{ site.baseurl }}/data">Data (CMS)</a></li>
+					<li><a href="{{ site.baseurl }}/cities">Cities/areas</a></li>
+					</ul>
+				</li>
+				<li ><a href="{{ site.baseurl }}/faq">FAQ</a></li>
+				<li ><a href="{{ site.baseurl }}/blog">Blog</a></li>
+				<li ><a href="{{ site.baseurl }}/contact">Contact</a></li>
+				</ul>
+		</div>	
+		<!--End Menu Horizontal -->
       </div>
-  	</header>
+  </header>
 
