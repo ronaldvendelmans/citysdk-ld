@@ -5,20 +5,31 @@
     <meta charset="utf-8">
     <meta name="viewport"content="width=device-width,initial-scale=1">
     <link href="{{ site.baseurl }}/img/favicon.ico" rel="shortcut icon" type=image/x-icon>
-    <link rel="stylesheet" href="{{ site.baseurl }}/css/mapstyle.css">
+
 
     {% if page.layout == "map2" %}
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/mapstyle.css">	
     <script src="{{ site.baseurl }}/js/jquery-1.9.1.min.js"></script>
-    <script src="{{ site.baseurl }}/js/jquery-migrate-1.2.1.min.js"></script>
     <script src="{{ site.baseurl }}/js/highlight.min.js"></script>
-    <script src="{{ site.baseurl }}/js/leaflet.js"></script>        
     <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->    
 
     <link rel="stylesheet" href="{{ site.baseurl }}/css/leaflet.css" />
     <link rel="stylesheet" href="{{ site.baseurl }}/css/map.css">
     <script src="{{ site.baseurl }}/js/spin.min.js"></script>
-
+	<script src="{{ site.baseurl }}/js/leaflet.js"></script>  
+    <script src="{{ site.baseurl }}/js/jquery-migrate-1.2.1.min.js"></script>
+	
     {% endif %}
+	
+	 <script type="text/javascript">
+      $(document).ready(function () {
+        hljs.initHighlightingOnLoad();
+        $("a.ep_cms_url").attr("href", "http://cms.citysdk.waag.org");
+  		});
+      // Dynamic endpoint URL, used on data page
+      var epApiUrl = "http://api.citysdk.waag.org";
+  	</script>
+	
   </head>
   <body>	
 <header>
