@@ -26,14 +26,19 @@ article img {
 
 #output  {
   bottom: 0;
-  XXposition: absolute;
-  XXtop: 215px;
- height: 100%;
+  position: absolute;
+  top: 215px;
   width: 100%;   
    
   border-top-color: #d0dbe1; /*#CE2027;*/
   border-top-width: 2px;
   border-top-style: solid;  
+}
+
+@media all and (max-width: 480px) {
+	#output {
+		top: 415px;
+	}
 }
 
 #map {
