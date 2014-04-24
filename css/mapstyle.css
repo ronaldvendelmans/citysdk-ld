@@ -333,6 +333,11 @@ table#about tr td.number div {
   line-height: 35px;
 }
 
-.mapmenu {
-height: 40px !important;
+/* for map page only */
+.extramarge {
+padding-left: 0px;
+padding-right: 0px;
+margin-left: 0px;
+margin-right: 0px;
+margin-bottom: 20px;
 }
