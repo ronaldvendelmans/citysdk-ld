@@ -134,7 +134,7 @@ code#nodedata {
   line-height: 1em;
   color: black;
   
-  border-bottom-color: #CE2027;
+  border-bottom-color: #d0dbe1; /*#CE2027;*/
   border-bottom-width: 2px;
   border-bottom-style: solid;
   
@@ -152,7 +152,7 @@ code#nodedata .literal {
 
 pre code .string,
 code#nodedata .string {
-  color: #CE2027;  
+  color: #d0dbe1; /*#CE2027;*/  
 }
 
 pre code .number,
@@ -234,7 +234,7 @@ button {
 }
 
 tr.last_history {
-    border-bottom: 1px solid #CE2027;
+    border-bottom: 1px solid #d0dbe1; /*#CE2027;*/
 }
 
 tr.example td {
