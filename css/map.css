@@ -24,10 +24,6 @@ article img {
   line-height: 1.4;
 }
 
-#input table {
-  background: #d0dbe1;
-}
-
 #output  {
   bottom: 0;
   position: absolute;
@@ -169,7 +165,7 @@ code#nodedata .number {
 }
 
 #input table {
-  background-color: white;
+  background-color: #d0dbe1; /*white;*/
   border-color: #C0C0C0 #D9D9D9 #D9D9D9;
   border-radius: 1px 1px 1px 1px;
   border-right: 1px solid #D9D9D9;
