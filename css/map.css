@@ -30,7 +30,7 @@ article img {
   top: 185px;
   width: 100%;   
    
-  border-top-color: #CE2027;
+  border-top-color: #d0dbe1; /*#CE2027;*/
   border-top-width: 2px;
   border-top-style: solid;  
 }
@@ -42,7 +42,7 @@ article img {
 
 #floatbox {
   box-shadow: 0px 0px 15px rgba(50,50,50,0.1);
-  border-color: rgba(206, 32, 39, 0.4);/* #CE2027;*/
+  border-color: #ccc; /*rgba(206, 32, 39, 0.4); #CE2027;*/
   border-width: 1px;
   border-style: solid;
   
