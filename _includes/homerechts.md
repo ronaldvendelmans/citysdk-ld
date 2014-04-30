@@ -1,13 +1,10 @@
 
-### Hit and run
+### Quick links
 
-bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla 
-
-|[**DOCUMENTATION**]({{ site.baseurl }}/documentation)|
+|[**Project Website**](http://www.citysdk.eu/)|
 |[**GET AN API KEY**]({{ site.baseurl }}/apikey)|
 |[**MAP VIEWER**]({{ site.baseurl }}/mapviewer)|
 
-bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla 
   
 <br/>
 <br/>
