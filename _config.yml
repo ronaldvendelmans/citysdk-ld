@@ -9,3 +9,5 @@ prose:
     - /LICENSE.md
     - /README.md
     - /js
+    - /css
+    - /layouts
