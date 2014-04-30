@@ -2,7 +2,7 @@
 ### Quick links
 
 |[**Project Website**](http://www.citysdk.eu/)|
-|[**What is CitySDK**](http://www.citysdk.eu/about-the-project/)|
+|[**Available Data**]({{ site.baseurl }}/data)|
 |[**MAP VIEWER**]({{ site.baseurl }}/mapviewer)|
   
 <br/>
