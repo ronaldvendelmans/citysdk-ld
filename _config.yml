@@ -8,5 +8,4 @@ prose:
     - /_config.yml
     - /LICENSE.md
     - /README.md
-    - /_includes
     - /js
