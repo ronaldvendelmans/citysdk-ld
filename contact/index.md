@@ -5,7 +5,7 @@ mainmenu: Contact
 published: true
 ---
 
-## Contact
+# Contact
 
 This endpoint is hosted and maintained by [Waag Society](http:www.waag.org), Amsterdam.
 
