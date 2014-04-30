@@ -1,4 +1,4 @@
-﻿---
+---
 [//]: # (Notes to the editor: )
 [//]: # (1. Always put this section between --- and --- at the top of your page. )
 [//]: # (2. Add a page title (to be shown in a browser tab) with the title: attribute. )
