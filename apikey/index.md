@@ -5,7 +5,7 @@ mainmenu: GettingStarted
 published: true
 ---
 
-# API key / account
+#API key / account
 
 ##Read
 
