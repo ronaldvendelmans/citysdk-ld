@@ -190,7 +190,6 @@ padding: 0px;
   padding-left: 2px;
   display: block;
   padding-right: 4px !important;
-  padding-top: 2px;
 }
 
 #input td #url {
@@ -203,7 +202,6 @@ padding: 0px;
   left: -3px; 
   outline: none;
   font-family: 'Ubuntu', sans-serif !important;
-  color: red !important;
 }
 
 #input #url: focus{
