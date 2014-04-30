@@ -21,4 +21,4 @@ See the [Project Website](http://www.citysdk.eu/) for a comprehensive overview o
 
 ## How to join?
 
-Would your city like to open up it's data and services to the Europe wide developer community by joining CitySDK? Get in touch with the [owners](mailto:citysdk@waag.org) of this endpoint or the project management of CitySDK at [www.citysdk.eu/contact](http://www.citysdk.eu/contact).
+Would your city like to open up it's data and services to the Europe wide developer community by joining CitySDK? Get in touch with the [owners](mailto:citysdk@waag.org) of this endpoint or the project management of CitySDK at [Forum Virium Helsinki](http://www.citysdk.eu/partners/forum-virium/).
