@@ -1,5 +1,5 @@
 ---
-layout: single
+layout: default
 title: App gallery
 mainmenu: GettingStarted
 published: true
