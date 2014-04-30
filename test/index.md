@@ -1,4 +1,4 @@
----
+ï»¿---
 [//]: # (Notes to the editor: )
 [//]: # (1. Always put this section between --- and --- at the top of your page. )
 [//]: # (2. Add a page title (to be shown in a browser tab) with the title: attribute. )
@@ -19,9 +19,9 @@ Enter text in [Markdown](http://daringfireball.net/projects/markdown/). Use the 
 
 
 
-![Alt text](http://dev.citysdk.waag.org//img/waag-small.png) | *Parking Widget Amsterdam* – This widget gives travellers to Amsterdam insight in the associated travel time and costs for the last mile to destination for different parking options in the city. [http://parkeerwidget.yume.nl/widget/](http://parkeerwidget.yume.nl/widget/)
-![Alt text](http://dev.citysdk.waag.org//img/europa.png) | *Now* – this simple web app offers Public Transport departure times in your immediate vicinity (real-time where available). The web app works in Amsterdam, Helsinki, Manchester, Tampere (Fi). 
-![Alt text](http://dev.citysdk.waag.org//img/citysdk-small.png) | *Map viewer* – a demonstration of queries and results in the CitySDK mobility API.
-![Alt text](http://dev.citysdk.waag.org//img/waag-small.png) | *Parking Widget Amsterdam* – This widget gives travellers to Amsterdam insight in the associated travel time and costs for the last mile to destination for different parking options in the city. [http://parkeerwidget.yume.nl/widget/](http://parkeerwidget.yume.nl/widget/)
-![Alt text](http://dev.citysdk.waag.org//img/europa.png) | *Now* – this simple web app offers Public Transport departure times in your immediate vicinity (real-time where available). The web app works in Amsterdam, Helsinki, Manchester, Tampere (Fi). 
+![Alt text](http://dev.citysdk.waag.org//img/waag-small.png) | *Parking Widget Amsterdam* â€“ This widget gives travellers to Amsterdam insight in the associated travel time and costs for the last mile to destination for different parking options in the city. [http://parkeerwidget.yume.nl/widget/](http://parkeerwidget.yume.nl/widget/)
+![Alt text](http://dev.citysdk.waag.org//img/europa.png) | *Now* â€“ this simple web app offers Public Transport departure times in your immediate vicinity (real-time where available). The web app works in Amsterdam, Helsinki, Manchester, Tampere (Fi). 
+![Alt text](http://dev.citysdk.waag.org//img/citysdk-small.png) | *Map viewer* â€“ a demonstration of queries and results in the CitySDK mobility API.
+![Alt text](http://dev.citysdk.waag.org//img/waag-small.png) | *Parking Widget Amsterdam* â€“ This widget gives travellers to Amsterdam insight in the associated travel time and costs for the last mile to destination for different parking options in the city. [http://parkeerwidget.yume.nl/widget/](http://parkeerwidget.yume.nl/widget/)
+![Alt text](http://dev.citysdk.waag.org//img/europa.png) | *Now* â€“ this simple web app offers Public Transport departure times in your immediate vicinity (real-time where available). The web app works in Amsterdam, Helsinki, Manchester, Tampere (Fi). 
 
