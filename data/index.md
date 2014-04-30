@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: single
 title: Data
 mainmenu: Data
 published: true
