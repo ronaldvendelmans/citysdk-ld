@@ -1,8 +1,14 @@
 ---
 layout: home
 title: Home
+mainmenu: Home
 ---
 
+# CitySDK Linked Data API endpoint Amsterdam, the Netherlands
+
+This unified REST API gives access to unified data from different sources available on a per-object basis. The JSON and RDF API is written in Ruby + Sinatra. Data is stored in PostgreSQL/PostGIS database. Documentation and source code can all be found on GitHub and there’s also a Ruby API gem.
+
+A list of available data in this endpoint can be seen via [data]({{ site.baseurl }}/data) and the [map viewer]({{ site.baseurl }}/map).
 
 ## Project CitySDK
 
