@@ -26,6 +26,6 @@ The best tool to get a grip on the available open data is the [List of datasets]
 
 
 ## Discovery API
-To know which CitySDK API’s are available for which geography/jurisdiction there’s a project wide Discovery API at [http://cat.citysdk.eu/](http://cat.citysdk.eu/)
+To know which CitySDK API’s are available for which geography/jurisdiction there’s a project wide [Discovery API](http://cat.citysdk.eu/).
 
 <br/>
