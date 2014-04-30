@@ -3,12 +3,15 @@
 
 bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla 
 
-|[**Documentation**]({{ site.baseurl }}/documentation)|
-|[**Get an API key**]({{ site.baseurl }}/apikey)|
-|[**Map Viewer**]({{ site.baseurl }}/mapviewer)|
+|[**DOCUMENTATION**]({{ site.baseurl }}/documentation)|
+|[**GET AN API KEY**]({{ site.baseurl }}/apikey)|
+|[**MAP VIEWER**]({{ site.baseurl }}/mapviewer)|
 
 bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla 
-
+  
+  
+  
+  
 ### Supported by
 
 <div class="logos">
