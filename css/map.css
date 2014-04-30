@@ -202,6 +202,7 @@ padding: 0px;
   left: -3px; 
   outline: none;
   font-family: 'Ubuntu', sans-serif !important;
+  font-size: 100%;
 }
 
 #input #url: focus{
