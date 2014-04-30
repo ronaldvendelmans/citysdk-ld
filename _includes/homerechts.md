@@ -1,8 +1,8 @@
 
 ### Quick links
 
-|[**Project Website**](http://www.citysdk.eu/)|
-|[**Available Data**]({{ site.baseurl }}/data)|
+|[**PROJECT WEBSITE**](http://www.citysdk.eu/)|
+|[**AVAILABLE DATA**]({{ site.baseurl }}/data)|
 |[**MAP VIEWER**]({{ site.baseurl }}/mapviewer)|
   
 <br/>
