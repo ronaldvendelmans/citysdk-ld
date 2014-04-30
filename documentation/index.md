@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Start
-published: true
+title: Documentation
+mainmenu: GettingStarted
 ---
 
 #Documentation
