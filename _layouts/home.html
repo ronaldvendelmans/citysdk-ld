@@ -10,8 +10,10 @@
 
 <div class=" col_4  gridsmaller">
 
+{% capture info_content %}
 {% include homerechts.md %}
-
+{% endcapture %}
+{{ info_content | markdownify }}
 
 </div>
  
