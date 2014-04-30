@@ -1,10 +1,10 @@
 
-### Links
+### Hit and run
 
 
-![Alt text](http://dev.citysdk.waag.org//img/citysdk-small.png) | **Documentation**
-![Alt text](http://dev.citysdk.waag.org//img/waag-small.png) | **Apis**
-![Alt text](http://dev.citysdk.waag.org//img/europa.png) | **Map viewer**
+|[**Documentation**](/documentation)|
+|[**Get an API key**](/apikey)|
+|[**Map Viewer**](/mapviewer)|
 
 
 
