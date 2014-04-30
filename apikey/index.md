@@ -1,5 +1,5 @@
 ---
-layout: single
+layout: default
 title: API key
 mainmenu: GettingStarted
 published: true
