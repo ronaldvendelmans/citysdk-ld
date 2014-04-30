@@ -7,8 +7,6 @@ published: true
 
 #Documentation
 
-## Getting Started
-
 The best tool to get a grip on the available open data is the [List of datasets]({{ site.baseurl }}/data) combined with the [Map Viewer]({{ site.baseurl }}/data):
 
 - Each datasets in the List of Datasets has a link to the map viewer called **Show sample...** which gives you an instant view of datapoints in JSON with a corresponding view of points, lines or shapes on the map;
