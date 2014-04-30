@@ -32,6 +32,8 @@ Yes, probably. Datasets need to be open and have a geolocation. You can send an 
 
 [Waag Society](http://waag.org) maitains the codebase on [GitHub](https://github.com/waagsociety/citysdk-ld) and runs this instance as well. 
 
+## What are the terms & conditions?
+This service is considered a useful prototype, offered with a ‘best effort SLA’ and a fair-use policy. A sustainable hosted instance of the API is currently in preparation.
 
 ## Other questions
 
