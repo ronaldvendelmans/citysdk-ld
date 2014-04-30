@@ -1,5 +1,5 @@
 
-## API examples
+## API query examples
 
 <ul>
 {% for example in site.data.endpoint.examples %}
