@@ -82,6 +82,10 @@ tbody th{
 font-family: 'Ubuntu', sans-serif;
 }
 
+th, td {
+border: 1px 0px 1px 0px #ccc solid;
+}
+
 button,
 a.btn,
 input[type="submit"],
