@@ -2,9 +2,10 @@
 layout: default
 title: App gallery
 mainmenu: GettingStarted
+published: true
 ---
 
-##Applications using the LD API
+#Applications using the LD API
 
 Your app here? Send an email to citysdk@waag.org.
  
