@@ -12,6 +12,8 @@ This webservice offers unified and direct access to open data from government, c
 
 A list of available data in this endpoint can be seen via [data]({{ site.baseurl }}/data) and the [map viewer]({{ site.baseurl }}/map).
 
+<br/>
+<br/>
 
 ## Project CitySDK
 
