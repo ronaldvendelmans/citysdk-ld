@@ -1,7 +1,7 @@
 ---
 layout: single
 title: FAQ
-published: true
+mainmenu: FAQ
 ---
 
 ## What is the CitySDK Linked Data API?

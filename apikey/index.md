@@ -1,6 +1,7 @@
 ---
 layout: api
 title: API key
+mainmenu: GettingStarted
 ---
 
 # API key / account

@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Contact
+mainmenu: Contact
 ---
 
 ## Contact

@@ -7,6 +7,7 @@
 [//]: # (- default, for regular pages with two columns, the right one showing a standard link list )
 [//]: # (- single, to use a 1-column layout )
 [//]: # (- map, for the map viewer only )
+[//]: # (4. Add a main menu item with the mainmenu: attribute. If the page is displayed, this main menu item is selected in the menu bar. )
 
 layout: default
 title: test page
