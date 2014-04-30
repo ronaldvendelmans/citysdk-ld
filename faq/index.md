@@ -4,8 +4,6 @@ title: FAQ
 published: true
 ---
 
-#FAQ
-
 ## What is the CitySDK Linked Data API?
 
 It is a web service offering unified and direct access to open data from government, commercial and crowd sources alike. The web service is a standard adopted by 6 European cities.
