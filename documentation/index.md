@@ -13,7 +13,9 @@ The best tool to get a grip on the available open data is the [List of datasets]
 
 - Each datasets in the List of Datasets has a link to the map viewer called **Show sample...** which gives you an instant view of datapoints in JSON with a corresponding view of points, lines or shapes on the map;
 - The query field on the Map Viewer has a drop down menu as well with a number of example queries. 
- 
+
+<br/>
+
 ## Developer Documentation API
 This unified REST API gives access to unified data from different sources available on a per-object basis. The JSON and RDF API is written in Ruby + Sinatra. Data is stored in PostgreSQL/PostGIS database. Documentation and source code can all be found on GitHub and there’s also a Ruby API gem.
 
