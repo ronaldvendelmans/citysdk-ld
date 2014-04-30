@@ -1,9 +1,10 @@
 
 ### Quick links
-<br/>
 
 |[**Project Website**](http://www.citysdk.eu/)|
-|[**GET AN API KEY**]({{ site.baseurl }}/apikey)|
+<br/>
+|[**What is CitySDK**](http://www.citysdk.eu/about-the-project/)|
+<br/>
 |[**MAP VIEWER**]({{ site.baseurl }}/mapviewer)|
   
 <br/>
