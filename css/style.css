@@ -83,8 +83,14 @@ font-family: 'Ubuntu', sans-serif;
 }
 
 th, td {
-border-bottom: 1px #ccc solid !important;
-border-top: 1px #ccc solid !important;
+Xborder-bottom: 1px #ccc solid !important;
+Xborder-top: 1px #ccc solid !important;
+background: #e7f2d7 !important;
+}
+
+table { 
+    border-spacing: 0 !important;
+    border-collapse: collapse !important;
 }
 
 button,
