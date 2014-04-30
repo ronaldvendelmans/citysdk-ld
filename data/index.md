@@ -2,9 +2,10 @@
 layout: default
 title: Data
 mainmenu: Data
+published: true
 ---
 
-## Data available via CitySDK
+# Data available via CitySDK
 
 The following data is currently available via CitySDK. You can use the <a class="ep_cms_url">CMS</a> if you want more detailed information, or if you want to add or update data.
 
