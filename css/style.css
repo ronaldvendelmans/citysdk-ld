@@ -83,10 +83,8 @@ font-family: 'Ubuntu', sans-serif;
 }
 
 th, td {
-Xborder-bottom: 1px #ccc solid !important;
-Xborder-top: 1px #ccc solid !important;
+border-bottom: 3px #fff solid !important;
 background: #e7f2d7 !important;
-margin-bottom: 3px !important;
 }
 
 table { 
