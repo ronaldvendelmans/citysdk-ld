@@ -1,3 +1,8 @@
+---
+layout: default
+title: Contact
+---
+
 ## Contact
 
 This endpoint is hosted and maintained by Waag Society, Amsterdam
