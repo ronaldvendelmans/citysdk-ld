@@ -13,13 +13,14 @@ This webservice offers unified and direct access to open data from government, c
 A list of available data in this endpoint can be seen via [data]({{ site.baseurl }}/data) and the [map viewer]({{ site.baseurl }}/map).
 
 <br/>
-<br/>
 
 ## Project CitySDK
 
 CitySDK is creating a toolkit for the development of digital services within cities. With open and interoperable digital service interfaces, CitySDK enables a more efficient utilisation of the expertise and know-how of developer communities. 
 
 See the [Project Website](http://www.citysdk.eu/) for a comprehensive overview of the complete CitySDK toolkit.
+
+<br/>
 
 ## How to join?
 
