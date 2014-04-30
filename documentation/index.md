@@ -11,7 +11,7 @@ published: true
 
 The best tool to get a grip on the available open data is the [List of datasets]({{ site.baseurl }}/data) combined with the [Map Viewer]({{ site.baseurl }}/data):
 
-- Each datasets in the List of Datasets has a link to the map viewer called **Show sample...** which gives you an instant view of datapoints in JSON with a corresponding Map View;
+- Each datasets in the List of Datasets has a link to the map viewer called **Show sample...** which gives you an instant view of datapoints in JSON with a corresponding view of points, lines or shapes on the map;
 - The query field on the Map Viewer has a drop down menu as well with a number of example queries. 
  
 ## Developer Documentation API
@@ -19,7 +19,7 @@ This unified REST API gives access to unified data from different sources availa
 
 **This website contains endpoint specific information only**, mainly regarding the datasets available here. Alle general documentation on the API can be found on the wiki at the corresponding [GitHub repository](https://github.com/waagsociety/citysdk-ld).
  
-To get started there’s a Swagger implementation available here: <link>.
+To help you get started a Swagger implementation will be available soon.
 
 <br/>
 
