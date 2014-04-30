@@ -1,9 +1,9 @@
 ---
 layout: api
-title: API keys
+title: API key
 ---
 
-# API guide
+# API key / account
 
 ##Read
 
