@@ -85,6 +85,7 @@ font-family: 'Ubuntu', sans-serif;
 th, td {
 border-bottom: 3px #fff solid !important;
 background: #e7f2d7 !important;
+font-size: 1em !important;
 }
 
 table { 

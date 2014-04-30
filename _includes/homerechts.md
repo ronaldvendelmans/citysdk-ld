@@ -1,12 +1,13 @@
 
 ### Hit and run
 
+bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla 
 
-|[**Documentation**](/documentation)|
-|[**Get an API key**](/apikey)|
-|[**Map Viewer**](/mapviewer)|
+|[**Documentation**]({{ site.baseurl }}/documentation)|
+|[**Get an API key**]({{ site.baseurl }}/apikey)|
+|[**Map Viewer**]({{ site.baseurl }}/mapviewer)|
 
-
+bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla 
 
 ### Supported by
 
