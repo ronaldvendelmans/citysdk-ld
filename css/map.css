@@ -22,8 +22,6 @@ article img {
 	margin-bottom: 20px;*/
   padding: 5px;
   line-height: 1.4;
-  font-family: 'Ubuntu', sans-serif;
-  color: red !important;
 }
 
 #output  {
@@ -226,6 +224,8 @@ padding: 0px;
 
 #input table td.fill input{
   width: 99%; 
+    font-family: 'Ubuntu', sans-serif;
+  color: red !important;
 }
 
 #input table tr td:first-child {
