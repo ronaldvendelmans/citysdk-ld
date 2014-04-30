@@ -6,7 +6,7 @@ published: true
 ---
 
 # Endpoint Amsterdam
-_**adding scalability to real-time open data**_
+**_adding scalability to real-time open data_**
 
 This webservice offers unified and direct access to open data from government, commercial and crowd sources alike. This open interface is adopted as standard by 6 European cities in the Project CitySDK.
 
