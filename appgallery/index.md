@@ -1,6 +1,7 @@
 ---
 layout: default
 title: App gallery
+mainmenu: GettingStarted
 ---
 
 ##Applications using the LD API

@@ -10,6 +10,7 @@
 
 layout: default
 title: test page
+mainmenu: Data
 ---
 
 ## A New test Post

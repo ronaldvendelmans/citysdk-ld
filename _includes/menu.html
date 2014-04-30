@@ -1,15 +1,15 @@
 			<!-- Menu Horizontal -->
 			<div class="col_12" >
 				<ul class="menu extramarge">
-				<li{% if page.title == "Home" %} class='current'{% endif %}><a href="{{ site.baseurl }}/">Home</a></li>
-				<li{% if page.title == "Start" %} class='current'{% endif %}><a href="#">Getting started</a>
+				<li{% if page.mainmenu == "Home" %} class='current'{% endif %}><a href="{{ site.baseurl }}/">Home</a></li>
+				<li{% if page.mainmenu == "GettingStarted" %} class='current'{% endif %}><a href="#">Getting started</a>
 					<ul>
 					<li><a href="{{ site.baseurl }}/doc">Documentation</a></li>
 					<li><a href="{{ site.baseurl }}/appgallery">App Gallery</a></li>
 					<li><a href="{{ site.baseurl }}/api">API&nbsp;key</a></li>
 					</ul>
 				</li>
-				<li{% if page.title == "Data" %} class='current'{% endif %}><a href="#">Data</a>
+				<li{% if page.mainmenu == "Data" %} class='current'{% endif %}><a href="#">Data</a>
 					<ul>
 					<li><a href="{{ site.baseurl }}/mapviewer">Map viewer</a></li>
 					<li><a href="{{ site.baseurl }}/data">Data</a></li>
@@ -17,8 +17,8 @@
 					<li><a href="{{ site.baseurl }}/test">test</a></li>
 					</ul>
 				</li>
-				<li{% if page.title == "FAQ" %} class='current'{% endif %}><a href="{{ site.baseurl }}/faq">FAQ</a></li>
-				<li{% if page.title == "Contact" %} class='current'{% endif %}><a href="{{ site.baseurl }}/contact">Contact</a></li>
+				<li{% if page.mainmenu == "FAQ" %} class='current'{% endif %}><a href="{{ site.baseurl }}/faq">FAQ</a></li>
+				<li{% if page.mainmenu == "Contact" %} class='current'{% endif %}><a href="{{ site.baseurl }}/contact">Contact</a></li>
 				</ul>
 			</div>	
 			<!--End Menu Horizontal -->
