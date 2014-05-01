@@ -12,7 +12,7 @@ These applications make use of the CitySDK LD API - Your app here as well? Send 
 
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**Parking API Amsterdam**<br/> This API will return costs and recommendations for visiting any destination in Amsterdam [Parking API Amsterdam](http://divvapi.parkshark.nl/)
 
-![Alt text](http://dev.citysdk.waag.org//img/europa.png) | **Now**<br/>This simple web app offers Public Transport departure times in your immediate vicinity (real-time where available). The web app works in Amsterdam, Helsinki Manchester, Tampere (Fi): [Now](http://citysdk.waag.org/now/).
+![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**Now**<br/>This simple web app offers Public Transport departure times in your immediate vicinity (real-time where available). The web app works in Amsterdam, Helsinki Manchester, Tampere (Fi): [Now](http://citysdk.waag.org/now/).
 
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**City Navigator** HSL Navigator is a fully open-source service based solely on open data. [Helsinki edition](http://dev.hsl.fi/navigator-proto/)
 
