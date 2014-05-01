@@ -8,9 +8,9 @@ published: true
 # App Gallery
 These applications make use of the CitySDK LD API. Would you like your app listed here as well? Send us an [email](mailto:citysdk@waag.org).
 
-![Alt text](http://dev.citysdk.waag.org//img/waag-small.png) |**Parking Widget Amsterdam**<br/>This widget gives travellers to Amsterdam insight in the associated travel time and costs for the last mile to destination for different parking options in the city: [Parkeerwidget](http://parkeerwidget.yume.nl/widget/).
-![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**Parking API Amsterdam**<br/> This API will return costs and recommendations for visiting any destination in Amsterdam [Parking API Amsterdam](http://divvapi.parkshark.nl/)
-![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**Now**<br/>This simple web app offers Public Transport departure times in your immediate vicinity (real-time where available). The web app works in Amsterdam, Helsinki Manchester, Tampere (Fi): [Now](http://citysdk.waag.org/now/).
+![Alt text](http://dev.citysdk.waag.org//img/waag-small.png) |**[Parking Widget Amsterdam](http://parkeerwidget.yume.nl/widget/)**<br/>This widget gives travellers to Amsterdam insight in the associated travel time and costs for the last mile to destination for different parking options in the city.
+![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**[Parking API Amsterdam](http://divvapi.parkshark.nl/)**<br/> This API will return costs and recommendations for visiting any destination in Amsterdam.
+![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**[Now](http://citysdk.waag.org/now/)**<br/>This simple web app offers Public Transport departure times in your immediate vicinity (real-time where available). The web app works in Amsterdam, Helsinki Manchester, Tampere (Fi).
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**City Navigator**<br/> HSL Navigator is a fully open-source service based solely on open data. [Helsinki edition](http://dev.hsl.fi/navigator-proto/)
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png)|**Tree Spotter**<br/> Trees in Dutch Cities (Amsterdam, The Hague, Utrecht a.o.), for iOS and [Android](https://play.google.com/store/apps/details?id=nl.twocoolmonkeys.opendata.bomenspotter.amsterdam).
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**City Dashboard**<br/> gives a view of the pulse of the city by showing all real-time data streams: [City Dashboard](http://citydashboard.waag.org/).
