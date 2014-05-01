@@ -1,3 +1,7 @@
+---
+published: false
+---
+
 
 ### Quick links
 
@@ -9,7 +13,7 @@
 <br/>
 <br/>
   
-### Supported by
+### Supported by:
 
 <div class="logos">
 	<p><a href="http://www.waag.org/"><img src="http://dev.citysdk.waag.org//img/waag-small.png" /></a></p>
