@@ -13,7 +13,6 @@ prose:
     - /layouts
 
   metadata:
-    _includes:
     "":
       - name: "layout"
         field:
