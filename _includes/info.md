@@ -3,7 +3,7 @@
 |[**GitHub**](https://github.com/waagsociety/citysdk-ld)|
 |[**Swagger coming soon**]()|
 
-## API query example
+## API query examples
 
 <ul>
 {% for example in site.data.endpoint.examples %}
