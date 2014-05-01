@@ -1,10 +1,9 @@
-
 ## Dev quick link
 
 |[**GitHub**](https://github.com/waagsociety/citysdk-ld)|
+|[**Swagger coming soon**]()|
 
 ## API query examples
-<br/>  
 
 <ul>
 {% for example in site.data.endpoint.examples %}
