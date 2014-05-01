@@ -1,7 +1,7 @@
 ---
 layout: single
-pagetitle: test page site
-mainmenu: Data
+pagetitle: App Gallery 2
+mainmenu: GettingStarted
 published: true
 ---
 
