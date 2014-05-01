@@ -1,10 +1,9 @@
 ---
-layout: default
+layout: single
 pagetitle: API key
 mainmenu: GettingStarted
 published: true
 ---
-
 
 # API key / account
 
