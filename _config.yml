@@ -11,9 +11,15 @@ prose:
     - /js
     - /css
     - /layouts
+
   metadata:
     _posts:
-	  - name: "layout"
-	    field:
-		  element: "text"
-		  help: "select required layout" 
+      - name: "layout"
+        field:
+          element: "text"
+          value: ""
+      - name: "title"
+        field:
+          element: "text"
+          label: "Title"
+          value: ""
