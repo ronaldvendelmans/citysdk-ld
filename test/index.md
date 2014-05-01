@@ -1,7 +1,7 @@
 ---
 layout: single
 pagetitle: test page site
-mainmenu: Getting started
+mainmenu: Data
 published: true
 ---
 
