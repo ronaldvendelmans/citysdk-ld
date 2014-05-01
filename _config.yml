@@ -18,22 +18,13 @@ prose:
         field:
           element: "text"
           value: ""
+          help: "choose one from home (home only), default (2 columns), single (1 column), map (viewer only)"
       - name: "title"
         field:
           element: "text"
-          label: "Title"
           value: ""
-      - name: "tags"
+      - name: "mainmenu"
         field:
-          element: "multiselect"
-          label: "Add Tags"
-          placeholder: "Choose Tags"
-          options:
-            - name: "Apples"
-              value: "apples"
-            - name: "Bananas"
-              value: "bananas"
-            - name: "Pears"
-              value: "pears"
-            - name: "Mangos"
-              value: "mangos"
+          element: "text"
+          value: ""
+
