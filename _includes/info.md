@@ -1,7 +1,3 @@
----
-published: true
----
-
 
 ## Dev quick link
 
