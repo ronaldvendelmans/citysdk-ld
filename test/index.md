@@ -25,7 +25,7 @@ These applications make use of the CitySDK LD API. Would you like your app liste
 
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) | **Buildings in the Netherlands by year of construction**<br/>A map showing all 9,866,539 buildings in the Netherlands, shaded according to year of construction.
 
-![Alt text](http://dev.citysdk.waag.org//img/europa.png) | **Agricutural land use (crops) in the Netherlands ** <br/>Map made for an exhibition on Sicco Mansholt, European Agricultural policy and it’s influence on land use: [Mansholt Map](http://waagsociety.github.io/mansholt/).
+![Alt text](http://dev.citysdk.waag.org//img/europa.png) | **Agricutural land use (crops) in the Netherlands** <br/>Map made for an exhibition on Sicco Mansholt, European Agricultural policy and it’s influence on land use: [Mansholt Map](http://waagsociety.github.io/mansholt/).
 
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) | **User Generated data** <br/>Apps like [Verbeter de Buurt (Improve your Neighborhood)](http://www.verbeterdebuurt.nl/)  and [BuurtVitaal](http://www.buurtvitaal.nl) generate data for this endpoint by collecting citizen reports and publicizing these via an open311 interface.
 
