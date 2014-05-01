@@ -4,9 +4,12 @@ published: false
 
 
 ## API query examples
+<br/>
 
 |[**GitHub**](https://github.com/waagsociety/citysdk-ld)|
-  
+
+<br/>  
+
 <ul>
 {% for example in site.data.endpoint.examples %}
   <li>
