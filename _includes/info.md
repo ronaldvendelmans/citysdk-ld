@@ -1,7 +1,3 @@
----
-published: false
----
-
 ## Dev quick link
 
 |[**GitHub**](https://github.com/waagsociety/citysdk-ld)|

@@ -1,8 +1,3 @@
----
-published: false
----
-
-
 ### Quick links
 
 |[**PROJECT WEBSITE**](http://www.citysdk.eu/)|
