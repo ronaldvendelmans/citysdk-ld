@@ -1,7 +1,7 @@
 ---
 //: null
 layout: default
-title: test page
+title: test page site
 mainmenu: Data
 published: true
 tags: 
