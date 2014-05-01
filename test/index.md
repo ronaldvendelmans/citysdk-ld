@@ -14,8 +14,6 @@ These applications make use of the CitySDK LD API - Your app here as well? Send 
 
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) | **Now**<br/>This simple web app offers Public Transport departure times in your immediate vicinity (real-time where available). The web app works in Amsterdam, Helsinki Manchester, Tampere (Fi): [Now](http://citysdk.waag.org/now/).
 
-![Alt text](http://dev.citysdk.waag.org//img/citysdk-small.png) | **Map viewer**<br/>A demonstration of queries and results in the CitySDK mobility API: [Map Viewer]({{ site.baseurl }}/mapviewer).
-
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**City Navigator** HSL Navigator is a fully open-source service based solely on open data. [Helsinki edition](http://dev.hsl.fi/navigator-proto/)
 
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png)|**Tree Spotter** Trees in Dutch Cities (Amsterdam, The Hague, Utrecht a.o.), for iOS and [Android](https://play.google.com/store/apps/details?id=nl.twocoolmonkeys.opendata.bomenspotter.amsterdam).
@@ -27,6 +25,8 @@ These applications make use of the CitySDK LD API - Your app here as well? Send 
 
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) | **Buildings in the Netherlands by year of construction**:a map showing all 9,866,539 buildings in the Netherlands, shaded according to year of construction.
 
-![Alt text](http://dev.citysdk.waag.org//img/europa.png) | **Agricutural land use (crops) in the Netherlands ** Map made for an exhibition on Sicco Mansholt, European Agricultural policy and it’s influence on land use, [waagsociety.github.io/mansholt/](http://waagsociety.github.io/mansholt/)
+![Alt text](http://dev.citysdk.waag.org//img/europa.png) | **Agricutural land use (crops) in the Netherlands ** Map made for an exhibition on Sicco Mansholt, European Agricultural policy and it’s influence on land use: [Mansholt Map](http://waagsociety.github.io/mansholt/).
 
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) | **User Generated data**: Apps like [Verbeter de Buurt (Improve your Neighborhood)](http://www.verbeterdebuurt.nl/)  and [BuurtVitaal](http://www.buurtvitaal.nl) generate data for this endpoint by collecting citizen reports and publicizing these via an open311 interface.
+
+![Alt text](http://dev.citysdk.waag.org//img/citysdk-small.png) | **Map viewer**<br/>A demonstration of queries and results in the CitySDK mobility API: [Map Viewer]({{ site.baseurl }}/mapviewer).
