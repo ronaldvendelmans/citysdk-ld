@@ -32,5 +32,3 @@ prose:
           help: "Add the name of a main menu item. If the page is displayed, this main menu item is selected in the menu bar"
           element: "text"
           value: ""
-
-		  
