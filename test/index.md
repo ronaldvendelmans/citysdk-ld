@@ -1,9 +1,8 @@
 ---
-layout: default
+layout: single
 pagetitle: test page site
-mainmenu: Data
+mainmenu: Gettingstarted
 published: true
-
 ---
 
 ## A New test Post
