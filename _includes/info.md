@@ -1,9 +1,13 @@
+---
+published: false
+---
 
-## API query examples
-<br/>
+
+## Dev quick link
 
 |[**GitHub**](https://github.com/waagsociety/citysdk-ld)|
 
+## API query examples
 <br/>  
 
 <ul>
