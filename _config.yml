@@ -13,7 +13,7 @@ prose:
     - /layouts
 
   metadata:
-    _posts/static:
+    "":
       - name: "layout"
         field:
           element: "text"
