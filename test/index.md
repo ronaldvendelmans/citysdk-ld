@@ -1,6 +1,6 @@
 ---
 [//]: # (Notes to the editor: )
-[//]: # (1. Always put this section between --- and --- at the top of your page. )
+[//]: # (1. Always put this section at the top of your page. )
 [//]: # (2. Add a page title (to be shown in a browser tab) with the title: attribute. )
 [//]: # (3. Add a page layout with the layout: attribute. Possible values are: )
 [//]: # (- home, for the homepage only )
