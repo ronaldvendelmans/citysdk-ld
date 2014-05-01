@@ -1,6 +1,6 @@
 ---
 layout: default
-title: API key
+pagetitle: API key
 mainmenu: GettingStarted
 published: true
 ---

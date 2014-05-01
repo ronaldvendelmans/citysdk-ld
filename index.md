@@ -1,6 +1,6 @@
 ---
 layout: home
-title: Home
+pagetitle: Home
 mainmenu: Home
 published: true
 ---

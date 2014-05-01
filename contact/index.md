@@ -1,6 +1,6 @@
 ---
 layout: single
-title: Contact
+pagetitle: Contact
 mainmenu: Contact
 published: true
 ---

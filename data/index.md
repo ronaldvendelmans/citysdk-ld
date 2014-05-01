@@ -1,6 +1,6 @@
 ---
 layout: single
-title: Data
+pagetitle: Data
 mainmenu: Data
 published: true
 ---

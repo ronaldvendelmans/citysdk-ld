@@ -20,7 +20,7 @@ prose:
           value: ""
           label: "Page layout"
           help: "Choose one from home (home only), default (2 columns), single (1 column), map (viewer only)"
-      - name: "title"
+      - name: "pagetitle"
         field:
           element: "text"
           value: ""

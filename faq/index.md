@@ -1,6 +1,6 @@
 ---
 layout: single
-title: FAQ
+pagetitle: FAQ
 mainmenu: FAQ
 published: true
 ---

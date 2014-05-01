@@ -1,6 +1,6 @@
 ---
 layout: single
-title: Cities
+pagetitle: Cities
 mainmenu: Data
 published: true
 ---

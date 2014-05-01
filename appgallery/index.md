@@ -1,6 +1,6 @@
 ---
 layout: single
-title: App gallery
+pagetitle: App gallery
 mainmenu: GettingStarted
 published: true
 ---

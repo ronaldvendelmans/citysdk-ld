@@ -1,16 +1,6 @@
 ---
-[//]: # (Notes to the editor: )
-[//]: # (1. Always put this section at the top of your page. )
-[//]: # (2. Add a page title (to be shown in a browser tab) with the title: attribute. )
-[//]: # (3. Add a page layout with the layout: attribute. Possible values are: )
-[//]: # (- home, for the homepage only )
-[//]: # (- default, for regular pages with two columns, the right one showing a standard link list )
-[//]: # (- single, to use a 1-column layout )
-[//]: # (- map, for the map viewer only )
-[//]: # (4. Add a main menu item with the mainmenu: attribute. If the page is displayed, this main menu item is selected in the menu bar. )
-
 layout: default
-title: test page site
+pagetitle: test page site
 mainmenu: Data
 published: true
 

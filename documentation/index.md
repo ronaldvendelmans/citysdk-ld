@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Documentation
+pagetitle: Documentation
 mainmenu: GettingStarted
 published: true
 ---
