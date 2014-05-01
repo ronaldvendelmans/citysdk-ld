@@ -7,9 +7,9 @@ published: true
 
 # App Gallery
 These applications make use of the CitySDK LD API. Would you like your app listed here as well? Send us an [email](mailto:citysdk@waag.org).
-
+<br/>
 test2
-
+<br/>
 ![Alt text](http://dev.citysdk.waag.org//img/waag-small.png) |**[Parking Widget Amsterdam](http://parkeerwidget.yume.nl/widget/)**<br/>This widget gives travellers to Amsterdam insight in the associated travel time and costs for the last mile to destination for different parking options in the city.
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**[Parking API Amsterdam](http://divvapi.parkshark.nl/)**<br/> This API will return costs and recommendations for visiting any destination in Amsterdam.
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**[Now](http://citysdk.waag.org/now/)**<br/>This simple web app offers Public Transport departure times in your immediate vicinity (real-time where available). The web app works in Amsterdam, Helsinki Manchester, Tampere (Fi).
