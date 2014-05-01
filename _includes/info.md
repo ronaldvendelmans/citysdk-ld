@@ -1,8 +1,3 @@
----
-published: false
-layout: ""
----
-
 
 ## API query examples
 <br/>
