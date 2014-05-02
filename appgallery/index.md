@@ -5,7 +5,7 @@ mainmenu: GettingStarted
 published: true
 ---
 
-[//]: # (This may be the most platform independent comment)
+[//]: # (editing this table is a bit more complicated - see comments below)
 
 # App Gallery
 These applications make use of the CitySDK LD API. Would you like your app listed here as well? Send us an [email](mailto:citysdk@waag.org).
@@ -21,3 +21,8 @@ These applications make use of the CitySDK LD API. Would you like your app liste
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**[Agricutural land use (crops) in the Netherlands](https://waagsociety.github.io/mansholt/)** <br/>Map made for an exhibition on Sicco Mansholt, European Agricultural policy and it’s influence on land use.
 ![Alt text](http://dev.citysdk.waag.org//img/europa.png) |**User Generated data** <br/>Apps like [Verbeter de Buurt (Improve your Neighborhood)](http://www.verbeterdebuurt.nl/)  and [BuurtVitaal](http://www.buurtvitaal.nl) generate data for this endpoint by collecting citizen reports and publicizing these via an open311 interface.
 ![Alt text](http://dev.citysdk.waag.org//img/citysdk-small.png) |**[Map viewer]({{ site.baseurl }}/mapviewer)**<br/>A demonstration of queries and results in the CitySDK mobility API.
+
+[//]: # (TIPS TO EDIT THIS PAGE)
+[//]: # (Icons need to have a size of 150x50)
+[//]: # (A table should be preceded and followed by a blank line. Blank lines within a table are not allowed)
+[//]: # (Every row in a table should be on one line, returns are not allowed)
