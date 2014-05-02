@@ -1,9 +1,10 @@
 
 ### Quick links
 
-|[**PROJECT WEBSITE**](http://www.citysdk.eu/)|
+|[**APP GALLERY**]({{ site.baseurl }}/appgallery)|
 |[**AVAILABLE DATA**]({{ site.baseurl }}/data)|
 |[**MAP VIEWER**]({{ site.baseurl }}/mapviewer)|
+|[**PROJECT WEBSITE**](http://www.citysdk.eu/)|
   
 <br/>
 <br/>
