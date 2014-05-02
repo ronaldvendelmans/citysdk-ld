@@ -19,8 +19,8 @@ These applications make use of the CitySDK LD API. Would you like your app liste
 ![Alt text]({{ site.baseurl }}/img/ope.png) |**[Open Data Globe](http://citysdk.waag.org/visualisation/)**<br/> the dynamics of European cities are made visible in the Open Data Globe, based on available data sets in CitySDK. 
 ![Alt text]({{ site.baseurl }}/img/bui.png) |**[Buildings in the Netherlands by year of construction](http://citysdk.waag.org/buildings/)**<br/>A map showing all 9,866,539 buildings in the Netherlands, shaded according to year of construction.
 ![Alt text]({{ site.baseurl }}/img/agr.png) |**[Agricutural land use (crops) in the Netherlands](https://waagsociety.github.io/mansholt/)** <br/>Map made for an exhibition on Sicco Mansholt, European Agricultural policy and it’s influence on land use.
-![Alt text]({{ site.baseurl }}/img/usr.png) |**User Generated data** <br/>Apps like [Verbeter de Buurt (Improve your Neighborhood)](http://www.verbeterdebuurt.nl/)  and [BuurtVitaal](http://www.buurtvitaal.nl) generate data for this endpoint by collecting citizen reports and publicizing these via an open311 interface.
-![Alt text]({{ site.baseurl }}/img/mapv.png) |**[Map viewer]({{ site.baseurl }}/mapviewer)**<br/>A demonstration of queries and results in the CitySDK mobility API.
+![Alt text]({{ site.baseurl }}/img/use.png) |**User Generated data** <br/>Apps like [Verbeter de Buurt (Improve your Neighborhood)](http://www.verbeterdebuurt.nl/)  and [BuurtVitaal](http://www.buurtvitaal.nl) generate data for this endpoint by collecting citizen reports and publicizing these via an open311 interface.
+![Alt text]({{ site.baseurl }}/img/map.png) |**[Map viewer]({{ site.baseurl }}/mapviewer)**<br/>A demonstration of queries and results in the CitySDK mobility API.
 
 [//]: # (TIPS TO EDIT THIS PAGE)
 [//]: # (Icons need to have a size of 150x50)
