@@ -5,6 +5,8 @@ mainmenu: GettingStarted
 published: true
 ---
 
+[//]: # (This may be the most platform independent comment)
+
 # App Gallery
 These applications make use of the CitySDK LD API. Would you like your app listed here as well? Send us an [email](mailto:citysdk@waag.org).
 
