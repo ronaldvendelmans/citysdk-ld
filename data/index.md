@@ -7,7 +7,7 @@ published: true
 
 # Data available via CitySDK
 
-The following data is currently available via CitySDK. You can use the <a class="ep_cms_url">CMS</a> if you want more detailed information, or if you want to add or update data.
+The following data is currently available via CitySDK. 
 
 <ul id="layers"></ul>
 <script src="http://d3js.org/d3.v3.min.js"></script>
