@@ -12,11 +12,11 @@ It is a web service offering unified and direct access to open data from governm
 ## What does the CitySDK Linked Data API do?
 The Linked Data API makes data applicable in five steps, it:
 
-1. collects data or web services from a myriad of sources;
-2. it describes the data;
-3. it links the data to reference datasets (e.g. from Cadastre or OSM);
-4. offers the data as a unified service to other applications (API);
-5. allows those applications to annotate and enrich the data.
+1. It collects data or web services from a myriad of sources;
+2. It describes the data;
+3. It links the data to reference datasets (e.g. from Cadastre or OSM);
+4. It offers the data as a unified service to other applications (API);
+5. It allows those applications to annotate and enrich the data.
 
 Independent of file format, refresh rate or granularity open data is easily accessible for commercial use, research and software developers. Thanks to the unique, open design the API can be linked to all national and international systems and is interoperable with European standards.
 
@@ -30,10 +30,10 @@ Yes, probably. Datasets need to be open and have a geolocation. You can send an 
 
 ## Who maintains the API?
 
-[Waag Society](http://waag.org) maitains the codebase on [GitHub](https://github.com/waagsociety/citysdk-ld) and runs this instance as well. 
+[Waag Society](http://waag.org) maintains the codebase on [GitHub](https://github.com/waagsociety/citysdk-ld) and runs this instance as well. 
 
 ## What are the terms & conditions?
-This service is considered a useful prototype, offered with a ‘best effort SLA’ and a fair-use policy. A sustainable hosted instance of the API is currently in preparation.
+This service is considered a useful prototype, offered with a ‘best effort SLA’ and a fair-use policy. A sustainable-hosted instance of the API is currently in preparation.
 
 ## Other questions
 
