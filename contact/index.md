@@ -7,7 +7,7 @@ published: true
 
 # Contact
 
-This endpoint is hosted and maintained by [Waag Society](http:www.waag.org), Amsterdam.
+This endpoint is hosted and maintained by [Waag Society](http://www.waag.org), Amsterdam.
 
 Contact us via [email](mailto:citysdk@waag.org).
 
