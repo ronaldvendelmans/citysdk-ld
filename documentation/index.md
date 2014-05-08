@@ -16,9 +16,9 @@ To help you get started a Swagger implementation will be available soon.
 <br/>
 
 ## Datasets in this endpoint
-The best tool to get a grip on the available open data is the [List of datasets]({{ site.baseurl }}/data) combined with the [Map Viewer]({{ site.baseurl }}/data):
+The [List of datasets]({{ site.baseurl }}/data) combined with the [Map Viewer]({{ site.baseurl }}/data) is the best tool to get a grip on the available open data:
 
-- Each datasets in the List of Datasets has a link to the map viewer called **Show sample...** which gives you an instant view of datapoints in JSON with a corresponding view of points, lines or shapes on the map;
+- Each dataset in the List of Datasets has a link to the map viewer called **Show sample...** which gives you an instant view of datapoints in JSON with a corresponding view of points, lines or shapes on the map;
 - The query field on the Map Viewer has a drop down menu as well with a number of example queries. 
 
 <br/>
@@ -26,6 +26,6 @@ The best tool to get a grip on the available open data is the [List of datasets]
 
 
 ## Discovery API
-To know which CitySDK API’s are available for which geography/jurisdiction there’s a project wide [Discovery API](http://cat.citysdk.eu/).
+There is a project wide [Discovery API](http://cat.citysdk.eu/) to see which City SDK API's are available for which geography/jurisdiction. 
 
 <br/>
